@@ -9,6 +9,7 @@ var passport = require('passport');
 var flash = require('connect-flash');
 var MongoDBStore = require('connect-mongodb-session')(session);
 var debug = require('debug')('mongoose');
+var port = process.env.PORT || 30000;
 
 // kaakuna modules
 var home = require('./routes/home');
@@ -146,9 +147,7 @@ app.use('*', function(req, res, next) {
     });
 });
 
-app.listen(30000, function(){
-    console.log('listening on 30000')
-});
+app.listen(port);
 // module.exports = app;
 
 // a middleware function that will enable the user
