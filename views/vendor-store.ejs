@@ -1,0 +1,505 @@
+<%# header %>
+<% include partials/store_head_section.ejs %>
+
+<div class="breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-inner">
+      <ul class="list-inline list-unstyled">
+        <li><a href="/">Home</a></li>
+        <%if(store && store.name){%>
+          <li class='active'><%=store.name%></li>
+        <%}%>
+      </ul>
+    </div>
+    <!-- /.breadcrumb-inner --> 
+  </div>
+  <!-- /.container --> 
+</div>
+<!-- /.breadcrumb -->
+<style>
+  .no-products{
+    padding: 13px 15px;
+    color: #666666;
+    font-family: 'Open Sans', sans-serif;
+    letter-spacing: 0.2px;
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    transition: all 0.3s ease 0s;
+    text-align: -webkit-match-parent;
+    padding: 10px 15px;
+    border-bottom: 1px solid #e3e3e3;
+  }
+
+  .no-products-icon{
+    font-size: 16px; 
+    margin-right: 12px;
+  }
+
+  .placeholder-container{
+    width: 100%;
+    height: 150px;
+    position: relative;
+    border: 1px #cccccc solid;
+    cursor: pointer;
+    color: #d0205e;
+    transition: background-color 0.3s;
+    overflow: hidden;	
+    margin: 0 auto;
+    
+  }
+  
+  .pl-logo{
+    width: 210px;
+    height: 197px;
+  }
+
+  .placeholder-container img{
+    width: 100%;
+    height: 100%;
+  }
+  
+  .placeholder-container > a, .placeholder-container > input[type='file'], .placeholder-container > img{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .placeholder-container > img{
+    height: auto;
+    width: 100%;
+    
+  }
+
+  .placeholder-container > a{
+    background-color: rgba(0,0,0,0);
+    color: #d0205e;
+    padding: 5px;
+    border: 1px #aaaaaa solid;
+    transition: background-color 0.5s;
+  }
+
+  .centeralize{
+    text-align: center;
+  }
+
+  .centeralize > .placeholder-container{
+    display: inline-block;
+  }
+
+  .section-heading{
+			font-size: 15px;
+			font-family: 'Open Sans', sans-serif;
+			border-bottom: 1px solid #e3e3e3;
+			padding-bottom: 10px;
+			text-transform: uppercase;
+			font-weight: 550;	
+			margin-bottom: 35px;
+  }
+  
+  [type="file"] {
+      border: 0;
+      clip: rect(0, 0, 0, 0);
+      height: 1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute !important;
+      white-space: nowrap;
+      width: 1px;  
+  }
+
+  .placeholder-container:hover {
+    /*box-shadow: inset 0 0 0 2000px rgba(0,0,0,0.3);*/
+  }
+  
+  .placeholder-container-focused {
+    outline: 1px dotted #000;
+    outline:  -webkit-focus-ring-color auto 5px;
+    
+  }
+
+  [type='file'] + label{
+    pointer-events: none;
+  }
+
+  .centeralize  input[type="submit"]{
+    margin-top: 1rem;
+  }
+
+</style>
+<div class="body-content outer-top-xs">
+  <div class='container'>
+    <div class='row'>
+      <div class='col-md-3 sidebar'> 
+        <!-- ================================== TOP NAVIGATION ================================== -->
+        <div class="side-menu animate-dropdown outer-bottom-xs">
+          <div class="head"><i class="icon glyphicon glyphicon-cog fa-fw"></i> Actions</div>
+          <nav class="yamm megamenu-horizontal">
+            <ul class="nav">
+              <a class="no-products" href="#">
+                <i class="no-products-icon"  aria-hidden="true"></i>Welcome
+              </a>
+              <a class="no-products" href="#storelogo">
+                <i class="no-products-icon"  aria-hidden="true"></i>Store's Logo
+              </a>
+              <a class="no-products" href="#storebanner">
+                <i class="no-products-icon "  aria-hidden="true"></i>Store's Banner
+              </a>
+              <a class="no-products" href="#storetheme">
+                <i class="no-products-icon " aria-hidden="true"></i>Store's Theme
+              </a>
+              <a class="no-products" href="#productcategories">
+                <i class="no-products-icon " aria-hidden="true"></i>Product Categories
+              </a>
+              <a class="no-products" href="#productcatalog">
+                <i class="no-products-icon "  aria-hidden="true"></i>Product Catalog
+              </a>
+            </ul>
+            <!-- /.nav --> 
+          </nav>
+          <!-- /.megamenu-horizontal --> 
+        </div>
+        <!-- /.side-menu --> 
+      </div>
+        <!-- ================================== TOP NAVIGATION : END ================================== -->
+        
+        <!-- /.sidebar-module-container --> 
+      
+      <!-- /.sidebar -->
+      <div class='col-md-9'> 
+        <!-- ========================================== SECTION – HERO ========================================= -->
+        <h4 class="section-heading" id="section-heading"></h4>
+        <div id="actionsDisp">  
+        </div>
+      <!-- /.col -->
+      </div> 
+    </div>
+    <!-- /.row --> 
+    <!-- ============================================== BRANDS CAROUSEL ============================================== -->
+    <div id="brands-carousel" class="logo-slider wow fadeInUp">
+      <div class="logo-slider-inner">
+        <div id="brand-slider" class="owl-carousel brand-slider custom-carousel owl-theme">
+          <div class="item m-t-15"> <a href="#" class="image"> <img data-echo="/assets/images/brands/brand1.png" src="/assets/images/blank.gif" alt=""> </a> </div>
+          <!--/.item-->
+          
+          <div class="item m-t-10"> <a href="#" class="image"> <img data-echo="/assets/images/brands/brand2.png" src="/assets/images/blank.gif" alt=""> </a> </div>
+          <!--/.item-->
+          
+          <div class="item"> <a href="#" class="image"> <img data-echo="/assets/images/brands/brand3.png" src="/assets/images/blank.gif" alt=""> </a> </div>
+          <!--/.item-->
+          
+          <div class="item"> <a href="#" class="image"> <img data-echo="/assets/images/brands/brand4.png" src="/assets/images/blank.gif" alt=""> </a> </div>
+          <!--/.item-->
+          
+          <div class="item"> <a href="#" class="image"> <img data-echo="/assets/images/brands/brand5.png" src="/assets/images/blank.gif" alt=""> </a> </div>
+          <!--/.item-->
+          
+          <div class="item"> <a href="#" class="image"> <img data-echo="/assets/images/brands/brand6.png" src="/assets/images/blank.gif" alt=""> </a> </div>
+          <!--/.item-->
+          
+          <div class="item"> <a href="#" class="image"> <img data-echo="/assets/images/brands/brand2.png" src="/assets/images/blank.gif" alt=""> </a> </div>
+          <!--/.item-->
+          
+          <div class="item"> <a href="#" class="image"> <img data-echo="/assets/images/brands/brand4.png" src="/assets/images/blank.gif" alt=""> </a> </div>
+          <!--/.item-->
+          
+          <div class="item"> <a href="#" class="image"> <img data-echo="/assets/images/brands/brand1.png" src="/assets/images/blank.gif" alt=""> </a> </div>
+          <!--/.item-->
+          
+          <div class="item"> <a href="#" class="image"> <img data-echo="/assets/images/brands/brand5.png" src="/assets/images/blank.gif" alt=""> </a> </div>
+          <!--/.item--> 
+        </div>
+        <!-- /.owl-carousel #logo-slider --> 
+      </div>
+      <!-- /.logo-slider-inner --> 
+      
+    </div>
+    <!-- /.logo-slider --> 
+    <!-- ============================================== BRANDS CAROUSEL : END ============================================== --> </div>
+  <!-- /.container --> 
+  </div>
+</div>
+
+<!-- add product modal-->
+<div id="addProductsModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add Items to Store</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- /.body-content --> 
+<%# /* footer */%>
+<% include partials/footer.ejs %>
+<!-- For demo purposes – can be removed on production --> 
+
+<!-- For demo purposes – can be removed on production : End --> 
+
+<!-- JavaScripts placed at the end of the document so the pages load faster --> 
+
+<script src="/assets/js/jquery-1.11.1.min.js"></script> 
+<script src="/assets/js/bootstrap.min.js"></script> 
+<script src="/assets/js/bootstrap-hover-dropdown.min.js"></script> 
+<script src="/assets/js/owl.carousel.min.js"></script> 
+<script src="/assets/js/echo.min.js"></script> 
+<script src="/assets/js/jquery.easing-1.3.min.js"></script> 
+<script src="/assets/js/bootstrap-slider.min.js"></script> 
+<script src="/assets/js/jquery.rateit.min.js"></script> 
+<script src="/assets/js/bootstrap-select.min.js"></script> 
+<script src="/assets/js/wow.min.js"></script> 
+<script src="/assets/js/scripts.js"></script>
+<script src="/assets/js/materialize.min.js"></script>
+<script src="/assets/js/products.js"></script>
+<script src='/assets/js/minimalistic-front-end-router.js'></script>
+	
+<script>
+$(document).ready(function(){ 
+  // https://stackoverflow.com/questions/14354040/jquery-1-9-live-is-not-a-function
+  jQuery.fn.extend({
+    live: function (event, callback) {
+    if (this.selector) {
+            jQuery(document).on(event, this.selector, callback);
+        }
+        return this;
+    }
+  });   
+
+
+  // --begin-- router section
+  minfcontainer = document.getElementById('actionsDisp');
+  var sectionHeading = document.getElementById('section-heading');
+
+  minfroute('/', ()=>{
+    // $('#uAddressForm').hide();
+    // $('#uStoreForm').hide();
+    minfcontainer.innerHTML = '<h4>Welcome</h4'
+    
+  });
+
+  minfroute('*', ()=>{
+    minfcontainer.innerHTML = '<h4>Section not ready</h4'
+  })
+  
+  minfroute('storelogo', ()=>{
+    minfcontainer.innerHTML=`
+    <form method="post" id="logoImgUpld" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
+      <div class="col-md-12 centeralize">
+          <div class="col-md-4"></div>
+          <label class="col-md-4 placeholder-container pl-logo" id="placeholder-container">
+            <input type="file" name="file" accept="image/*" id="logoimginp" data-multiple-caption="{count} files selected" />
+            <%if(store && store._id && store.logo_path){%>
+              <img id="logoImg" 
+              src="/account/store/<%=store._id+'/'%>images<%='/'+store.logo_path%>"/>
+              <a id="add-logo" >change logo image</a>
+            <%} else{%>
+              <a id="add-logo" >add logo image</a>
+            <%}%>      
+          </label>   
+          <div class="col-md-4"></div>
+      </div>
+      <div class="col-md-12 centeralize" >
+          <div class="col-md-4"></div>
+          <div class="col-md-4" >
+            <!--- if(storeid){
+              <a href="/<%=storeid%>" class="btn btn-flat col-md-9"  target="_blank">view changes in store page</a>
+            }--->   
+            <input class="btn btn-flat col-md-9" type="submit" value="Upload logo"/>
+            
+          </div>          
+      </div>     
+    </form>
+    `;
+    sectionHeading.textContent = 'Upload a Logo for your store';
+  });
+  
+  var formAppends = {};
+  minfroute('storebanner', ()=>{
+    minfcontainer.innerHTML = `
+      <p class="statusMsg"></p>
+      
+      <form method="post" id="storebanner" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
+        <div class="col-md-12 ">
+            ${formAppends && formAppends.data?formAppends.data:''}
+            <%if(store && store.banner_image){%>
+              <%store.banner_image.forEach(function(img){%>
+                <div class="col-md-6">
+                  <!--new elems should be appended here-->
+                  
+                    <label class="col-md-6 placeholder-container" id="placeholder-container">
+                    <%=img.path%>
+                      <img src='images<%='/'+img.path%>' id="logoImg" 
+                      />
+                    </label>   
+                  <button class="btn btn-flat col-sm-12 submit-btn delete-btn"  style="margin: 4px 0 0 0;"type="submit">delete</button> 
+                </div>
+              <%})%>
+            <%}%>
+            <div class="col-md-6 add-banner-container">
+              <!--new elems should be appended here-->
+              <label class="col-md-6 placeholder-container" id="placeholder-container">
+                <input type="file" name="file" accept="image/*" id="bannerimginp" data-multiple-caption="{count} files selected" />
+                
+                  <img id="logoImg" 
+                  "/>
+                
+                <a id="add-logo" >add image</a>             
+              </label> 
+              <button class="btn btn-flat col-sm-12 submit-btn" style="margin: 4px 0 0 0;"type="submit">Upload</button> 
+            </div> 
+            <div class="col-md-4"></div>
+        </div>    
+      </form>
+    `
+    sectionHeading.textContent = 'Upload a Banner for your store';
+  });
+  // --end-- router section
+
+  $('[type="file"]').live('focus', function(event){
+    $('#add-logo').css('background-color', '#aaaaaa')
+  })
+
+  $('[type="file"]').live('blur', function(event){
+    $('#add-logo').css('background-color', 'rgba(0,0,0,0)')
+  })
+
+  $('.placeholder-container').live('mouseenter', function(event){
+    $('#add-logo').css('background-color', '#aaaaaa')
+  }).live('mouseleave', function(){
+    $('#add-logo').css('background-color', 'rgba(0,0,0,0)')
+  })
+
+  // retrieve bas64 format of images
+  // and display them in an image tag
+  // tags should follow this arrangement
+  //
+  // <elem class="placeholder-container">
+  //   <input type="file" />
+  //   <img />
+  // </elem>
+  var imgfile = undefined;
+  $('[type="file"]').live( 'change', function( e ) {
+    var fileName = undefined;
+    var imageTag = this.nextElementSibling;
+    var file = e.target.files[0];
+    var imgtype = file.type;
+    var supportedimgs= ["image/jpeg","image/png","image/jpg"];
+    if(!(supportedimgs.includes(imgtype))){
+      alert('please select a valid image file (JPEG/JPG/PNG)')
+      $(this).val('')
+      return false
+    }
+    else{
+      if ( !(this.files && this.files.length > 1 ) ){
+        var reader = new FileReader();
+        reader.onload = function(){
+          imageTag.src = reader.result;
+          imgfile = reader.result;
+        };
+        reader.readAsDataURL(e.target.files[0]);
+        
+      }    
+    }
+  });
+
+  $('#logoImgUpld').live('submit', function(event){
+    // event.preventDefault();
+    // code-block:::show spinner
+    if(!$('#logoimginp').val()){
+      // code-block:::show error message
+      alert('please click on the add image button to add a logo image')
+      return false
+    }
+  });
+
+  $('#storebanner').live('submit', function(event){
+    event.preventDefault();
+    // code-block:::showspinner
+    if(!$('#bannerimginp').val()){
+      // code-block:::show error message
+      alert('please click on the add image button to add a logo image')
+      return false
+    }
+    $.ajax({
+            type: 'POST',
+            url: '/account/store<%=storeid?'/'+storeid:''%>/banner',
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData:false,
+            beforeSend: function(){
+                $('.submit-btn').attr("disabled","disabled");
+                $('#storebanner').css("opacity",".5");
+            },
+            success: function(msg){
+                $('.statusMsg').html('');
+                if(msg && msg.success===true){
+                    formAppends.data = `<div class="col-md-6">
+                                          <!--new elems should be appended here-->
+                                          
+                                            <label class="col-md-6 placeholder-container" id="placeholder-container">
+                                              <img src='${imgfile}' id="logoImg" 
+                                              />
+                                            </label>   
+                                          <button class="btn btn-flat col-sm-12 submit-btn delete-btn"  style="margin: 4px 0 0 0;"type="submit">delete</button> 
+                                        </div> `
+                  $(formAppends.data).insertBefore('.add-banner-container')
+
+                    // $('#storebanner')[0].reset();
+                    $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Form data submitted successfully.</span>');
+                }else{
+                    $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
+                }
+                $('#storebanner').css("opacity","");
+                $(".submit-btn").removeAttr("disabled");
+            },
+            error: function(errObj, status){
+              $('#storebanner').css("opacity","");
+              $(".submit-btn").removeAttr("disabled");
+              $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
+            }
+        });
+    });
+
+});
+
+
+//   Array.prototype.forEach.call( inputsContainer, function( container ) {
+//     var fileInput = container.firstElementChild
+//       , imageTag = container.lastElementChild;
+ 
+//     fileInput.addEventListener( 'change', function( e ) {
+//       var fileName = undefined;
+//       if ( this.files && this.files.length > 1 ) {
+//         fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+//       } else {
+//         var reader = new FileReader();
+//         reader.onload = function(){
+//           imageTag.src = reader.result;
+//         };
+//         reader.readAsDataURL(e.target.files[0]);
+//       }
+//     });
+//   });
+
+// });
+
+</script>
+
+</body>
+
+</html>

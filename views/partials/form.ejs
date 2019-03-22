@@ -1,0 +1,48 @@
+
+var updateProfileForm = `<form method='post' action='/profile' id='uProfileForm'>
+                        <div class='col-md-6'>
+                            <div class='form-group' >
+                                <label class='info-title' for='newFname'>First Name<span></span></label>
+                                <input type='text' name='editFname' value='<%= user.name.fname?user.fname:'' %>' class='form-control info-update unicase-form-control text-input' id='newFname' />
+                            </div>
+
+                            <div class='form-group' >
+                                <label class='info-title' for='newLname'>Last Name<span></span></label>
+                                <input type='text' name='editLname' value='<%= user.name.lname?user.lname:'' %>' class='form-control info-update unicase-form-control text-input' id='newLname' />                    
+                            
+                            </div>	
+                        </div> 
+                        <div class='col-md-6'>
+                            <div class='form-group' >
+                                <label class='info-title' for='newEmail'>Email Address<span></span></label>
+                                <input type='text' onmousedown="return false" oninput="this.value='<%= user.email?user.email:'' %>'"  name='editMail' value='<%= user.email?user.email:'' %>' class='form-control unicase-form-control text-input' id='newEmail'/>                    
+                            </div>  
+
+                            <div class='form-group' >
+                                <label class='info-title' for='editTel'>Phone Number<span></span></label>
+                                <input type='tel' name='editTel' value='<%= user.telephone?user.telephone:'' %>' class='form-control info-update unicase-form-control text-input' id='editTel' />                    
+                            </div>	
+                        </div>  
+                        <div class='col-md-6'>
+                            <div class='form-group' >
+                                <label class='info-title' for='editPassCurr'>Current Password<span></span></label>
+                                <input type='password' name='editPassCurr'  class='form-control info-update unicase-form-control text-input' id='editPassCurr' />                    
+                            </div>	
+
+                            <div class='form-group' >
+                                <label class='info-title' for='editPassNew'>New Password<span></span></label>
+                                <input type='password' name='editPassNew'  class='form-control info-update unicase-form-control text-input' id='editPassNew' />                    
+                            </div>	
+                        </div> 
+                        <div class='col-md-6'>
+                            <div class='form-group' >
+                                <label class='info-title' for='editPassConf'>Confirm Password<span></span></label>
+                                <input type='password' name='editPassConf'  class='form-control info-update unicase-form-control text-input' id='editPassConf' />
+                            </div>	
+                        </div>
+                        <div class='col-md-8'>
+                            <button class='col-md-8 btn'>Save Changes</button>
+                        </div>
+                        </form>`;
+
+var updateAddressForm = `<script src='/switchstylesheet/switchstylesheet.html'></script>`;

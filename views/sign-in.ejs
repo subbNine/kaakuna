@@ -1,0 +1,252 @@
+	<%# header %>
+	<% include partials/head_section.ejs %>
+
+	<div class="breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-inner">
+				<ul class="list-inline list-unstyled">
+					<li><a href="home.html">Home</a></li>
+					<li class='active' id='breadcrumblnk'>Sign in</li>
+				</ul>
+			</div><!-- /.breadcrumb-inner -->
+		</div><!-- /.container -->
+	</div><!-- /.breadcrumb -->
+
+	<div class="body-content">
+		<div class="container" id="view-port">
+			<div class="sign-in-page">
+
+			<% if(message){%>
+				<ul>
+					<%for(err of message){%>
+						<li style="color: red"><%= err %></li>
+					<%}%>
+				</ul>
+			<%}%>
+			<!---- ====================sign row starts here================ -->
+				<div class="row" id="sign-in-form">
+					<!-- Sign-in -->
+					<div class="col-md-4 col-sm-4"></div>			
+					<div  class="col-md-4 col-sm-4 sign-in" style="">
+						
+						<h4 class="">Sign in</h4>
+						<!--<p class="">Hello, Welcome to your account.</p>-->
+						<div class="social-sign-in outer-top-xs">
+							<div class="col-sm-6">
+								<a href="#" class="facebook-sign-in"><i class="fa fa-facebook"></i> Sign In</a>		
+							</div>
+							<div class="col-sm-6">
+								<a href="#" class="twitter-sign-in"><i class="fa fa-twitter"></i> Sign In</a><br/>
+							</div>
+						</div>
+						
+						<form class="register-form outer-top-xs" role="form" method="post" action="/account/signin">
+							<div class="form-group">
+								<label class="info-title" for="InputEmailLgn">Email Address <span>*</span></label>
+								<input type="email" value="<%= autoFill && autoFill.signInAutoFill ? autoFill.signInAutoFill.email:'' %>" name="email" class="form-control unicase-form-control text-input" id="InputEmailLgn" >
+							</div>
+							<div class="form-group">
+								<label class="info-title" for="InputPwordLgn">Password <span>*</span></label>
+								<input type="password" name="password" class="form-control unicase-form-control text-input" id="InputPwordLgn" >
+							</div>
+							<div class="radio outer-xs">
+								<!--<label>
+									<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">Remember me!
+								</label>-->
+								<a href="#" class="forgot-password pull-right">Forgot your Password?</a>
+							</div>
+							<button type="submit" class="btn btn-primary checkout-page-button">Log in</button>
+							<a id="show-signup-form-btn" href="#signup" type="submit" class="btn btn-primary checkout-page-button">Sign up</a>
+						</form>					
+					</div>
+					<div class="col-md-4 col-sm-4"></div>
+				</div>
+					<!-- Sign-in -->
+				<div class="row" id="sign-up-form">
+					<div class="col-md-4 col-sm-4"></div>
+					<!-- create a new account -->
+					<div class="col-md-4 col-sm-4 create-new-account">
+						<h4 class="checkout-subtitle">Create a new account</h4>
+						<p class="text title-tag-line">Create your new account.</p>
+						<form class="register-form outer-top-xs" role="form" method="post" action="/account/signup">
+							
+							<div class="form-group">
+								<label class="info-title" for="InputFname">First Name <span>*</span></label>
+								<input type="text" required name="fname" value="<%= autoFill && autoFill.signUpAutoFill? autoFill.signUpAutoFill.fname:'' %>" class="form-control unicase-form-control text-input" id="InputFname" />
+							</div>
+							<div class="form-group">
+								<label class="info-title" for="InputLname">Last Name <span>*</span></label>
+								<input type="text" required name="lname" value="<%= autoFill && autoFill.signUpAutoFill? autoFill.signUpAutoFill.lname:'' %>" class="form-control unicase-form-control text-input" id="InputLname" />
+							</div>
+							
+							<div class="form-group">
+								<label class="info-title" for="InputEmail2">Email Address <span>*</span></label>
+								<input type="email" required name="email" value="<%= autoFill && autoFill.signUpAutoFill? autoFill.signUpAutoFill.email:'' %>" class="form-control unicase-form-control text-input" id="InputEmail2" />
+							</div>
+
+							<div class="form-group">
+								<label class="info-title" for="InputPhone">Phone Number <span>*</span></label>
+								<input type="tel" required name="phone" value="<%= autoFill && autoFill.signUpAutoFill? autoFill.signUpAutoFill.phone:'' %>" class="form-control unicase-form-control text-input" id="InputPhone" />
+							</div>
+							
+							<div class="form-group">
+								<label class="info-title" for="InputPword">Password <span>*</span></label>
+								<input type="password" required name="password" class="form-control unicase-form-control text-input" id="InputPword" />
+							</div>
+							<!--<div class="form-group">
+								<label class="info-title" for="InputConfPword">Confirm Password <span>*</span></label>
+								<input type="password" required name="passwordConfirm" class="form-control unicase-form-control text-input" id="InputConfPword" />
+							</div>-->
+							<button type="submit" class="btn btn-primary checkout-page-button">Sign Up</button>
+							<a id="show-login-form-btn" href="#signin" type="submit" class="btn btn-primary checkout-page-button">Log in</a>
+						</form>
+					</div>
+					<div class="col-md-4 col-sm-4"></div>	
+					<!-- create a new account -->			
+			</div><!-- /.sign up row -->
+	</div><!-- /.sigin-in-->
+	<!-- ============================================== BRANDS CAROUSEL ============================================== -->
+	<div id="brands-carousel" class="logo-slider wow fadeInUp">
+
+			<div class="logo-slider-inner">	
+				<div id="brand-slider" class="owl-carousel brand-slider custom-carousel owl-theme">
+					<div class="item m-t-15">
+						<a href="#" class="image">
+							<img data-echo="assets/images/brands/brand1.png" src="/assets/images/blank.gif" alt="">
+						</a>	
+					</div><!--/.item-->
+
+					<div class="item m-t-10">
+						<a href="#" class="image">
+							<img data-echo="assets/images/brands/brand2.png" src="/assets/images/blank.gif" alt="">
+						</a>	
+					</div><!--/.item-->
+
+					<div class="item">
+						<a href="#" class="image">
+							<img data-echo="assets/images/brands/brand3.png" src="/assets/images/blank.gif" alt="">
+						</a>	
+					</div><!--/.item-->
+
+					<div class="item">
+						<a href="#" class="image">
+							<img data-echo="assets/images/brands/brand4.png" src="/assets/images/blank.gif" alt="">
+						</a>	
+					</div><!--/.item-->
+
+					<div class="item">
+						<a href="#" class="image">
+							<img data-echo="assets/images/brands/brand5.png" src="/assets/images/blank.gif" alt="">
+						</a>	
+					</div><!--/.item-->
+
+					<div class="item">
+						<a href="#" class="image">
+							<img data-echo="assets/images/brands/brand6.png" src="/assets/images/blank.gif" alt="">
+						</a>	
+					</div><!--/.item-->
+
+					<div class="item">
+						<a href="#" class="image">
+							<img data-echo="assets/images/brands/brand2.png" src="/assets/images/blank.gif" alt="">
+						</a>	
+					</div><!--/.item-->
+
+					<div class="item">
+						<a href="#" class="image">
+							<img data-echo="assets/images/brands/brand4.png" src="/assets/images/blank.gif" alt="">
+						</a>	
+					</div><!--/.item-->
+
+					<div class="item">
+						<a href="#" class="image">
+							<img data-echo="assets/images/brands/brand1.png" src="/assets/images/blank.gif" alt="">
+						</a>	
+					</div><!--/.item-->
+
+					<div class="item">
+						<a href="#" class="image">
+							<img data-echo="assets/images/brands/brand5.png" src="/assets/images/blank.gif" alt="">
+						</a>	
+					</div><!--/.item-->
+				</div><!-- /.owl-carousel #logo-slider -->
+			</div><!-- /.logo-slider-inner -->
+		
+	</div><!-- /.logo-slider -->
+	<!-- ============================================== BRANDS CAROUSEL : END ============================================== -->	
+	</div>
+	<!-- /.container -->
+	</div><!-- /.body-content -->
+
+	<% include partials/footer.ejs%>
+
+	<!-- For demo purposes – can be removed on production -->
+	
+	
+	<!-- For demo purposes – can be removed on production : End -->
+
+	<!-- JavaScripts placed at the end of the document so the pages load faster -->
+	<script src="/assets/js/jquery-1.11.1.min.js"></script> 
+	<script src="/assets/js/bootstrap.min.js"></script> 
+	
+	<script src="/assets/js/bootstrap-hover-dropdown.min.js"></script>
+	<script src="/assets/js/owl.carousel.min.js"></script>
+	
+	<script src="/assets/js/echo.min.js"></script>
+	<script src="/assets/js/jquery.easing-1.3.min.js"></script>
+	<script src="/assets/js/bootstrap-slider.min.js"></script>
+    <script src="/assets/js/jquery.rateit.min.js"></script>
+    <script type="text/javascript" src="/assets/js/lightbox.min.js"></script>
+    <script src="/assets/js/bootstrap-select.min.js"></script>
+    <script src="/assets/js/wow.min.js"></script>
+	<script src="/assets/js/scripts.js"></script>
+
+	<!-- For demo purposes – can be removed on production -->
+	
+	<script src="/switchstylesheet/switchstylesheet.html"></script>
+
+	<script src='/assets/js/minimalistic-front-end-router.js'></script>
+	
+	<script>
+		$(document).ready(function(){ 
+			// $(".changecolor").switchstylesheet( { seperator:"color"} );
+			$('.show-theme-options').click(function(){
+				$(this).parent().toggleClass('open');
+				return false;
+			});
+
+			// hide sign-up form
+			$('#sign-up-form').hide();
+			
+			
+			minfroute('signup', function(){
+				// e.preventDefault();
+				$('#sign-in-form').hide();
+				$('#sign-up-form').show();
+				$('#breadcrumblnk').text('Sign up');
+				viewport.scrollIntoView(true);
+			});
+
+			minfroute('signin', function(){
+				// e.preventDefault();
+				$('#sign-up-form').hide();
+				$('#sign-in-form').show();
+				$('#breadcrumblnk').text('Sign in')
+				viewport.scrollIntoView(true);
+			});
+			var viewport = document.getElementById('view-port');
+			viewport.scrollIntoView(true);
+		});
+
+		$(window).bind("load", function() {
+		   $('.show-theme-options').delay(2000).trigger('click');
+		});
+	</script>
+	<!-- For demo purposes – can be removed on production : End -->
+
+	
+
+</body>
+
+<!-- Mirrored from www.themesground.com/flipmart-demo/V6/sign-in.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 11 Feb 2019 14:27:05 GMT -->
+</html>

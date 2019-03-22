@@ -1,0 +1,628 @@
+
+	<%# header %>
+	<% include partials/head_section.ejs %>
+	<style>
+		#account-nav{
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			width: 25%;
+			background-color: #f1f1f1;
+			border: 1px solid #555 !important;
+			height: 100%;
+			overflow: auto;
+		}
+
+		#account-nav li a {
+			display: block;
+			color: #000;
+			padding: 8px 0 8px 16px;
+			text-decoration: none;
+		}
+
+		#account-nav li{
+			text-align: center;
+			border-bottom: 1px solid #555;
+		}
+
+		#account-nav li:last-child{
+			border-bottom: none;
+		}
+
+		#account-nav li a:hover{
+			background-color: #555;
+			color: white;
+		}
+
+		.hide-form{
+			display: None;
+		}
+
+		.show-form{
+			display: Block;
+		}
+
+		.msg{
+			color: red;
+		}
+		
+	</style>
+	<div id="breadcrumb" class='breadcrumb'>
+		<div class='container'>
+			<div class='breadcrumb-inner'>
+				<ul class='list-inline list-unstyled'>
+					<li><a href='/'>Home</a></li>
+                    <li><a>Profile</a></li>
+                    <li class='active'>Update Profile</li>
+				</ul>
+			</div><!-- /.breadcrumb-inner -->
+		</div><!-- /.container -->
+	</div><!-- /.breadcrumb -->
+	
+	<div class='body-content'>
+        <div class='container'>
+            <% if(user){%>
+                <h1 style='margin-bottom: 30px'><%=user.name.first && user.name.last?user.name.first + ' ' + user.name.last: user.email%></h1>
+            <%}%>
+			<div style=''>
+				<ul id='account-nav' class='col-md-4'>
+					My Profile
+					<li><a href='#info' id='uProfile'>Profile Information</a></li>
+					<li><a href='#deliveryaddress' id='uAddress'>Delivery Address</a></li>
+					My Order
+					<li><a href='#myorder' id='uOrder'>Kaakuna.com</a></li>
+					Manage Stores
+					<li><a href='#createstore' id='uStore'>Create Stores</a></li>
+					<%if(user && user.stores){%>
+						<li><a href='#mystores' id='uStore'>My Stores</a></li>
+					<%}%>
+				</ul>
+			</div>
+			<%if(errors){%>
+				<ul>
+					<%for(error of errors){%>
+						<li><%=error.msg%></li>
+					<%}%>
+				</ul>
+			<%}%>
+			<div  id='myAccountEdit' class='col-md-8'>
+			</div>
+		</div><!-- /.sign up row -->
+	</div><!-- /.sigin-in-->
+	<!-- ============================================== BRANDS CAROUSEL ============================================== -->
+	<div id='brands-carousel' class='logo-slider wow fadeInUp'>
+
+			<div class='logo-slider-inner'>	
+				<div id='brand-slider' class='owl-carousel brand-slider custom-carousel owl-theme'>
+					<div class='item m-t-15'>
+						<a href='#' class='image'>
+							<img data-echo='/assets/images/brands/brand1.png' src='/assets/images/blank.gif' alt=''>
+						</a>	
+					</div><!--/.item-->
+
+					<div class='item m-t-10'>
+						<a href='#' class='image'>
+							<img data-echo='/assets/images/brands/brand2.png' src='/assets/images/blank.gif' alt=''>
+						</a>	
+					</div><!--/.item-->
+
+					<div class='item'>
+						<a href='#' class='image'>
+							<img data-echo='/assets/images/brands/brand3.png' src='/assets/images/blank.gif' alt=''>
+						</a>	
+					</div><!--/.item-->
+
+					<div class='item'>
+						<a href='#' class='image'>
+							<img data-echo='/assets/images/brands/brand4.png' src='/assets/images/blank.gif' alt=''>
+						</a>	
+					</div><!--/.item-->
+
+					<div class='item'>
+						<a href='#' class='image'>
+							<img data-echo='/assets/images/brands/brand5.png' src='/assets/images/blank.gif' alt=''>
+						</a>	
+					</div><!--/.item-->
+
+					<div class='item'>
+						<a href='#' class='image'>
+							<img data-echo='/assets/images/brands/brand6.png' src='/assets/images/blank.gif' alt=''>
+						</a>	
+					</div><!--/.item-->
+
+					<div class='item'>
+						<a href='#' class='image'>
+							<img data-echo='/assets/images/brands/brand2.png' src='/assets/images/blank.gif' alt=''>
+						</a>	
+					</div><!--/.item-->
+
+					<div class='item'>
+						<a href='#' class='image'>
+							<img data-echo='/assets/images/brands/brand4.png' src='/assets/images/blank.gif' alt=''>
+						</a>	
+					</div><!--/.item-->
+
+					<div class='item'>
+						<a href='#' class='image'>
+							<img data-echo='/assets/images/brands/brand1.png' src='/assets/images/blank.gif' alt=''>
+						</a>	
+					</div><!--/.item-->
+
+					<div class='item'>
+						<a href='#' class='image'>
+							<img data-echo='/assets/images/brands/brand5.png' src='/assets/images/blank.gif' alt=''>
+						</a>	
+					</div><!--/.item-->
+				</div><!-- /.owl-carousel #logo-slider -->
+			</div><!-- /.logo-slider-inner -->
+		
+	</div><!-- /.logo-slider -->
+	<!-- ============================================== BRANDS CAROUSEL : END ============================================== -->	
+	</div>
+	<!-- /.container -->
+	</div><!-- /.body-content -->
+
+	<% include partials/footer.ejs%>
+
+	<!-- For demo purposes – can be removed on production -->
+	
+	
+	<!-- For demo purposes – can be removed on production : End -->
+
+	<!-- JavaScripts placed at the end of the document so the pages load faster -->
+	<script src="/assets/js/jquery-1.11.1.min.js"></script> 
+	<script src="/assets/js/bootstrap.min.js"></script> 
+	
+	<script src='/assets/js/bootstrap-hover-dropdown.min.js'></script>
+	<script src='/assets/js/owl.carousel.min.js'></script>
+	
+	<script src='/assets/js/echo.min.js'></script>
+	<script src='/assets/js/jquery.easing-1.3.min.js'></script>
+	<script src='/assets/js/bootstrap-slider.min.js'></script>
+    <script src='/assets/js/jquery.rateit.min.js'></script>
+    <script type='text/javascript' src='/assets/js/lightbox.min.js'></script>
+    <script src='/assets/js/bootstrap-select.min.js'></script>
+    <script src='/assets/js/wow.min.js'></script>
+	<script src='/assets/js/scripts.js'></script>
+	<script src="/assets/js/states_and_lgas.js"></script>
+	<script src="/assets/js/navigo.min.js"></script>
+
+	<!-- For demo purposes – can be removed on production -->
+	
+	<!--<script src='/switchstylesheet/switchstylesheet.html'></script>-->
+	
+	<script src='/assets/js/minimalistic-front-end-router.js'></script>
+	
+	<script>
+		$(document).ready(function(){ 
+			// $('.changecolor').switchstylesheet( { seperator:'color'} );
+
+			// https://stackoverflow.com/questions/14354040/jquery-1-9-live-is-not-a-function
+			jQuery.fn.extend({
+				live: function (event, callback) {
+				if (this.selector) {
+						jQuery(document).on(event, this.selector, callback);
+					}
+					return this;
+				}
+			});
+
+			<!--<%if(hashpath==='deliveryaddress'){%>
+				window.location.href = '/account/profile#deliveryaddress'
+			<%}%>-->
+
+			$('.show-theme-options').click(function(){
+				$(this).parent().toggleClass('open');
+				return false;
+			});
+
+			// hide sign-up form
+			$('#sign-up-form').hide();
+			$('#show-signup-form-btn').click(function(e){
+				e.preventDefault();
+				$('#sign-in-form').hide();
+				$('#sign-up-form').show();
+			});
+
+			$('#show-login-form-btn').click(function(e){
+				e.preventDefault();
+				$('#sign-up-form').hide();
+				$('#sign-in-form').show();
+			});
+
+			// var uProfile = document.getElementById('uProfile');
+			var breadcrumb = document.getElementById('breadcrumb');
+			var currentView = document.querySelector('#breadcrumb .active');
+			var myAccountDisp = document.getElementById('myAccountEdit');
+			minfcontainer = myAccountDisp;
+			
+			// front-end routes
+			minfroute('info', ()=>{
+				// $('#uAddressForm').hide();
+				// $('#uStoreForm').hide();
+				minfcontainer.innerHTML=`
+				<form method='post' name="uProfileForm" action='/account/profile/user' id='uProfileForm' class="uProfile ">
+					<div class='col-md-6'>
+						<div class='form-group' >
+							<label class='info-title' for='newFname'>First Name<span></span></label>
+							<input type='text' name='Fname' value='<%= form && form.Fname || user.name.first? form && form.Fname? form.Fname: user.name.first:'' %>' 
+							class='form-control info-update unicase-form-control text-input' id='newFname' />
+						</div>
+					
+						<div class='form-group' >
+							<label class='info-title' for='newLname'>Last Name<span></span></label>
+							<input type='text' name='Lname' value='<%= form && form.Lname || user.name.last? form && form.Lname? form.Lname: user.name.last:'' %>' 
+							class='form-control info-update unicase-form-control text-input' id='newLname' />
+						</div>	
+					</div> 
+					<div class='col-md-6'>
+						<div class='form-group' >
+							<label class='info-title' for='newEmail'>Email Address<span></span></label>
+							<input type='text' onmousedown="return false" oninput="this.value='<%= user.email?user.email:'' %>'"  name='Email' value="<%= user.email?user.email:'' %>" class='form-control unicase-form-control text-input' id='newEmail'/>                    
+						</div>  
+					
+						<div class='form-group' >
+							<label class='info-title' for='Tel'>Phone Number<span></span></label>
+							<input type='tel' name='Tel' value="<%= form && form.Tel || user.telephone? form && form.Tel? form.Tel: user.telephone:'' %>" 
+							class='form-control info-update unicase-form-control text-input' id='Tel' />                    
+						</div>	
+					</div>  
+					<div class='col-md-6'>
+						<div class='form-group' >
+							<label class='info-title' for='PassCurr'>Current Password<span></span></label>
+							<input type='password' name='PassCurr'  class='form-control info-update unicase-form-control text-input' id='PassCurr' />                    
+						</div>	
+
+						<div class='form-group' >
+							<label class='info-title' for='PassNew'>New Password<span></span></label>
+							<input type='password' name='PassNew'  class='form-control info-update unicase-form-control text-input' id='PassNew' />                    
+						</div>	
+					</div> 
+					<div class='col-md-6'>
+						<div class='form-group' >
+							<label class='info-title' for='PassConf'>Confirm Password<span></span></label>
+							<input type='password' name='PassConf'  class='form-control info-update unicase-form-control text-input' id='PassConf' />
+						</div>	
+					</div>
+					<div class='col-md-8'>
+						<button class='col-md-8 btn'>Save Changes</button>
+					</div>
+				</form>`;
+				breadcrumb.scrollIntoView(true);
+				currentView.textContent = 'Update Profile';
+			});
+
+			minfroute('/', ()=>{
+				// $('#uAddressForm').hide();
+				// $('#uStoreForm').hide();
+				minfredirect('info')
+				breadcrumb.scrollIntoView(true);
+				currentView.textContent = 'Update Profile';
+			});
+
+			minfroute('deliveryaddress', ()=>{
+				// $('#uProfileForm').hide();
+				// $('#uStoreForm').hide();
+				minfcontainer.innerHTML = `
+				<form method='post' id='uAddressForm' action="/account/profile/address<%= user.address?'/'+user.address:''%>#deliveryaddress" class="uProfile ">
+					<div class='col-md-6'>
+						<div class='form-group' >
+							<label class='info-title' for='state'>State<span></span></label>
+							<select name='state'  id='state' class='form-control unicase-form-control address-update text-input'>
+								<option>  ---Select State---
+								</option>
+								<%for(loc of location){%> 
+									<%if(addr && loc.state.id==addr.state){%>
+										<option selected value='<%=loc.state.id%>'> <%=loc.state.name%>
+										</option>
+									<% } else{ %>
+										<option  value='<%=loc.state.id%>'> <%=loc.state.name%>
+										</option>
+									<% } %>
+								<%}%>
+							</select>											
+						</div>
+
+						<div class='form-group'>
+							<label class='info-title' for='state'>LGA<span></span></label>
+							<select name='lga' id='lga'  class='form-control unicase-form-control address-update text-input'>
+								<option>  ---Select LGA---
+								</option>
+								<%if(addr){%>
+									<% for(lga of location[addr.state-1].state.locals){%>
+										<%if(addr && addr.LGA && lga.id==addr.LGA){%>
+											<option selected value='<%=addr.LGA%>'> <%=location[addr.state-1].state.locals[addr.LGA-1].name%> 
+											</option>
+										<%}else{%>
+											<option  value='<%=lga.id%>'> <%=lga.name%>
+											</option>
+										<%}%>
+									<%}%>
+								<%}%>
+							</select>
+						</div>
+					</div> 
+					<div class='col-md-6'>
+						<div class='form-group' >
+							<label class='info-title' for='city'>City<span></span></label>
+							<input type='text' value='<%=form && form.city || addr && addr.city? form && form.city? form.city: addr.city:''%>' 
+							placeholder='Enter City' name='city' class='form-control unicase-form-control address-update text-input' id='city'/>                    
+						</div>  
+						
+						<div class='form-group' >
+							<label class='info-title' for='streetAddress'>Street Address<span></span></label>
+							<input type='text' value='<%= form && form.streetAddress || addr && addr.streetAddress? form && form.streetAddress? form.streetAddress: addr.streetAddress:''%>' 
+							placeholder='Enter Street Address' name='streetAddress' 
+							class='form-control unicase-form-control address-update text-input' id='streetAddress'/>                    
+						</div>	
+					</div>  
+					<div class='col-md-6'>
+						<div class='form-group' >
+							<label class='info-title' for='postalCode'>Postal Code<span></span></label>
+							<input type='text' value='<%= form && form.postalCode || addr && addr.postalCode? form && form.postalCode? form.postalCode: addr.postalCode:''%>' 
+							placeholder='Enter Postal Code' name='postalCode'  class='form-control unicase-form-control address-update text-input' id='postalCode' />                    
+						</div>	
+
+						<div class='form-group' >
+							<label class='info-title' for='closestLandmark'>Closest Landmark<span></span></label>
+							<input type='text' value='<%= form && form.closestLandmark || addr && addr.closestLandmark? form && form.closestLandmark? form.closestLandmark: addr.closestLandmark:''%>' 
+							placeholder='Describe a landmark location near you' name='closestLandmark'  class='form-control unicase-form-control address-update text-input' id='closestLandmark' />                    
+						</div>	
+					</div> 
+					<div class='col-md-8'>
+						<button class='col-md-8 btn'>Save Changes</button>
+					</div>
+				</form>`;
+				breadcrumb.scrollIntoView(true);
+				currentView.textContent = 'Update Address';
+			});
+
+			minfroute('createstore', ()=>{
+				// $('#uProfileForm').hide();
+				// $('#uAddressForm').hide();
+				
+				minfcontainer.innerHTML = `
+				<form method='post' action='/account/profile/store#createstore' id='uStoreForm' class="uProfile ">
+					
+					<div class='col-md-6'>
+						<h1>Store Info</h1>
+						<div class='form-group' >
+							<label class='info-title' for='bizName'>Business Name<span></span></label>
+							<input type='text' value='<%=form && form.bizName? form.bizName: ''%>'
+							name='bizName' class='form-control info-update unicase-form-control text-input' id='bizName' />
+						</div>
+							
+						
+						<h1>Contact Info</h1>
+						<div class='form-group' >
+							<label class='info-title' for='storeState'>State<span></span></label><span id='stateError' class="msg"></span>
+							<select name='storeState'  id='storeState' class='form-control unicase-form-control address-update text-input'>
+								<option>  ---Select State---
+								</option>
+								<%for(loc of location){%>
+										<option  value='<%=loc.state.id%>'> <%=loc.state.name%>
+										</option>
+								<%}%>
+							</select>											
+						</div>
+						<div class='form-group'>
+							<label class='info-title' for='storeLga'>LGA<span></span></label><span id='lgaError' class="msg"></span>
+							<select name='storeLga' id='storeLga'  class='form-control unicase-form-control address-update text-input'>
+								<option>  ---Select LGA---
+								</option>
+							</select>
+						</div>
+						<div class='form-group' >
+							<label class='info-title' for='city'>City<span></span></label>
+							<input type='text'  placeholder='Enter City' name='storeCity' 
+							value='<%=form && form.storeCity? form.storeCity: ''%>'
+							class='form-control unicase-form-control address-update text-input' id='city'/>                    
+						</div>  
+						<div class='form-group' >
+							<label class='info-title' for='bizAddr'>Street Address<span></span></label>
+							<input type='text' value='<%=form && form.bizAddr? form.bizAddr: ''%>'
+							placeholder="Enter Physical Address of Business" 
+							name='bizAddr'  class='form-control info-update unicase-form-control text-input' id='bizAddr' />                    
+						
+						</div>
+						<div class='form-group' >
+							<label class='info-title' for='bizEmail'>Email Address<span></span></label>
+							<input type='text' name='bizEmail' 
+							value='<%=form && form.bizEmail? form.bizEmail: ''%>'
+							placeholder='Business Email Address' 
+							class='form-control unicase-form-control text-input' id='bizEmail'/>                    
+						</div>  
+					
+						<div class='form-group' >
+							<label class='info-title' for='bizTel'>Business Phone<span></span></label>
+							<input type='tel' paceholder="Enter Business Phone" 
+							value='<%=form && form.bizTel? form.bizTel: ''%>'
+							name='bizTel' class='form-control info-update unicase-form-control text-input' 
+							id='bizTel' />                    
+						</div>	
+						<div class='form-group' >
+							<label class='info-title' for='bizUrl'>URL<span></span></label><br/>
+							<h6 style="display: inline">http://kaakuna.com/</h6>&nbsp;<span id='urlError' class="msg"></span>
+							<input type='text' 
+							name='bizUrl' value='<%=form && form.bizUrl? form.bizUrl: ''%>'
+							class='form-control info-update unicase-form-control text-input' id='bizUrl' />                    
+						</div>	
+					</div>  				
+					<div class='col-md-8'>
+						<button class='col-md-8 btn'>Create Store</button>
+					</div>
+				</form>`
+				// $('#urlError').hide();
+				// $('#stateError').hide();
+				// $('#lgaError').hide();
+				breadcrumb.scrollIntoView(true);
+				currentView.textContent = 'Create Store';
+			});
+
+			minfroute('mystores', ()=>{
+				minfcontainer.innerHTML = `
+				<%if(user && user.stores){%>
+					<ul>
+						<%user.stores.forEach(function(store){%>
+							<li><a href='/account/store/<%=store.storeid%>'><%=store.storename%></a></li>
+						<%})%>
+					</ul>
+				<%}%>
+				`
+				breadcrumb.scrollIntoView(true);
+				currentView.textContent = 'My Stores';
+			})
+
+			// ### this section ensure that the state of 'user profile info' form has changed before submitting
+			// stores initial values of form fields
+			var inputs = {}
+
+			$('.info-update').live('focus', function(e){
+				// console.log('inputs before', inputs[e.target.id]);
+				if(inputs[e.target.id] === undefined){
+					inputs[e.target.id] = e.target.value;
+				}
+				// console.log('inputs after', inputs[e.target.id]);
+				// console.log(e)
+			});
+
+			$('#uProfileForm').live('submit', function(e){
+				var inputKeys = Object.keys(inputs);
+				var numInputs = inputKeys.length;
+				var modifiedFields = 0;
+				inputKeys.forEach((key, index)=>{
+					// console.log(key, $('#'+key).val())
+					modifiedFields += inputs[key] === $('#'+key).val();
+				});
+				
+				return !(modifiedFields === numInputs);
+			});
+			// ###
+
+
+
+			// ### this section ensures that the state of the 'user address update' form has changed 
+			// else does not submit the form
+
+			// get initial values of fields
+			// we dont want to submit a form if its state hasn't changed
+			var addrInputs = {}
+			$('.address-update').live('focus', function(e){
+				// console.log('inputs before', addrInputs[e.target.id]);
+				if(addrInputs[e.target.id] === undefined){
+					addrInputs[e.target.id] = e.target.value;
+				}
+			});
+
+			// when user selects state
+			// show LGAs
+			$('#state').live('change', function(event){
+				var selected =  event.target.value;
+				var lgas = states_and_lgas[+selected-1].state.locals;
+				// console.log(lgas)
+				var lgaopts = `<option vaue=''>---Select LGA---</option>`;
+				for(lga of lgas){
+					//console.log(lga);
+					lgaopts += `<option value='${lga.id}'> ${lga.name}</option>`;
+				}
+				document.getElementById('lga').innerHTML = lgaopts;
+			});
+
+			// forms onsubmit handler
+			$('#uAddressForm').live('submit', function(e){
+				var inputKeys = Object.keys(addrInputs);
+				var numInputs = inputKeys.length;
+				var modifiedFields = 0;
+				inputKeys.forEach((key, index)=>{
+					// console.log(key, $('#'+key).val())
+					modifiedFields += addrInputs[key] === $('#'+key).val();
+				});
+				
+				return !(modifiedFields === numInputs);
+			});
+			// ###
+
+
+
+			// ###
+			// validate select fields.
+			// be sure not to submit selects with option '---Select LGA/State---'
+			function validateSelectFields(val){
+				return !!(typeof(val)==='string' && !val.match(/-+Select \w+-+/)); 
+			}
+			$('#uStoreForm').live('submit', function(event){
+				var bizUrl = $('#bizUrl').val();
+
+				var isValidState = validateSelectFields($('#storeState').val());
+				isValidState?$('#stateError').text(''):$('#stateError').text('Please select a from the state drop down below');
+
+				var isValidLga = validateSelectFields($('#storeLga').val());
+				isValidLga?$('#lgaError').text(''):$('#lgaError').text('Please select an LGA from the LGA drop down below');
+
+				console.log( isValidState, isValidLga)
+				var len =  bizUrl.split(' ').length;
+				// console.log(len)
+				if(len>1){
+					$('#urlError').text('url should not conatain a space character');
+				}
+				else{
+					$('#urlError').text('');
+				}
+				return len==1 && isValidState && isValidLga;
+			});
+
+			$('#bizUrl').live('change', function(event){
+				var value = event.target.value;
+				var len = value.split(' ').length;
+				var errorSelector = $('#urlError');
+				if(len>1){
+					// url contains a space character
+					errorSelector.text('url should not conatain a space character');
+				}else{
+					errorSelector.text('');
+
+					// show spinner beside url text field
+					// block of code here
+					//
+					//###
+
+					$.getJSON('http://localhost:30000/account/profile/store/search', {q:value}, function(result){
+						var doc = result;
+						if(doc && doc.found){
+							// remove spinner text
+							errorSelector.text('URL already in use, not available');
+						}else{
+							errorSelector.text('');
+						}
+					});
+				}
+				// console.log(event);
+			});
+
+			$('#storeState').live('change', function(event){
+				var selected =  event.target.value;
+				var lgas = states_and_lgas[+selected-1].state.locals;
+				// console.log(lgas)
+				var lgaopts = `<option vaue=''>---Select LGA---</option>`;
+				for(lga of lgas){
+					// console.log(lga);
+					lgaopts += `<option value='${lga.id}'> ${lga.name}</option>`;
+				}
+				document.getElementById('storeLga').innerHTML = lgaopts;
+			});
+			// ###
+
+		});
+
+		$(window).bind('load', function() {
+		   $('.show-theme-options').delay(2000).trigger('click');
+		});
+	</script>
+	<!-- For demo purposes – can be removed on production : End -->
+
+	
+
+</body>
+
+<!-- Mirrored from www.themesground.com/flipmart-demo/V6/sign-in.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 11 Feb 2019 14:27:05 GMT -->
+</html>
