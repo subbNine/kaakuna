@@ -71,7 +71,7 @@ app.use(function(req, res, next) {
     res.locals.login = req.isAuthenticated();
     res.locals.session = req.session;
     res.locals.user = req.user;
-    res.locals.hashpath = undefined;
+    // res.locals.hashpath = undefined;
     res.locals.storeData = undefined;
     // console.log(res.locals)
     next();
