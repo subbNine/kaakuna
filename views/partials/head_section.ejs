@@ -36,7 +36,7 @@
   <style>
     .logo{
       width: 131px;
-      height: 70px;
+      height: 50px;
       overflow: hidden;
     }
     .logo img{
@@ -108,7 +108,11 @@
           <!--<div class="logo"> <a href="/"> <img src="/assets/images/logo.png" alt="logo"> </a> </div>-->
           <div class="logo"> 
             <a href="/<%=storeData && storeData.url?storeData.url:''%>">
-              <img src="<%=storeData && storeData.logo_path?'/'+storeData.url+'/images/'+storeData.logo_path:'/assets/images/logo.png'%>" alt="logo"> 
+            <%if(storeData && storeData.logo_path){%>
+              <img src="<%='/'+storeData.url+'/images/'+storeData.logo_path%>" alt="logo"> 
+            <%}else{%>
+              <h4>KAAKUNA.COM</h4> 
+            <%}%>
             </a> 
           </div>
           <!-- /.logo --> 
