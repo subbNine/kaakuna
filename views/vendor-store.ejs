@@ -128,6 +128,10 @@
     margin-top: 1rem;
   }
 
+  .banner{
+    margin-bottom: 50px;
+  }
+
 </style>
 <div class="body-content outer-top-xs">
   <div class='container'>
@@ -328,6 +332,7 @@ $(document).ready(function(){
   });
   
   var formAppends = {};
+  formAppends.data = '';
   minfroute('storebanner', ()=>{
     minfcontainer.innerHTML = `
       <p class="statusMsg"></p>
@@ -337,19 +342,19 @@ $(document).ready(function(){
             ${formAppends && formAppends.data?formAppends.data:''}
             <%if(store && store.banner_image){%>
               <%store.banner_image.forEach(function(img){%>
-                <div class="col-md-6">
+                <div class="col-md-6 banner">
                   <!--new elems should be appended here-->
                   
                     <label class="col-md-6 placeholder-container" id="placeholder-container">
-                    <%=img.path%>
-                      <img src='images<%='/'+img.path%>' id="logoImg" 
+                    
+                      <img src='<%=store._id+"/"%>images<%='/'+img.path%>' id="logoImg" 
                       />
                     </label>   
                   <button class="btn btn-flat col-sm-12 submit-btn delete-btn"  style="margin: 4px 0 0 0;"type="submit">delete</button> 
                 </div>
               <%})%>
             <%}%>
-            <div class="col-md-6 add-banner-container">
+            <div class="col-md-6 banner add-banner-container">
               <!--new elems should be appended here-->
               <label class="col-md-6 placeholder-container" id="placeholder-container">
                 <input type="file" name="file" accept="image/*" id="bannerimginp" data-multiple-caption="{count} files selected" />
@@ -448,7 +453,7 @@ $(document).ready(function(){
             success: function(msg){
                 $('.statusMsg').html('');
                 if(msg && msg.success===true){
-                    formAppends.data = `<div class="col-md-6">
+                    formAppends.buffer = `<div class="col-md-6 banner">
                                           <!--new elems should be appended here-->
                                           
                                             <label class="col-md-6 placeholder-container" id="placeholder-container">
@@ -456,8 +461,9 @@ $(document).ready(function(){
                                               />
                                             </label>   
                                           <button class="btn btn-flat col-sm-12 submit-btn delete-btn"  style="margin: 4px 0 0 0;"type="submit">delete</button> 
-                                        </div> `
-                  $(formAppends.data).insertBefore('.add-banner-container')
+                                        </div> `;
+                    formAppends.data += formAppends.buffer;
+                    $(formAppends.buffer).insertBefore('.add-banner-container')
 
                     // $('#storebanner')[0].reset();
                     $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Form data submitted successfully.</span>');

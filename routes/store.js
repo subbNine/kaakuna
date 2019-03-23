@@ -139,7 +139,7 @@ router.post('/:storeid/banner', function(req, res, next){
     var storeDataDir = ''+storeid
     // console.log(storeDataDir)
     if(!fs.existsSync(path.join(dataDirectoryRoot, storeDataDir))){
-        fs.mkdirSync(path.join(dataDirectoryRoot, storeDataDir));
+        fs.mkdirSync(path.join(dataDirectoryRoot, storeDataDir), {recursive: true});
     }
 
     form.parse(req, (err, fields, files) => {

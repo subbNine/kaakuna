@@ -23,7 +23,8 @@ router.get('/', function(req, res){
         res.render('sign-in', {page:'Account', 
                                 message: errMsg, 
                                 autoFill: autoFill
-                                });
+                            }
+                );
     }
 });
 
@@ -66,14 +67,14 @@ var storeAddr = require('../models/store').Address;
 
 var storeRoute = require('./store');
 
-// router to process
+// define local variables for stores
 router.use('/store', isLoggedIn, function(req, res, next){  // user must be signed in and must have privilleges to access this route
     const hasStores = req.user.stores;
     if(!hasStores){
         res.redirect('/account/profile#createstore') ;
         return;      
     }
-    
+    res.locals.storeData = undefined;    
     return next();
 }
 , storeRoute);
@@ -155,12 +156,16 @@ router.post('/profile/user', isLoggedIn, [
             var newPass = req.body.PassNew;
             console.log(newFname, newLname, newTel, req.user);
             if(newPass){
-                User.where({email:req.user.email}).updateOne({$set:
-                                                                {name:
-                                                                    {first:newFname, last:newLname}, 
-                                                                telephone: newTel, 
-                                                                password: newPass}
-                                                            }, 
+                User.where({email:req.user.email})
+                    .updateOne({$set:
+                                    {name:
+                                        {first:newFname, 
+                                        last:newLname
+                                        }, 
+                                    telephone: newTel, 
+                                    password: newPass
+                                    }
+                                }, 
                 function(err, writeOpResult){
                     if(err){
                         console.log(err);
@@ -172,7 +177,14 @@ router.post('/profile/user', isLoggedIn, [
                     }
                 })
             }else{
-                User.where({email:req.user.email}).updateOne({$set:{name:{first:newFname, last:newLname}, telephone:newTel}}, 
+                User.where({email:req.user.email})
+                    .updateOne({$set:{name:
+                                        {first:newFname, 
+                                        last:newLname
+                                    }, 
+                                    telephone:newTel
+                                    }
+                                }, 
                 function(err, writeOpResult){
                     if(err){
                         console.log(err);
@@ -369,7 +381,11 @@ router.post('/profile/store', isLoggedIn, [check('bizUrl').isLength({min: 1})
         var newStore = new Store({name: bizName, vendor: req.user._id, url: bizUrl, email: bizEmail});
         newStore.business_phone.push(bizTel);
 
-        var newStoreAddr = new storeAddr({state: bizState, city: bizCity, LGA: bizLga, streetAddress: bizStreet, store: newStore._id});
+        var newStoreAddr = new storeAddr({state: bizState, 
+                                          city: bizCity, 
+                                          LGA: bizLga, 
+                                          streetAddress: bizStreet, 
+                                          store: newStore._id});
         newStore.business_address.push(newStoreAddr._id);
         newStore.save(function(err){    // save new store document
             if(!err){
