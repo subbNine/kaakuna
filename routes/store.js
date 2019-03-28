@@ -120,7 +120,7 @@ router.post('/:storeid/logo', function(req, res, next){
         fs.rename(oldImgPath, newImgPath, (err) => {
             if (err){return next(err)};
             console.log('Rename complete!');
-            Store.findByIdAndUpdate(storeid, {logo_path: newImgName}, function(err, store){
+            Store.findByIdAndUpdate(storeid, {logo_path: newImgName}, function(err){
                 if(err){ return next(err)};
                 return res.redirect(`/account/store/${storeid}`);
             })
@@ -128,15 +128,20 @@ router.post('/:storeid/logo', function(req, res, next){
     });
 });
 
-router.post('/:storeid/banner', function(req, res, next){
+// create or add store banner
+router.post('/:storeid/banner', function(req, res){
     var dataDirectoryRoot = req.dataDirectoryRoot;  // root directory for storing images
 
     var form  = new formidable.IncomingForm();
 
     var storeid =  req.params.storeid;
 
-    // console.log(storeid)
+    var response = {}
+
+    // store files are saved in a directory named after the store's id
+    // and images are named after the mongoose-objectid assigned to them
     var storeDataDir = ''+storeid
+
     // console.log(storeDataDir)
     if(!fs.existsSync(path.join(dataDirectoryRoot, storeDataDir))){
         fs.mkdirSync(path.join(dataDirectoryRoot, storeDataDir), {recursive: true});
@@ -145,8 +150,9 @@ router.post('/:storeid/banner', function(req, res, next){
     form.parse(req, (err, fields, files) => {
         console.log(req.params.storeid)
         if (err) {
-          console.error('Error', err);
-          throw err;
+            response.success = false;
+            response.message = 'something went wrong, please try again';
+            return res.json(response);
         } 
         
         var storeDataDir = ''+storeid
@@ -154,18 +160,29 @@ router.post('/:storeid/banner', function(req, res, next){
         var newImgPath = path.join(dataDirectoryRoot, storeDataDir, newImgName);
         var oldImgPath = files.file.path;
         fs.rename(oldImgPath, newImgPath, (err) => {
-            if (err){return next(err)};
+            if (err){
+                response.success = false;
+                response.message = 'something went wrong, please try again';
+                return res.json(response);
+            };
             console.log('Rename complete!');
             Store.findById(storeid, function(err, doc){
-                if(err) return next(err)
+                if(err){
+                    response.success = false;
+                    response.message = 'something went wrong, please try again';
+                    return res.json(response);
+                }
                 if(doc.banner_image === undefined){
                     doc.banner_image = [];
                 }
                 doc.banner_image.push({path:newImgName});
                 
                 doc.save(function(err){
-                    if(err){return  next(err)}
-                    var response = {}
+                    if(err){
+                        response.success = false;
+                        response.message = 'something went wrong, please try again';
+                        return res.json(response);
+                    }
                     response.success = true;
                     response.message = 'success'
                     res.json(response);

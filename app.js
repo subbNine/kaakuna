@@ -117,7 +117,7 @@ app.use('/checkout.html', function(req, res, next){
 var Store = require('./models/store').Store
 
 app.use('/:store_url_name', function(req, res, next){
-    var storeUrlName = req.params.store_url_name;
+    var storeUrlName = req.params.store_url_name.toLowerCase();;
     Store.findOne({url: storeUrlName}, function(err, store){
         if(err) return next(err)
         if(store && store.url){

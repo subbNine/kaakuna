@@ -160,6 +160,9 @@
               <a class="no-products" href="#productcatalog">
                 <i class="no-products-icon "  aria-hidden="true"></i>Product Catalog
               </a>
+              <a class="no-products" href="/<%=store && store.url?store.url:''%>" target="_blank">
+                <i class="no-products-icon "  aria-hidden="true"></i>View Changes in Store
+              </a>
             </ul>
             <!-- /.nav --> 
           </nav>
@@ -175,7 +178,8 @@
       <div class='col-md-9'> 
         <!-- ========================================== SECTION – HERO ========================================= -->
         <h4 class="section-heading" id="section-heading"></h4>
-        <div id="actionsDisp">  
+        
+        <div id="actionsDisp" class="col-md-12">  
         </div>
       <!-- /.col -->
       </div> 
@@ -226,26 +230,7 @@
   </div>
 </div>
 
-<!-- add product modal-->
-<div id="addProductsModal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Add Items to Store</h4>
-      </div>
-      <div class="modal-body">
-        <p>Some text in the modal.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
 
 <!-- /.body-content --> 
 <%# /* footer */%>
@@ -292,7 +277,7 @@ $(document).ready(function(){
     // $('#uAddressForm').hide();
     // $('#uStoreForm').hide();
     minfcontainer.innerHTML = '<h4>Welcome</h4'
-    
+    sectionHeading.textContent = 'Welcome';
   });
 
   minfroute('*', ()=>{
@@ -309,9 +294,9 @@ $(document).ready(function(){
             <%if(store && store._id && store.logo_path){%>
               <img id="logoImg" 
               src="/account/store/<%=store._id+'/'%>images<%='/'+store.logo_path%>"/>
-              <a id="add-logo" >change logo image</a>
+              <a id="addimg" >change logo image</a>
             <%} else{%>
-              <a id="add-logo" >add logo image</a>
+              <a id="addimg" >add logo image</a>
             <%}%>      
           </label>   
           <div class="col-md-4"></div>
@@ -332,14 +317,14 @@ $(document).ready(function(){
   });
   
   var formAppends = {};
-  formAppends.data = '';
+  formAppends.bannerdata = '';
   minfroute('storebanner', ()=>{
     minfcontainer.innerHTML = `
       <p class="statusMsg"></p>
       
       <form method="post" id="storebanner" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
-        <div class="col-md-12 ">
-            ${formAppends && formAppends.data?formAppends.data:''}
+        <div class="col-md-12 imgwrapper">
+            ${formAppends && formAppends.bannerdata?formAppends.bannerdata:''}
             <%if(store && store.banner_image){%>
               <%store.banner_image.forEach(function(img){%>
                 <div class="col-md-6 banner">
@@ -359,10 +344,10 @@ $(document).ready(function(){
               <label class="col-md-6 placeholder-container" id="placeholder-container">
                 <input type="file" name="file" accept="image/*" id="bannerimginp" data-multiple-caption="{count} files selected" />
                 
-                  <img id="logoImg" 
+                  <img id="bannerImg" 
                   "/>
                 
-                <a id="add-logo" >add image</a>             
+                <a id="addimg" >add image</a>             
               </label> 
               <button class="btn btn-flat col-sm-12 submit-btn" style="margin: 4px 0 0 0;"type="submit">Upload</button> 
             </div> 
@@ -375,17 +360,17 @@ $(document).ready(function(){
   // --end-- router section
 
   $('[type="file"]').live('focus', function(event){
-    $('#add-logo').css('background-color', '#aaaaaa')
+    $('#addimg').css('background-color', '#aaaaaa')
   })
 
   $('[type="file"]').live('blur', function(event){
-    $('#add-logo').css('background-color', 'rgba(0,0,0,0)')
+    $('#addimg').css('background-color', 'rgba(0,0,0,0)')
   })
 
   $('.placeholder-container').live('mouseenter', function(event){
-    $('#add-logo').css('background-color', '#aaaaaa')
+    $('#addimg').css('background-color', '#aaaaaa')
   }).live('mouseleave', function(){
-    $('#add-logo').css('background-color', 'rgba(0,0,0,0)')
+    $('#addimg').css('background-color', 'rgba(0,0,0,0)')
   })
 
   // retrieve bas64 format of images
@@ -462,12 +447,14 @@ $(document).ready(function(){
                                             </label>   
                                           <button class="btn btn-flat col-sm-12 submit-btn delete-btn"  style="margin: 4px 0 0 0;"type="submit">delete</button> 
                                         </div> `;
-                    formAppends.data += formAppends.buffer;
+                    formAppends.bannerdata += formAppends.buffer;
                     $(formAppends.buffer).insertBefore('.add-banner-container')
-
-                    // $('#storebanner')[0].reset();
+                      formAppends.buffer = '';
+                    $('#storebanner input').next().removeAttr("src");
+                    $('[type="file"]').val('')
                     $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Form data submitted successfully.</span>');
-                }else{
+                }
+                else{
                     $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
                 }
                 $('#storebanner').css("opacity","");

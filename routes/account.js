@@ -68,13 +68,14 @@ var storeAddr = require('../models/store').Address;
 var storeRoute = require('./store');
 
 // define local variables for stores
-router.use('/store', isLoggedIn, function(req, res, next){  // user must be signed in and must have privilleges to access this route
+// user must be signed in and must have privilleges to access this route
+router.use('/store', isLoggedIn, function(req, res, next){ 
     const hasStores = req.user.stores;
     if(!hasStores){
         res.redirect('/account/profile#createstore') ;
         return;      
     }
-    res.locals.storeData = undefined;    
+    // res.locals.storeData = undefined;    
     return next();
 }
 , storeRoute);
@@ -358,7 +359,8 @@ router.post('/profile/store', isLoggedIn, [check('bizUrl').isLength({min: 1})
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         Address.findById(req.user.address, function(err, addr){
-            console.log(errors.array())
+            console.log('errors array', errors.array())
+            console.log('errors obj', errors)
             res.render('profile', {page:'profile', 
                                     // statestr: states_and_lgas[addr.state].state.name,
                                     // lgastr: states_and_lgas[addr.state].state.locals[addr.LGA].name,
@@ -423,8 +425,8 @@ router.post('/profile/store', isLoggedIn, [check('bizUrl').isLength({min: 1})
 // });
 
 router.get('/logout', isLoggedIn, function(req, res, next) {
-    req.logOut();
     req.session.destroy();
+    req.logOut();
     res.redirect('/');
 });
 

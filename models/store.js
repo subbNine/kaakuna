@@ -26,26 +26,26 @@ const store = new Schema({
 
 // store.virtuals('bannerI').get
 
+const storeItemSubCategory = new Schema({
+    category: {type: Schema.Types.ObjectId, ref: 'storeItemCategory'},
+    store: {type: Schema.Types.ObjectId, ref: 'store'},
+    name: {type: String, lowercase: true}
+});
+
 const storeItemCategory = new Schema({
     category_name: {type: String, lowercase: true},
     image_path: String,
     icon_class: String,
     store: {type:Schema.Types.ObjectId, ref: 'store'},
-    subCategories:{type:[
-            {subcategory:{
-                type:Schema.Types.ObjectId, 
-                ref: 'storeItemSubCategory'
-                }, 
-            subcategory_name: String
-            }
+    subCategories:{type:[ storeItemSubCategory
+            // {subcategory:{
+            //     type:Schema.Types.ObjectId, 
+            //     ref: 'storeItemSubCategory'
+            //     }, 
+            // subcategory_name: String
+            // }
         ]
     }
-});
-
-const storeItemSubCategory = new Schema({
-    category: {type: Schema.Types.ObjectId, ref: 'storeItemCategory'},
-    store: {type: Schema.Types.ObjectId, ref: 'store'},
-    name: {type: String, lowercase: true}
 });
 
 const storeItem = new Schema({
