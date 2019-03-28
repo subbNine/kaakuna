@@ -1,5 +1,5 @@
 <%# header %>
-<% include partials/store_head_section.ejs %>
+<% include partials/vendorstore_headsection.ejs %>
 
 <div class="breadcrumb">
   <div class="container">
@@ -39,7 +39,7 @@
 
   .placeholder-container{
     width: 100%;
-    height: 150px;
+    height: 140px;
     position: relative;
     border: 1px #cccccc solid;
     cursor: pointer;
@@ -132,6 +132,9 @@
     margin-bottom: 50px;
   }
 
+  .cat-btn{
+    margin: 10px 10px;
+  }
 </style>
 <div class="body-content outer-top-xs">
   <div class='container'>
@@ -228,7 +231,7 @@
     <!-- ============================================== BRANDS CAROUSEL : END ============================================== --> </div>
   <!-- /.container --> 
   </div>
-</div>
+</div>          
 
 
 
@@ -304,9 +307,7 @@ $(document).ready(function(){
       <div class="col-md-12 centeralize" >
           <div class="col-md-4"></div>
           <div class="col-md-4" >
-            <!--- if(storeid){
-              <a href="/<%=storeid%>" class="btn btn-flat col-md-9"  target="_blank">view changes in store page</a>
-            }--->   
+             
             <input class="btn btn-flat col-md-9" type="submit" value="Upload logo"/>
             
           </div>          
@@ -356,6 +357,178 @@ $(document).ready(function(){
       </form>
     `
     sectionHeading.textContent = 'Upload a Banner for your store';
+  });
+
+  formAppends.prodcatdata = ''
+  minfroute('productcategories', ()=>{
+    minfcontainer.innerHTML = `
+      <p class="statusMsg"></p>
+      <div class=' form-group row col-md-12 col-sm-12'>
+
+        <div class='col-md-3 col-sm-1' >
+        </div> 
+
+        <div class="col-md-6 col-sm-10">
+          <button  class="btn cat-btn btn-flat col-md-12 col-sm-12" data-target="#addCat" data-toggle="collapse" >add category</button>
+          
+          
+          <form method='post' class="collapse col-sm-12" enctype="multipart/form-data" id='addCat'> 
+            <div class="col-md-1 col-sm-1">
+            </div>
+            <div class=' col-md-10 col-sm-10'>
+              <label class='info-title' for='catName' style="margin: 20px 0 0 0">Category Name<span></span></label>
+              <input type='text' name='catName' 
+              class='form-control info-update unicase-form-control text-input' id='catName' />
+
+              <label for="catimginp" style="margin: 20px 0 10px 0">
+                Category Image
+              </label>
+              <label class="col-md-6 placeholder-container" id="placeholder-container"> 
+                <input type="file" name="file" accept="image/*" id="catimginp" data-multiple-caption="{count} files selected" />
+                
+                <img id="catImg" 
+                />
+                
+                <a id="addimg" >add image</a>             
+              </label> 
+              <button class='col-md-12 btn submit-btn' style="margin: 4px 0 0 0">Add</button>
+            </div>
+            <div class="col-md-1 col-sm-1">
+            </div>
+
+          </form>
+
+          <button   class="btn cat-btn btn-flat col-md-12 col-sm-12" data-target="#addSubCat" data-toggle="collapse">add sub category</button>
+          
+          <form method='post' class="collapse col-sm-12" enctype="multipart/form-data" id='addSubCat'> 
+            <div class="col-md-1 col-sm-1">
+            </div>
+            <div class="col-md-10 col-sm-10">
+              <label class='info-title' for='subcatCategory' style="margin-top: 20px">Category Name<span></span></label>
+              <select name='subcatCategory'  id='subcatCategory' class='form-control unicase-form-control'>
+                <option selected>  ---Select Category---
+                </option>
+                <%if(categories){%>
+                  <%for(cat of categories){%> 
+                    
+                    <option value='<%=cat._id%>'> <%=cat.category_name%>
+                    </option>
+                  
+                  <%}%>
+                <%}%>
+                ${formAppends && formAppends.prodcatdata?formAppends.prodcatdata:''}
+              </select>
+              <label class='info-title' for='subCatName' style="margin-top: 20px">Sub category Name<span></span></label>
+              <input type='text'  placeholder='Enter Sub category Name' name='subCatName' 	
+                class='form-control unicase-form-control address-update text-input' id='subCatName'/>  
+              
+                <button class='col-md-12 btn submit-btn' style="margin: 10px 0 0 0">Add</button>  
+            </div>
+            <div class="col-md-1 col-sm-1">
+            </div>
+
+          </form>
+
+        </div>
+
+        <div class='col-md-3 col-sm-1' >
+        </div>
+
+      </div> 
+    `
+    sectionHeading.textContent = 'Product Categories';
+  }); 
+
+  minfroute('productcatalog', ()=>{
+    minfcontainer.innerHTML = `
+     						
+        <div class="col-md-12">
+          
+          <div class='form-group col-md-6' >
+            <label class='info-title' for='itemName'>Name of Item<span></span></label>
+            <input type='text'  placeholder='Name of Item' name='itemName' 
+            class='form-control unicase-form-control address-update text-input' id='itemName'/>                    
+          </div>  
+          <div class='form-group col-md-6' >
+            <label class='info-title' for='itemPrice'>Price of Item<span></span></label>
+            <input type='number' 
+            placeholder="Price of Item (NGN)" 
+            name='itemPrice'  class='form-control info-update unicase-form-control text-input' id='itemPrice' />                    
+          </div>
+      
+          <div class='form-group col-md-6' >
+            <label class='info-title' for='prodManf'>Manufacturer of Product<span></span></label>
+            <input type='text' name='prodManf' 
+            placeholder='Manufacturer of Products' 
+            class='form-control unicase-form-control text-input' id='prodManf'/>                    
+          </div>  
+        
+          <div class='form-group col-md-6' >
+            <label class='info-title' for='prodColor'>Color of Product<span></span></label>
+            <input type='text' placeholder="e.g black, white, red"
+           name='prodColor' class='form-control info-update unicase-form-control text-input' 
+            id='prodColor' />                    
+          </div>
+          
+          <div class='form-group col-md-6' >
+            <label for="prodImg" >
+              Product Image
+            </label>
+            <label class="col-md-6 placeholder-container" id="placeholder-container"> 
+              <input type="file" name="prodImgInp" accept="image/*" id="prodImgInp"/>
+              
+              <img id="prodImg" 
+              />
+              
+              <a id="addimg" >add image</a>             
+            </label>                  
+          </div>
+          <div class='form-group col-md-6' >
+            <label class='info-title' for='productDesc'>Description of Product<span></span></label>
+            <textarea type='text area'name='productDesc' 
+            class='form-control info-update unicase-form-control 
+            text-input' id='productDesc'></textarea>
+          </div>
+          <div class="form-group col-md-6">
+            <label class='info-title' for='prodCategory' style="">Category Name<span></span></label>
+            <select name='prodCategory'  id='prodCategory' class='form-control unicase-form-control'>
+              <option selected>  ---Select Category---
+              </option>
+              <%if(categories){%>
+                <%for(cat of categories){%> 
+                  
+                  <option value='<%=cat._id%>'> <%=cat.category_name%>
+                  </option>
+                
+                <%}%>
+              <%}%>
+              ${formAppends && formAppends.prodcatdata?formAppends.prodcatdata:''}
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class='info-title' for='prodSubCategory' style="">Sub Category Name<span></span></label>
+            <select name='prodSubCategory'  id='prodSubCategory' class='form-control unicase-form-control'>
+              <option selected>  ---Select Category---
+              </option>
+              <!--<%if(categories){%>
+                <%for(cat of categories){%> 
+                  
+                  <option value='<%=cat._id%>'> <%=cat.category_name%>
+                  </option>
+                
+                <%}%>
+              <%}%>-->
+              ${formAppends && formAppends.prodsubcatdata?formAppends.prodsubcatdata:''}
+            </select>
+          </div>
+        </div>  
+        <div class='col-md-12' style="margin-top: 30px">
+          <div class="col-md-4"></div>
+          <button class='col-md-4 btn' style="background-color: #d0205e">Add Product</button>
+          <div class="col-md-4"></div>
+        </div>     
+    `
+    sectionHeading.textContent = "Product Catalog";
   });
   // --end-- router section
 
@@ -466,30 +639,114 @@ $(document).ready(function(){
               $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
             }
         });
-    });
+    }
+  );
+
+  //  create category for store item
+  $('#addCat').live('submit', function(event){
+    event.preventDefault();
+    if(!$('#catimginp').val()){
+      // code-block:::show error message
+      alert('please click on the add image button to add a category image')
+      return false
+    }
+    if(!$('#catName').val()){
+      alert('please do not leave the category name field blank')
+      return false
+    }
+
+    $.ajax({
+          type: 'POST',
+          url: "/account/store<%=storeid?'/'+storeid:''%>/cat",
+          data: new FormData(this),
+          contentType: false,
+          cache: false,
+          processData: false,
+          beforeSend: function(){
+              $('.submit-btn').attr("disabled","disabled");
+              $('#addCat').css("opacity",".5");
+          },
+          success: function(msg){
+              $('.statusMsg').html('');
+              if(msg && msg.success===true){
+                  
+                  // add result to the list of categories under the subcategory section
+                  $('#subcatCategory')
+                  .append(`<option value="${msg.data && msg.data.value? msg.data.value:''}">
+                              ${msg.data && msg.data.innerHtml?msg.data.innerHtml:''}
+                          </option>`);
+
+                  $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Form data submitted successfully.</span>');
+              }else{
+                  $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">'+ (msg.message?msg.message:'Some problem occurred, please try again.')+'</span>');
+              }
+              $('#addCat').css("opacity","");
+              $(".submit-btn").removeAttr("disabled");
+          },
+          error: function(errObj, status){
+            $('#addCat').css("opacity","");
+            $(".submit-btn").removeAttr("disabled");
+            $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
+          }
+      });
+  });
+
+  // create sub category for store item
+  $('#addSubCat').live('submit', function(event){
+    event.preventDefault();
+    if(!$('#subCatName').val()){
+      // code-block:::show error message
+      alert('please click on the add image button to add a category image')
+      return false
+    }
+    if(!$('#subcatCategory').val() || $('#subcatCategory').val() == '---Select Category---'  ){
+      alert('please select a category')
+      return false
+    }
+
+    $.ajax({
+          type: 'POST',
+          url: "/account/store<%=storeid?'/'+storeid:''%>/subcat",
+          data: new FormData(this),
+          contentType: false,
+          cache: false,
+          processData: false,
+          beforeSend: function(){
+              $('.submit-btn').attr("disabled","disabled");
+              $('#addSubCat').css("opacity",".5");
+          },
+          success: function(msg){
+              $('.statusMsg').html('');
+              if(msg && msg.success===true){
+                  
+                  // add result to the list of categories under the subcategory section
+                  $('#subcatCategory')
+                  .append(`<option value="${msg.data && msg.data.value? msg.data.value:''}">
+                              ${msg.data && msg.data.innerHtml?msg.data.innerHtml:''}
+                          </option>`);
+                  
+                  // save the new form data to a variable
+                  formAppends.prodcatdata += 
+                    `<option value="${msg.data && msg.data.value? msg.data.value:''}">
+                        ${msg.data && msg.data.innerHtml?msg.data.innerHtml:''}
+                    </option>`;
+
+                  $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Form data submitted successfully.</span>');
+              }else{
+                  $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">'+ (msg.message?msg.message:'Some problem occurred, please try again.')+'</span>');
+              }
+              $('#addSubCat').css("opacity","");
+              $(".submit-btn").removeAttr("disabled");
+          },
+          error: function(errObj, status){
+            $('#addSubCat').css("opacity","");
+            $(".submit-btn").removeAttr("disabled");
+            $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
+          }
+      });
+  });
 
 });
-
-
-//   Array.prototype.forEach.call( inputsContainer, function( container ) {
-//     var fileInput = container.firstElementChild
-//       , imageTag = container.lastElementChild;
- 
-//     fileInput.addEventListener( 'change', function( e ) {
-//       var fileName = undefined;
-//       if ( this.files && this.files.length > 1 ) {
-//         fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
-//       } else {
-//         var reader = new FileReader();
-//         reader.onload = function(){
-//           imageTag.src = reader.result;
-//         };
-//         reader.readAsDataURL(e.target.files[0]);
-//       }
-//     });
-//   });
-
-// });
 
 </script>
 
