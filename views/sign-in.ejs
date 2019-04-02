@@ -203,7 +203,7 @@
 
 	<!-- For demo purposes – can be removed on production -->
 	
-	<script src="/switchstylesheet/switchstylesheet.html"></script>
+	<!--script src="/switchstylesheet/switchstylesheet.html"></script-->
 
 	<script src='/assets/js/minimalistic-front-end-router.js'></script>
 	
@@ -219,7 +219,7 @@
 			$('#sign-up-form').hide();
 			
 			
-			minfroute('signup', function(){
+			minfroute('signup', null, function(){
 				// e.preventDefault();
 				$('#sign-in-form').hide();
 				$('#sign-up-form').show();
@@ -227,7 +227,7 @@
 				viewport.scrollIntoView(true);
 			});
 
-			minfroute('signin', function(){
+			minfroute('signin', null, function(){
 				// e.preventDefault();
 				$('#sign-up-form').hide();
 				$('#sign-in-form').show();

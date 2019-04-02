@@ -260,17 +260,20 @@ router.post('/profile/address', isLoggedIn, function(req, res, next){
         if(err){
             return next(err)
         };
-        User.where({email: req.user.email}).updateOne({$set:{address: addr._id}}, function(err, writeOpResult){
-            if(err){
-                console.log(err);
-                next(err);
+        User.where({email: req.user.email})
+            .updateOne({$set:{address: addr._id}}, 
+            function(err, writeOpResult){
+                if(err){
+                    console.log(err);
+                    next(err);
+                }
+                if(writeOpResult){
+                    // console.log(writeOpResult);
+                    // req.session.userAddress = addr;
+                    res.redirect('/account/profile#deliveryaddress');
+                }
             }
-            if(writeOpResult){
-                // console.log(writeOpResult);
-                // req.session.userAddress = addr;
-                res.redirect('/account/profile#deliveryaddress');
-            }
-        });
+        );
     });
     
     // res.render('profile', {page:'profile'});

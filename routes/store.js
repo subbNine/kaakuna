@@ -213,7 +213,11 @@ router.post('/:storeid/cat',
                 return res.json(response);
             }
 
-            // console.log(catName)
+            if(!files.file.size){
+                response.success = false;
+                response.message = 'You have not uploaded any file';
+                return res.json(response);  
+            }
             if (err) {
                 response.success = false;
                 response.message = 'something went wrong, please try again';
@@ -224,7 +228,7 @@ router.post('/:storeid/cat',
             ProductCategory.find({store: storeid, category_name: catName.toLowerCase()}, 'category_name', 
                 function(err, cat){
                     if(cat && cat.length){
-                        console.log(cat)
+                        // console.log(cat)
                         response.success = false;
                         response.message = "you already a category with that name";
                         return res.json(response);
@@ -314,5 +318,215 @@ router.post('/:storeid/subcat',
         })
     }
 );
+
+router.get('/:storeid/subcat', 
+    function(req, res, next){
+        var query = req.query;
+        // console.log('got query: ', query);
+        ProductCategory.findById(query.category, 'subCategories', function(err, prodcat){
+            if(prodcat && prodcat.subCategories){
+                console.log(prodcat);
+                if(prodcat.subCategories.length){
+                    var subcats = prodcat.subCategories.map((subcat, subcatidx, subcats)=>{
+                                    return {name:subcat.name, id: subcat._id}
+                                }
+                        );
+                    console.log('subcat', subcats)
+                    return res.json({success: true, data: subcats});
+                }
+                
+                return res.json({success: true, data: []});
+                
+            }
+            return res.json({success: false, data: []})
+        });
+    }
+);
+
+router.post('/:storeid/addprod', 
+    function(req, res, next){
+        var form = formidable.IncomingForm();
+        var dataDirectoryRoot = req.dataDirectoryRoot;  // root directory for storing images
+        var storeid = req.params.storeid;
+        var storeDataDir = ''+storeid
+        var response = {};
+
+        if(!fs.existsSync(path.join(dataDirectoryRoot, storeDataDir))){
+            fs.mkdirSync(path.join(dataDirectoryRoot, storeDataDir), {recursive: true});
+        }
+
+        form.parse(req, function(err, fields, files){
+            var itemName = fields.itemName;
+            var prodImg = files.prodImgInp;
+            if(!itemName) return res.json({success: false, message: 'dont leave the <b>product name</b> field blank'})
+        
+            var itemPrice = fields.itemPrice;
+            if(!itemPrice) return res.json({success: false, message: 'dont leave the <b>Price of Product</b> field blank'})
+
+            var prodManf = fields.prodManf;
+            if(!prodManf) return res.json({success: false, message: 'dont leave the <b>manufacturer of product</b> field blank'})
+
+            var prodColor = fields.prodColor;
+            if(!prodColor) return res.json({success: false, message: 'dont leave the <b>color of product</b> field blank'})
+
+            var itemQty = fields.itemQty;
+            if(!itemQty) return res.json({success: false, message: 'dont leave the <b>Item Quantity</b> field blank'});
+
+            // console.log(files)
+            var productDescription = fields.productDesc;
+            if(!productDescription) return res.json({success: false, message: 'dont leave the <b>Product description</b> field blank'});
+
+            var productCategoryId = fields.prodCategory;
+            if(!productCategoryId) return res.json({success: false, message: 'dont leave the <b>Product Category</b> field blank'});
+            
+            // console.log({prodsubcat: req.checkBody('prodSubCategory')})
+            // console.log({prodsubcatbody: req.body})
+
+            var productSubCategoryId = fields.prodSubCategory;
+            if(!productSubCategoryId){ 
+                return res.json({success: false, message: 'dont leave the <b>Product sub category</b> field blank'});
+            } else{
+
+                // ensure that the subcategoryid from form field is valid and is registered  
+                // under the category id found in the database
+                ProductSubCategory.findOne({_id: productSubCategoryId, category: productCategoryId}, function(err, subcat){
+                    if(subcat && subcat._id){
+                        // this route serve product update and new product 
+                        Product.findOne({name: itemName.toLowerCase(), 
+                            category: productSubCategoryId, 
+                            store: storeid, 
+                            }, 
+                            function(err, prod){
+                                if (err){
+                                    response.success = false;
+                                    response.message = 'something went wrong, please try again';
+                                    return res.json(response);
+                                   
+                                };
+                                var storeDataDir = ''+storeid
+                                var newImgName = ''+mongoose.Types.ObjectId() // .Schema.Types.ObjectId;
+                                var newImgPath = path.join(dataDirectoryRoot, storeDataDir, newImgName);
+                                var oldImgPath = prodImg.path;
+                                if(prod && prod._id){
+                                    // if an image is uploaded
+                                    if(prodImg && prodImg.size){
+                                        fs.rename(oldImgPath, newImgPath, (err) => {
+                                            if (err){
+                                                response.success = false;
+                                                response.message = 'something went wrong, please try again';
+                                                return res.json(response);
+                                            
+                                            }
+                                            Product.where({name: itemName.toLowerCase(), 
+                                                category: productSubCategoryId,
+                                                store: storeid,
+                                                })
+                                                .updateOne(
+                                                    {
+                                                        name: itemName,
+                                                        description: productDescription,
+                                                        category: productSubCategoryId,
+                                                        price: itemPrice,
+                                                        manufacturer: prodManf,
+                                                        color: prodColor,
+                                                        image_path: newImgName,
+                                                        quantity: itemQty,
+                                                        store: storeid
+                                                        
+                                                    }, 
+                                                    function(err, writeopres){
+                                                        response.success = true;
+                                                        response.message = 'product updated';
+                                                        return res.json(response);
+                                                    }
+                                                )
+                                            }
+                                        )
+                                    }else{
+                                        Product.where({name: itemName.toLowerCase(), 
+                                            category: productSubCategoryId,
+                                            store: storeid,
+                                            })
+                                            .updateOne(
+                                                {
+                                                    name: itemName,
+                                                    description: productDescription,
+                                                    category: productSubCategoryId,
+                                                    price: itemPrice,
+                                                    manufacturer: prodManf,
+                                                    color: prodColor,
+                                                    quantity: itemQty,
+                                                    store: storeid
+                                                 
+                                                }, 
+                                                function(err, writeopres){
+                                                    if(err) return res.json({success: false, message: 'something went wrong'})
+                                                    console.log(writeopres)
+                                                    if(writeopres.nModified){
+                                                        response.success = true;
+                                                        response.message = 'product updated';
+                                                        return res.json(response);
+                                                    }else{
+                                                        response.success = false;
+                                                        response.message = 'update not successful';
+                                                        return res.json(response);
+                                                    }
+                                                }
+                                            )
+                                    }
+                                    
+                                }else{
+                                    if(!(prodImg && prodImg.size && prodImg.type.match(/image\/[jpg|png|JPEG]/))){
+                                        return res.json({success: false, message: 'You have not uploaded a product image'}); 
+                                    }
+            
+                                    fs.rename(oldImgPath, newImgPath, (err) => {
+                                        if (err){
+                                            response.success = false;
+                                            response.message = 'something went wrong, please try again';
+                                            return res.json(response);
+                                           
+                                        };
+                                        
+                                        var product = new Product({
+                                            name: itemName,
+                                            description: productDescription,
+                                            category: productSubCategoryId,
+                                            price: itemPrice,
+                                            manufacturer: prodManf,
+                                            color: prodColor,
+                                            image_path: newImgName,
+                                            quantity: itemQty,
+                                            store: storeid
+                                            }
+                                        );
+                                        
+                                        product.save(function(err, category){
+                                            if(err) {
+                                                response.success = false;
+                                                response.message = 'something went wrong, please try again';
+                                                return res.json(response);
+                                               
+                                            }
+                                            response.success = true;
+                                            response.message = 'success'
+                                            // response.data = {}
+                                            // response.data.value = category._id
+                                            // response.data.innerHtml = category.category_name
+                                            return res.json(response);
+                                            
+                                        });    
+                                    })
+                                }
+                            }
+                        );
+                    }
+                    else{
+                        res.json({success: false, message: 'invalid category or sub category '});
+                    }
+                });
+            }
+        });
+});
 
 module.exports = router;

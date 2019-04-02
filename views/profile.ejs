@@ -370,10 +370,8 @@
 			minfcontainer = myAccountDisp;
 			
 			// front-end routes
-			minfroute('personaldetails', ()=>{
-				// $('#uAddressForm').hide();
-				// $('#uStoreForm').hide();
-				minfcontainer.innerHTML=`
+			minfroute('personaldetails', function(){
+				return `
 				<form method='post' name="uProfileForm" action='/account/profile/user' id='uProfileForm' class="uProfile ">
 					<div class='col-md-6'>
 						<div class='form-group' >
@@ -421,204 +419,212 @@
 						<button class='col-md-8 btn'>Save Changes</button>
 					</div>
 				</form>`;
-				breadcrumb.scrollIntoView(true);
-				currentView.textContent = 'Personal Details';
-				sectionHeading.textContent = 'Personal Details'
-			});
+				
+				}, 
+				function(){breadcrumb.scrollIntoView(true);
+					currentView.textContent = 'Personal Details';
+					sectionHeading.textContent = 'Personal Details';
+				}
+			);
 
-			minfroute('/', ()=>{
-				// $('#uAddressForm').hide();
-				// $('#uStoreForm').hide();
+			minfroute('/', null,  function(){
 				minfredirect('personaldetails')
 				
 			});
 
-			minfroute('deliveryaddress', ()=>{
-				minfcontainer.innerHTML = `
-				<form method='post' id='uAddressForm' action="/account/profile/address<%= user.address?'/'+user.address:''%>#deliveryaddress" class="uProfile ">
-					<div class='form-group col-md-6' >
-						<label class='info-title' for='state'>State<span></span></label>
-						<select name='state'  id='state' class='form-control unicase-form-control address-update text-input'>
-							<option>  ---Select State---
-							</option>
-							<%for(loc of location){%> 
-								<%if(addr && loc.state.id==addr.state){%>
-									<option selected value='<%=loc.state.id%>'> <%=loc.state.name%>
-									</option>
-								<% } else{ %>
-									<option  value='<%=loc.state.id%>'> <%=loc.state.name%>
-									</option>
-								<% } %>
-							<%}%>
-						</select>											
-					</div>
+			minfroute('deliveryaddress', function(){
+					return `
+					<form method='post' id='uAddressForm' action="/account/profile/address<%= user.address?'/'+user.address:''%>#deliveryaddress" class="uProfile ">
+						<div class='form-group col-md-6' >
+							<label class='info-title' for='state'>State<span></span></label>
+							<select name='state'  id='state' class='form-control unicase-form-control address-update text-input'>
+								<option>  ---Select State---
+								</option>
+								<%for(loc of location){%> 
+									<%if(addr && loc.state.id==addr.state){%>
+										<option selected value='<%=loc.state.id%>'> <%=loc.state.name%>
+										</option>
+									<% } else{ %>
+										<option  value='<%=loc.state.id%>'> <%=loc.state.name%>
+										</option>
+									<% } %>
+								<%}%>
+							</select>											
+						</div>
 
-					<div class='form-group col-md-6'>
-						<label class='info-title' for='state'>LGA<span></span></label>
-						<select name='lga' id='lga'  class='form-control unicase-form-control address-update text-input'>
-							<option>  ---Select LGA---
-							</option>
-							<%if(addr){%>
-								<% for(lga of location[addr.state-1].state.locals){%>
-									<%if(addr && addr.LGA && lga.id==addr.LGA){%>
-										<option selected value='<%=addr.LGA%>'> <%=location[addr.state-1].state.locals[addr.LGA-1].name%> 
-										</option>
-									<%}else{%>
-										<option  value='<%=lga.id%>'> <%=lga.name%>
-										</option>
+						<div class='form-group col-md-6'>
+							<label class='info-title' for='state'>LGA<span></span></label>
+							<select name='lga' id='lga'  class='form-control unicase-form-control address-update text-input'>
+								<option>  ---Select LGA---
+								</option>
+								<%if(addr){%>
+									<% for(lga of location[addr.state-1].state.locals){%>
+										<%if(addr && addr.LGA && lga.id==addr.LGA){%>
+											<option selected value='<%=addr.LGA%>'> <%=location[addr.state-1].state.locals[addr.LGA-1].name%> 
+											</option>
+										<%}else{%>
+											<option  value='<%=lga.id%>'> <%=lga.name%>
+											</option>
+										<%}%>
 									<%}%>
 								<%}%>
-							<%}%>
-						</select>
-					</div>
-				
+							</select>
+						</div>
 					
-						<div class='form-group col-md-6' >
-							<label class='info-title' for='city'>City<span></span></label>
-							<input type='text' value='<%=form && form.city || addr && addr.city? form && form.city? form.city: addr.city:''%>' 
-							placeholder='Enter City' name='city' class='form-control unicase-form-control address-update text-input' id='city'/>                    
-						</div>  
 						
-						<div class='form-group col-md-6' >
-							<label class='info-title' for='streetAddress'>Street Address<span></span></label>
-							<input type='text' value='<%= form && form.streetAddress || addr && addr.streetAddress? form && form.streetAddress? form.streetAddress: addr.streetAddress:''%>' 
-							placeholder='Enter Street Address' name='streetAddress' 
-							class='form-control unicase-form-control address-update text-input' id='streetAddress'/>                    
-						</div>	
-					 
-					
-						<div class='form-group col-md-6' >
-							<label class='info-title' for='postalCode'>Postal Code<span></span></label>
-							<input type='text' value='<%= form && form.postalCode || addr && addr.postalCode? form && form.postalCode? form.postalCode: addr.postalCode:''%>' 
-							placeholder='Enter Postal Code' name='postalCode'  class='form-control unicase-form-control address-update text-input' id='postalCode' />                    
-						</div>	
-
-						<div class='form-group col-md-6' >
-							<label class='info-title' for='closestLandmark'>Closest Landmark<span></span></label>
-							<input type='text' value='<%= form && form.closestLandmark || addr && addr.closestLandmark? form && form.closestLandmark? form.closestLandmark: addr.closestLandmark:''%>' 
-							placeholder='Describe a landmark location near you' name='closestLandmark'  class='form-control unicase-form-control address-update text-input' id='closestLandmark' />                    
-						</div>	
-					
-					<div class='col-md-8'>
-						<button class='col-md-8 btn'>Save Changes</button>
-					</div>
-				</form>`;
-				breadcrumb.scrollIntoView(true);
-				currentView.textContent = 'Delivery Address';
-				sectionHeading.textContent = 'Delivery Address'
-			});
-
-			minfroute('createstore', ()=>{
-				// $('#uProfileForm').hide();
-				// $('#uAddressForm').hide();
-				
-				minfcontainer.innerHTML = `
-				<form method='post' action='/account/profile/store#createstore' id='uStoreForm' class="uProfile">
-					
-					<div>							
-						<div class="col-md-6">
-							<h3 class="section-title">Location details</h3>
-							<div class='form-group' >
-								<label class='info-title' for='storeState'>State<span></span></label><span id='stateError' class="msg"></span>
-								<select name='storeState'  id='storeState' class='form-control unicase-form-control address-update text-input'>
-									<option>  ---Select State---
-									</option>
-									<%for(loc of location){%>
-											<option  value='<%=loc.state.id%>'> <%=loc.state.name%>
-											</option>
-									<%}%>
-								</select>											
-							</div>
-							<div class='form-group'>
-								<label class='info-title' for='storeLga'>LGA<span></span></label><span id='lgaError' class="msg"></span>
-								<select name='storeLga' id='storeLga'  class='form-control unicase-form-control address-update text-input'>
-									<option>  ---Select LGA---
-									</option>
-								</select>
-							</div>
-							<div class='form-group' >
+							<div class='form-group col-md-6' >
 								<label class='info-title' for='city'>City<span></span></label>
-								<input type='text'  placeholder='Enter City' name='storeCity' 
-								value='<%=form && form.storeCity? form.storeCity: ''%>'
-								class='form-control unicase-form-control address-update text-input' id='city'/>                    
+								<input type='text' value='<%=form && form.city || addr && addr.city? form && form.city? form.city: addr.city:''%>' 
+								placeholder='Enter City' name='city' class='form-control unicase-form-control address-update text-input' id='city'/>                    
 							</div>  
-							<div class='form-group' >
-								<label class='info-title' for='bizAddr'>Street Address<span></span></label>
-								<input type='text' value='<%=form && form.bizAddr? form.bizAddr: ''%>'
-								placeholder="Enter Physical Address of Business" 
-								name='bizAddr'  class='form-control info-update unicase-form-control text-input' id='bizAddr' />                    
 							
-							</div>
-						</div>
-
-						<div class="col-md-6">
-							<h3 class="section-title">Contact details</h3>
-							<div class='form-group' >
-								<label class='info-title' for='bizName'>Name of Virtual Store<span></span></label>
-								<input type='text' value='<%=form && form.bizName? form.bizName: ''%>'
-								name='bizName' class='form-control info-update unicase-form-control text-input' id='bizName' />
-							</div>
-							<div class='form-group' >
-								<label class='info-title' for='bizEmail'>Email Address<span></span></label>
-								<input type='text' name='bizEmail' 
-								value='<%=form && form.bizEmail? form.bizEmail: ''%>'
-								placeholder='Business Email Address' 
-								class='form-control unicase-form-control text-input' id='bizEmail'/>                    
-							</div>  
+							<div class='form-group col-md-6' >
+								<label class='info-title' for='streetAddress'>Street Address<span></span></label>
+								<input type='text' value='<%= form && form.streetAddress || addr && addr.streetAddress? form && form.streetAddress? form.streetAddress: addr.streetAddress:''%>' 
+								placeholder='Enter Street Address' name='streetAddress' 
+								class='form-control unicase-form-control address-update text-input' id='streetAddress'/>                    
+							</div>	
 						
-							<div class='form-group' >
-								<label class='info-title' for='bizTel'>Business Phone<span></span></label>
-								<input type='tel' paceholder="Enter Business Phone" 
-								value='<%=form && form.bizTel? form.bizTel: ''%>'
-								name='bizTel' class='form-control info-update unicase-form-control text-input' 
-								id='bizTel' />                    
+						
+							<div class='form-group col-md-6' >
+								<label class='info-title' for='postalCode'>Postal Code<span></span></label>
+								<input type='text' value='<%= form && form.postalCode || addr && addr.postalCode? form && form.postalCode? form.postalCode: addr.postalCode:''%>' 
+								placeholder='Enter Postal Code' name='postalCode'  class='form-control unicase-form-control address-update text-input' id='postalCode' />                    
 							</div>	
-							<div class='form-group row' >
-								
-									<label style="display: block" class='col-md-12 info-title' for='bizUrl'>
-										Url
-									</label>
-									<span class="col-md-5" id="url-kak">
-											kaakuna.com/
-									</span>
-									<span class="col-md-7">
-																				
-										<input type='text' 
-											name='bizUrl' value='<%=form && form.bizUrl? form.bizUrl: ""%>'
-											class='col-md-12 form-control info-update unicase-form-control text-input' id='bizUrl' 
-										/> 
-									</span>  
-								                
-							</div>	
-						</div>
-					  				
-						<div class='col-md-8'>
-							<button class='col-md-8 btn' style="background-color: #d0205e">Create Store</button>
-						</div>
-					</div>
-				</form>`
-				// $('#urlError').hide();
-				// $('#stateError').hide();
-				// $('#lgaError').hide();
-				breadcrumb.scrollIntoView(true);
-				currentView.textContent = 'Create Store';
-				sectionHeading.textContent = 'Create Store'
-			});
 
-			minfroute('mystores', ()=>{
-				minfcontainer.innerHTML = `
-				<%if(user && user.stores){%>
-					<ul>
-						<%user.stores.forEach(function(store){%>
-							<li><a href='/account/store/<%=store.storeid%>'><%=store.storename%></a></li>
-						<%})%>
-					</ul>
-				<%}%>
-				`
-				breadcrumb.scrollIntoView(true);
-				currentView.textContent = 'My Stores';
-				sectionHeading.textContent = 'My Stores';
-			})
+							<div class='form-group col-md-6' >
+								<label class='info-title' for='closestLandmark'>Closest Landmark<span></span></label>
+								<input type='text' value='<%= form && form.closestLandmark || addr && addr.closestLandmark? form && form.closestLandmark? form.closestLandmark: addr.closestLandmark:''%>' 
+								placeholder='Describe a landmark location near you' name='closestLandmark'  class='form-control unicase-form-control address-update text-input' id='closestLandmark' />                    
+							</div>	
+						
+						<div class='col-md-8'>
+							<button class='col-md-8 btn'>Save Changes</button>
+						</div>
+					</form>`;
+					
+				},
+				function(){
+					breadcrumb.scrollIntoView(true);
+					currentView.textContent = 'Delivery Address';
+					sectionHeading.textContent = 'Delivery Address'
+				}
+			);
+
+			minfroute('createstore', 
+				function(){
+	
+					return `
+					<form method='post' action='/account/profile/store#createstore' id='uStoreForm' class="uProfile">
+						
+						<div>							
+							<div class="col-md-6">
+								<h3 class="section-title">Location details</h3>
+								<div class='form-group' >
+									<label class='info-title' for='storeState'>State<span></span></label><span id='stateError' class="msg"></span>
+									<select name='storeState'  id='storeState' class='form-control unicase-form-control address-update text-input'>
+										<option>  ---Select State---
+										</option>
+										<%for(loc of location){%>
+												<option  value='<%=loc.state.id%>'> <%=loc.state.name%>
+												</option>
+										<%}%>
+									</select>											
+								</div>
+								<div class='form-group'>
+									<label class='info-title' for='storeLga'>LGA<span></span></label><span id='lgaError' class="msg"></span>
+									<select name='storeLga' id='storeLga'  class='form-control unicase-form-control address-update text-input'>
+										<option>  ---Select LGA---
+										</option>
+									</select>
+								</div>
+								<div class='form-group' >
+									<label class='info-title' for='city'>City<span></span></label>
+									<input type='text'  placeholder='Enter City' name='storeCity' 
+									value='<%=form && form.storeCity? form.storeCity: ''%>'
+									class='form-control unicase-form-control address-update text-input' id='city'/>                    
+								</div>  
+								<div class='form-group' >
+									<label class='info-title' for='bizAddr'>Street Address<span></span></label>
+									<input type='text' value='<%=form && form.bizAddr? form.bizAddr: ''%>'
+									placeholder="Enter Physical Address of Business" 
+									name='bizAddr'  class='form-control info-update unicase-form-control text-input' id='bizAddr' />                    
+								
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<h3 class="section-title">Contact details</h3>
+								<div class='form-group' >
+									<label class='info-title' for='bizName'>Name of Virtual Store<span></span></label>
+									<input type='text' value='<%=form && form.bizName? form.bizName: ''%>'
+									name='bizName' class='form-control info-update unicase-form-control text-input' id='bizName' />
+								</div>
+								<div class='form-group' >
+									<label class='info-title' for='bizEmail'>Email Address<span></span></label>
+									<input type='text' name='bizEmail' 
+									value='<%=form && form.bizEmail? form.bizEmail: ''%>'
+									placeholder='Business Email Address' 
+									class='form-control unicase-form-control text-input' id='bizEmail'/>                    
+								</div>  
+							
+								<div class='form-group' >
+									<label class='info-title' for='bizTel'>Business Phone<span></span></label>
+									<input type='tel' paceholder="Enter Business Phone" 
+									value='<%=form && form.bizTel? form.bizTel: ''%>'
+									name='bizTel' class='form-control info-update unicase-form-control text-input' 
+									id='bizTel' />                    
+								</div>	
+								<div class='form-group row' >
+									
+										<label style="display: block" class='col-md-12 info-title' for='bizUrl'>
+											Url
+										</label>
+										<span class="col-md-5" id="url-kak">
+												kaakuna.com/
+										</span>
+										<span class="col-md-7">
+																					
+											<input type='text' 
+												name='bizUrl' value='<%=form && form.bizUrl? form.bizUrl: ""%>'
+												class='col-md-12 form-control info-update unicase-form-control text-input' id='bizUrl' 
+											/> 
+										</span>  
+													
+								</div>	
+							</div>
+										
+							<div class='col-md-8'>
+								<button class='col-md-8 btn' style="background-color: #d0205e">Create Store</button>
+							</div>
+						</div>
+					</form>`;
+				}, 
+				function(){
+					breadcrumb.scrollIntoView(true);
+					currentView.textContent = 'Create Store';
+					sectionHeading.textContent = 'Create Store'
+				}
+			);
+
+			minfroute('mystores', 
+				function(){
+					return `
+					<%if(user && user.stores){%>
+						<ul>
+							<%user.stores.forEach(function(store){%>
+								<li><a href='/account/store/<%=store.storeid%>'><%=store.storename%></a></li>
+							<%})%>
+						</ul>
+					<%}%>
+					`;	
+				},
+				function(){
+					breadcrumb.scrollIntoView(true);
+					currentView.textContent = 'My Stores';
+					sectionHeading.textContent = 'My Stores';
+				}
+			);
 
 			// ### this section ensure that the state of 'user profile info' form has changed before submitting
 			// stores initial values of form fields

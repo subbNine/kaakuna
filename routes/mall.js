@@ -9,6 +9,8 @@ mallRouter.get('/', function(req, res, next){
     res.render('store', {page: storeUrlName});
 });
 
+mallRouter.use('/images', serveStoreImgs);
+
 serveStoreImgs.get('/:imageName', function(req, res,next){
     var imageName = req.params.imageName;
     var storeData = res.locals.storeData
@@ -17,7 +19,5 @@ serveStoreImgs.get('/:imageName', function(req, res,next){
     res.sendFile(path.join(dataDirectoryRoot, ''+store, imageName))
 
 });
-
-mallRouter.use('/images', serveStoreImgs)
 
 module.exports = mallRouter

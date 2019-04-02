@@ -68,7 +68,7 @@ app.use(express.static('./public'));
 app.use(function(req, res, next) {
     // data for all views
     // res.locals.notProd = env !== 'production';
-    res.locals.login = req.isAuthenticated();
+    res.locals.loggedIn = req.isAuthenticated();
     res.locals.session = req.session;
     res.locals.user = req.user;
     // res.locals.hashpath = undefined;
@@ -91,7 +91,7 @@ app.use(function(req, res, next){
     var loginRoute = url.startsWith('/account');    
     
     // neglects routes like /a/b/c/assets but looks out for routes like
-    // /a/assets (whose url we failed to change) or /assets (static route)
+    // /a/assets (whose url we failed to make absolute) or /assets (static route)
     var isReallyStaticRoute = staticRoute? staticRoute.index===0: false;     
 
     // dont get urls of assets routes that miraculously bypassed the static middleware
