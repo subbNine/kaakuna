@@ -1,5 +1,5 @@
 <%# header %>
-<% include partials/store_head_section.ejs %>
+<% include partials/vendorstore_headsection.ejs %>
 
 <div class="breadcrumb">
   <div class="container">
@@ -39,7 +39,7 @@
 
   .placeholder-container{
     width: 100%;
-    height: 150px;
+    height: 140px;
     position: relative;
     border: 1px #cccccc solid;
     cursor: pointer;
@@ -132,6 +132,16 @@
     margin-bottom: 50px;
   }
 
+  .cat-btn{
+    margin: 10px 10px;
+  }
+  .hidden{
+    display: none;
+  }
+
+  .statusMsg > span{
+    transition: display 0.5s;
+  }
 </style>
 <div class="body-content outer-top-xs">
   <div class='container'>
@@ -157,8 +167,11 @@
               <a class="no-products" href="#productcategories">
                 <i class="no-products-icon " aria-hidden="true"></i>Product Categories
               </a>
-              <a class="no-products" href="#productcatalog">
-                <i class="no-products-icon "  aria-hidden="true"></i>Product Catalog
+              <a class="no-products" href="#products">
+                <i class="no-products-icon "  aria-hidden="true"></i>Add Products
+              </a>
+              <a class="no-products" href="/<%=store && store.url?store.url:''%>" target="_blank">
+                <i class="no-products-icon "  aria-hidden="true"></i>View Changes in Store
               </a>
             </ul>
             <!-- /.nav --> 
@@ -175,7 +188,237 @@
       <div class='col-md-9'> 
         <!-- ========================================== SECTION – HERO ========================================= -->
         <h4 class="section-heading" id="section-heading"></h4>
-        <div id="actionsDisp">  
+        
+        <div id="actionsDisp" class="col-md-12">  
+          
+          <p class="statusMsg" id="statusMsg"></p>
+          
+          <h4 id="welcome" class="hidden">Welcome</h4>
+
+          <h4 id="default" class="hidden">page not ready</h4>
+          
+          <form method="post" class="hidden" id="logoImgUpld" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
+            <div class="col-md-12 centeralize">
+                <div class="col-md-4"></div>
+                <label class="col-md-4 placeholder-container pl-logo" id="placeholder-container">
+                  <input type="file" name="file" accept="image/*" id="logoimginp" data-multiple-caption="{count} files selected" />
+                  <%if(store && store._id && store.logo_path){%>
+                    <img id="logoImg" 
+                    src="/account/store/<%=store._id+'/'%>images<%='/'+store.logo_path%>"/>
+                    <a class="addimg" >change logo image</a>
+                  <%} else{%>
+                    <a class="addimg" >add logo image</a>
+                  <%}%>      
+                </label>   
+                <div class="col-md-4"></div>
+            </div>
+            <div class="col-md-12 centeralize" >
+                <div class="col-md-4"></div>
+                <div class="col-md-4" >
+                  
+                  <input class="btn btn-flat col-md-9" type="submit" value="Upload logo"/>
+                  
+                </div>          
+            </div>     
+          </form>
+
+          <form method="post"  class="hidden"  id="storebanner" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
+            <div class="col-md-12 imgwrapper">
+                <%if(store && store.banner_image){%>
+                  <%store.banner_image.forEach(function(img){%>
+                    <div class="col-md-6 banner">
+                      <!--new elems should be appended here-->
+                      
+                        <label class="col-md-6 placeholder-container" id="placeholder-container">
+                        
+                          <img src='<%=store._id+"/"%>images<%='/'+img.path%>' id="logoImg" 
+                          />
+                        </label>   
+                      <button class="btn btn-flat col-sm-12 submit-btn delete-btn"  style="margin: 4px 0 0 0;"type="submit">delete</button> 
+                    </div>
+                  <%})%>
+                <%}%>
+                <div class="col-md-6 banner add-banner-container">
+                  <!--new elems should be appended here-->
+                  <label class="col-md-6 placeholder-container" id="placeholder-container">
+                    <input type="file" name="file" accept="image/*" id="bannerimginp" data-multiple-caption="{count} files selected" />
+                    
+                      <img id="bannerImg" 
+                      />
+                    
+                    <a class="addimg" >add image</a>             
+                  </label> 
+                  <button class="btn btn-flat col-sm-12 submit-btn" style="margin: 4px 0 0 0;"type="submit">Upload</button> 
+                </div> 
+                <div class="col-md-4"></div>
+            </div>    
+          </form>
+
+          <div id="addCategory" class='hidden form-group row col-md-12 col-sm-12'>
+
+            <div class='col-md-3 col-sm-1' >
+            </div> 
+
+            <div class="col-md-6 col-sm-10">
+              <button  class="btn cat-btn btn-flat col-md-12 col-sm-12" data-target="#addCat" data-toggle="collapse" >add category</button>
+              
+              
+              <form method='post' class="collapse col-sm-12" enctype="multipart/form-data" id='addCat'> 
+                <div class="col-md-1 col-sm-1">
+                </div>
+                <div class=' col-md-10 col-sm-10'>
+                  <label class='info-title' for='catName' style="margin: 20px 0 0 0">Category Name<span></span></label>
+                  <input type='text' name='catName' 
+                  class='form-control info-update unicase-form-control text-input' id='catName' />
+
+                  <label for="catimginp" style="margin: 20px 0 10px 0">
+                    Category Image
+                  </label>
+                  <label class="col-md-6 placeholder-container" id="placeholder-container"> 
+                    <input type="file" name="file" accept="image/*" id="catimginp" data-multiple-caption="{count} files selected" />
+                    
+                    <img id="catImg" 
+                    />
+                    
+                    <a class="addimg" >add image</a>             
+                  </label> 
+                  <button class='col-md-12 btn submit-btn' style="margin: 4px 0 0 0">Add</button>
+                </div>
+                <div class="col-md-1 col-sm-1">
+                </div>
+
+              </form>
+
+              <button   class="btn cat-btn btn-flat col-md-12 col-sm-12" data-target="#addSubCat" data-toggle="collapse">add sub category</button>
+              
+              <form method='post' class="collapse col-sm-12" enctype="multipart/form-data" id='addSubCat'> 
+                <div class="col-md-1 col-sm-1">
+                </div>
+                <div class="col-md-10 col-sm-10">
+                  <label class='info-title' for='subcatCategory' style="margin-top: 20px">Category Name<span></span></label>
+                  <select name='subcatCategory'  id='subcatCategory' class='form-control unicase-form-control prodCat'>
+                    <option selected>  ---Select Category---
+                    </option>
+                    <%if(categories){%>
+                      <%for(cat of categories){%> 
+                        
+                        <option value='<%=cat._id%>'> <%=cat.category_name%>
+                        </option>
+                      
+                      <%}%>
+                    <%}%>
+                  </select>
+                  <label class='info-title' for='subCatName' style="margin-top: 20px">Sub category Name<span></span></label>
+                  <input type='text'  placeholder='Enter Sub category Name' name='subCatName' 	
+                    class='form-control unicase-form-control address-update text-input' id='subCatName'/>  
+                  
+                    <button class='col-md-12 btn submit-btn' style="margin: 10px 0 0 0">Add</button>  
+                </div>
+                <div class="col-md-1 col-sm-1">
+                </div>
+
+              </form>
+
+            </div>
+
+            <div class='col-md-3 col-sm-1' >
+            </div>
+
+          </div> 
+        
+          <form id="addProd" class="hidden"  enctype="multipart/form-data">					
+            <div class="col-md-12">
+              
+              <div class='form-group col-md-6' >
+                <label class='info-title' for='itemName'>Name of Item<span></span></label>
+                <input type='text'  placeholder='Name of Item' name='itemName' required
+                class='form-control unicase-form-control address-update text-input' id='itemName'/>                    
+              </div>  
+              <div class='form-group col-md-6' >
+                <label class='info-title' for='itemPrice'>Price of Item<span></span></label>
+                <input type='number' required
+                placeholder="Price of Item (NGN)" 
+                name='itemPrice'  class='form-control info-update unicase-form-control text-input' id='itemPrice' />                    
+              </div>
+              <div class='form-group col-md-6' >
+                <label class='info-title' for='itemQty'>Item Quantity<span></span></label>
+                <input type='number' required
+                placeholder="Quantity of Item" 
+                name='itemQty'  class='form-control info-update unicase-form-control text-input' id='itemQty' />                    
+              </div>
+          
+              <div class='form-group col-md-6' >
+                <label class='info-title' for='prodManf'>Manufacturer of Product<span></span></label>
+                <input type='text' name='prodManf' required
+                placeholder='Manufacturer of Products' 
+                class='form-control unicase-form-control text-input' id='prodManf'/>                    
+              </div>  
+            
+              <div class='form-group col-md-6' >
+                <label class='info-title' for='prodColor'>Color of Product<span></span></label>
+                <input type='text' placeholder="e.g black" required
+                name='prodColor' class='form-control info-update unicase-form-control text-input' 
+                id='prodColor' />                    
+              </div>
+              <div class='form-group col-md-6' >
+                <label class='info-title' for='productDesc'>Description of Product<span></span></label>
+                <textarea type='text area'name='productDesc' required
+                class='form-control info-update unicase-form-control text-input' placeholder="brand, model number, type"
+                 id='productDesc'></textarea>
+              </div>
+              <div class="form-group col-md-6">
+                <label class='info-title' for='prodCategory' style="">Category Name<span></span></label>
+                <select name='prodCategory'  id='prodCategory' class='form-control unicase-form-control prodCat'>
+                  <option selected>  ---Select Category---
+                  </option>
+                  <%if(categories){%>
+                    <%for(cat of categories){%> 
+                      
+                      <option value='<%=cat._id%>'> <%=cat.category_name%>
+                      </option>
+                    
+                    <%}%>
+                  <%}%>
+                  
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class='info-title' for='prodSubCategory' style="">Sub Category Name<span></span></label>
+                <select name='prodSubCategory' required  id='prodSubCategory' class='form-control unicase-form-control'>
+                  <option selected>  ---Select Category---
+                  </option>
+                  <!--<%if(categories){%>
+                    <%for(cat of categories){%> 
+                      
+                      <option value='<%=cat._id%>'> <%=cat.category_name%>
+                      </option>
+                    
+                    <%}%>
+                  <%}%>-->
+                  
+                </select>
+              </div>
+              <div class='form-group col-md-6'>
+                <label for="prodImg" style="margin-top: 20px">
+                  Product Image
+                </label>
+                <label class="col-md-6 placeholder-container" id="placeholder-container"> 
+                  <input type="file"  name="prodImgInp" accept="image/*" id="prodImgInp"/>
+                  
+                  <img id="prodImg" 
+                  />
+                  
+                  <a class="addimg" >add image</a>             
+                </label>                  
+              </div>
+            </div>  
+            <div class='col-md-12' style="margin-top: 30px">
+              <div class="col-md-4"></div>
+              <button class='col-md-4 btn' style="background-color: #d0205e">Add Product</button>
+              <div class="col-md-4"></div>
+            </div>     
+          </form>
+
         </div>
       <!-- /.col -->
       </div> 
@@ -224,28 +467,9 @@
     <!-- ============================================== BRANDS CAROUSEL : END ============================================== --> </div>
   <!-- /.container --> 
   </div>
-</div>
+</div>          
 
-<!-- add product modal-->
-<div id="addProductsModal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Add Items to Store</h4>
-      </div>
-      <div class="modal-body">
-        <p>Some text in the modal.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
 
 <!-- /.body-content --> 
 <%# /* footer */%>
@@ -284,109 +508,126 @@ $(document).ready(function(){
   });   
 
 
-  // --begin-- router section
-  minfcontainer = document.getElementById('actionsDisp');
+  //--begin-- router section
+  // minfsetContainer(document.getElementById('actionsDisp'));
   var sectionHeading = document.getElementById('section-heading');
 
-  minfroute('/', ()=>{
-    // $('#uAddressForm').hide();
-    // $('#uStoreForm').hide();
-    minfcontainer.innerHTML = '<h4>Welcome</h4'
-    
-  });
+  minfroute('/', 
+    ()=>{
+      return 'welcome';
+    }, 
+    ()=>{
+      sectionHeading.textContent = 'Welcome'
+    }
+  );
 
-  minfroute('*', ()=>{
-    minfcontainer.innerHTML = '<h4>Section not ready</h4'
-  })
+  minfroute('*', 
+    ()=>{
+      return 'default';
+    }
+  );
   
-  minfroute('storelogo', ()=>{
-    minfcontainer.innerHTML=`
-    <form method="post" id="logoImgUpld" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
-      <div class="col-md-12 centeralize">
-          <div class="col-md-4"></div>
-          <label class="col-md-4 placeholder-container pl-logo" id="placeholder-container">
-            <input type="file" name="file" accept="image/*" id="logoimginp" data-multiple-caption="{count} files selected" />
-            <%if(store && store._id && store.logo_path){%>
-              <img id="logoImg" 
-              src="/account/store/<%=store._id+'/'%>images<%='/'+store.logo_path%>"/>
-              <a id="add-logo" >change logo image</a>
-            <%} else{%>
-              <a id="add-logo" >add logo image</a>
-            <%}%>      
-          </label>   
-          <div class="col-md-4"></div>
-      </div>
-      <div class="col-md-12 centeralize" >
-          <div class="col-md-4"></div>
-          <div class="col-md-4" >
-            <!--- if(storeid){
-              <a href="/<%=storeid%>" class="btn btn-flat col-md-9"  target="_blank">view changes in store page</a>
-            }--->   
-            <input class="btn btn-flat col-md-9" type="submit" value="Upload logo"/>
-            
-          </div>          
-      </div>     
-    </form>
-    `;
-    sectionHeading.textContent = 'Upload a Logo for your store';
-  });
+  minfroute('storelogo', 
+    ()=>{
+      return 'logoImgUpld';
+    },
+    ()=>{
+      sectionHeading.textContent = 'Upload a Logo for your store'
+    }
+  );
   
   var formAppends = {};
-  formAppends.data = '';
+  formAppends.bannerdata = '';
   minfroute('storebanner', ()=>{
-    minfcontainer.innerHTML = `
-      <p class="statusMsg"></p>
-      
-      <form method="post" id="storebanner" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
-        <div class="col-md-12 ">
-            ${formAppends && formAppends.data?formAppends.data:''}
-            <%if(store && store.banner_image){%>
-              <%store.banner_image.forEach(function(img){%>
-                <div class="col-md-6 banner">
-                  <!--new elems should be appended here-->
-                  
-                    <label class="col-md-6 placeholder-container" id="placeholder-container">
-                    
-                      <img src='<%=store._id+"/"%>images<%='/'+img.path%>' id="logoImg" 
-                      />
-                    </label>   
-                  <button class="btn btn-flat col-sm-12 submit-btn delete-btn"  style="margin: 4px 0 0 0;"type="submit">delete</button> 
-                </div>
-              <%})%>
-            <%}%>
-            <div class="col-md-6 banner add-banner-container">
-              <!--new elems should be appended here-->
-              <label class="col-md-6 placeholder-container" id="placeholder-container">
-                <input type="file" name="file" accept="image/*" id="bannerimginp" data-multiple-caption="{count} files selected" />
-                
-                  <img id="logoImg" 
-                  "/>
-                
-                <a id="add-logo" >add image</a>             
-              </label> 
-              <button class="btn btn-flat col-sm-12 submit-btn" style="margin: 4px 0 0 0;"type="submit">Upload</button> 
-            </div> 
-            <div class="col-md-4"></div>
-        </div>    
-      </form>
-    `
-    sectionHeading.textContent = 'Upload a Banner for your store';
-  });
-  // --end-- router section
+      return 'storebanner';
+    },
+    ()=>{
+      sectionHeading.textContent = 'Upload a Banner for your store'
+    }
+  );
+
+  formAppends.prodcatdata = ''
+  minfroute('productcategories', ()=>{
+      return 'addCategory';
+    },
+    ()=>{
+      sectionHeading.textContent = 'Product Categories'
+    }
+  ); 
+
+  formAppends.proddata = {}
+  formAppends.proddata.subcat = ''
+  minfroute('products', ()=>{
+      return 'addProd';
+    },
+    ()=>{
+      sectionHeading.textContent = "Product Catalog"
+    }
+  );
+  //--end-- router section
 
   $('[type="file"]').live('focus', function(event){
-    $('#add-logo').css('background-color', '#aaaaaa')
-  })
+    $('.addimg').css('background-color', '#aaaaaa')
+  });
 
   $('[type="file"]').live('blur', function(event){
-    $('#add-logo').css('background-color', 'rgba(0,0,0,0)')
-  })
+    $('.addimg').css('background-color', 'rgba(0,0,0,0)')
+  });
 
   $('.placeholder-container').live('mouseenter', function(event){
-    $('#add-logo').css('background-color', '#aaaaaa')
+    $('.addimg').css('background-color', '#aaaaaa')
   }).live('mouseleave', function(){
-    $('#add-logo').css('background-color', 'rgba(0,0,0,0)')
-  })
+    $('.addimg').css('background-color', 'rgba(0,0,0,0)')
+  });
+
+  $('#prodCategory').live('change', function(event){
+    var category = $(this).val();
+    formAppends.proddata.subcat = '';
+    // console.log(category)
+    $.ajax({
+          type: 'GET',
+          url: "/account/store<%=storeid?'/'+storeid:''%>/subcat",
+          data: {category: category},
+          contentType: false,
+          cache: false,
+          success: function(msg){
+              // $('.statusMsg').html('');
+              if(msg && msg.success===true){
+                  // add result to the list of subcategory
+                  if(msg.data && msg.data.length){
+                    $('#prodSubCategory')
+                        .html(`<option selected>  ---Select Category---
+                              </option>`)
+                    msg.data.forEach(
+                      (data)=>{
+                        $('#prodSubCategory')
+                        .append(`<option value="${data.id}">
+                                  ${data.name}
+                                </option>`);
+                        
+                        // cache this data so that it persists even when we change views
+                        // redux should be used here, but, well, this works too
+                        formAppends.proddata.subcat += 
+                          `<option value="${data.id}">
+                            ${data.name}
+                          </option>`;
+                      }
+                    );
+                  }
+                  else{
+                    $('#prodSubCategory')
+                        .html(`<option selected>  ---Select Category---
+                              </option>`)
+                        .append(`<option value="">
+                                  <i>no sub category added yet</i>
+                                </option>`);
+                        
+                  }
+                  
+              }
+          }
+      });
+  });
 
   // retrieve bas64 format of images
   // and display them in an image tag
@@ -440,8 +681,8 @@ $(document).ready(function(){
       return false
     }
     $.ajax({
-            type: 'POST',
-            url: '/account/store<%=storeid?'/'+storeid:''%>/banner',
+            type: "POST",
+            url: "/account/store<%=storeid?'/'+storeid:''%>/banner",
             data: new FormData(this),
             contentType: false,
             cache: false,
@@ -450,7 +691,15 @@ $(document).ready(function(){
                 $('.submit-btn').attr("disabled","disabled");
                 $('#storebanner').css("opacity",".5");
             },
-            success: function(msg){
+            complete: ()=>{
+              $('#storebanner').css("opacity","");
+              $(".submit-btn").removeAttr("disabled");
+              document.getElementById('statusMsg').scrollIntoView(true)
+              setTimeout(()=>{
+                $('.statusMsg > span').css('display', 'none');
+              }, 3000);
+            },
+            success: (msg)=>{
                 $('.statusMsg').html('');
                 if(msg && msg.success===true){
                     formAppends.buffer = `<div class="col-md-6 banner">
@@ -462,47 +711,175 @@ $(document).ready(function(){
                                             </label>   
                                           <button class="btn btn-flat col-sm-12 submit-btn delete-btn"  style="margin: 4px 0 0 0;"type="submit">delete</button> 
                                         </div> `;
-                    formAppends.data += formAppends.buffer;
                     $(formAppends.buffer).insertBefore('.add-banner-container')
-
-                    // $('#storebanner')[0].reset();
+                      formAppends.buffer = '';
                     $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Form data submitted successfully.</span>');
-                }else{
+                    
+                    $(this)[0].reset();
+                    $('.placeholder-container input').next().removeAttr("src");
+                }
+                else{
                     $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
                 }
-                $('#storebanner').css("opacity","");
-                $(".submit-btn").removeAttr("disabled");
             },
             error: function(errObj, status){
-              $('#storebanner').css("opacity","");
-              $(".submit-btn").removeAttr("disabled");
               $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
             }
-        });
-    });
+          }
+        );
+    }
+  );
+
+  //  create category for store item
+  $('#addCat').live('submit', function(event){
+    event.preventDefault();
+    if(!$('#catimginp').val()){
+      // code-block:::show error message
+      alert('please click on the add image button to add a category image')
+      return false
+    }
+    if(!$('#catName').val()){
+      alert('please do not leave the category name field blank')
+      return false
+    }
+
+    $.ajax({
+          type: 'POST',
+          url: "/account/store<%=storeid?'/'+storeid:''%>/cat",
+          data: new FormData(this),
+          contentType: false,
+          cache: false,
+          processData: false,
+          beforeSend: function(){
+              $('.submit-btn').attr("disabled","disabled");
+              $('#addCat').css("opacity",".5");
+          },
+          complete:()=>{
+            $('#addCat').css("opacity","");
+            $(".submit-btn").removeAttr("disabled");
+            document.getElementById('statusMsg').scrollIntoView(true)
+            setTimeout(()=>{
+              $('.statusMsg > span').css('display', 'none');
+            }, 3000);
+          },
+          success: (msg)=>{
+              $('.statusMsg').html('');
+              if(msg && msg.success===true){
+                  
+                  // add result to the list of categories under the subcategory section
+                  $('.prodCat')
+                  .append(`<option value="${msg.data && msg.data.value? msg.data.value:''}">
+                              ${msg.data && msg.data.innerHtml?msg.data.innerHtml:''}
+                          </option>`);
+
+                  // formAppends.prodcatdata += `
+                  //     <option value="${msg.data && msg.data.value? msg.data.value:''}">
+                  //         ${msg.data && msg.data.innerHtml?msg.data.innerHtml:''}
+                  //     </option>`;
+
+                  $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Category added successfully.</span>');
+                  $(this)[0].reset();
+                  $('.placeholder-container input').next().removeAttr("src");
+                }else{
+                  $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">'+ (msg.message?msg.message:'Some problem occurred, please try again.')+'</span>');
+              }
+              
+          },
+          error: function(errObj, status){
+            $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
+          }
+      });
+  });
+
+  // create sub category for store item
+  $('#addSubCat').live('submit', function(event){
+    event.preventDefault();
+    if(!$('#subCatName').val()){
+      // code-block:::show error message
+      alert('please click on the add image button to add a category image')
+      return false
+    }
+    if(!$('#subcatCategory').val() || $('#subcatCategory').val() == '---Select Category---'  ){
+      alert('please select a category')
+      return false
+    }
+
+    $.ajax({
+          type: 'POST',
+          url: "/account/store<%=storeid?'/'+storeid:''%>/subcat",
+          data: new FormData(this),
+          contentType: false,
+          cache: false,
+          processData: false,
+          beforeSend: function(){
+              $('.submit-btn').attr("disabled","disabled");
+              $('#addSubCat').css("opacity",".5");
+          },
+          complete: ()=>{
+            $('#addSubCat').css("opacity","");
+            $(".submit-btn").removeAttr("disabled");
+            document.getElementById('statusMsg').scrollIntoView(true);
+            setTimeout(()=>{
+              $('.statusMsg > span').css('display', 'none');
+            }, 3000);
+          },
+          success: (msg)=>{
+              $('.statusMsg').html('');
+              if(msg && msg.success===true){
+                  $('.statusMsg').html('<span style="font-size:18px;color:#34A853">sub category added successfully.</span>');
+              }else{
+                  $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">'+ (msg.message?msg.message:'Some problem occurred, please try again.')+'</span>');
+              }
+             $(this)[0].reset();
+          },
+          error: function(errObj, status){
+            $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
+          }
+      });
+  });
+
+  $('#addProd').live('submit', function(event){
+    event.preventDefault();
+    $.ajax({
+          type: 'POST',
+          url: "/account/store<%=storeid?'/'+storeid:''%>/addprod",
+          data: new FormData(this),
+          contentType: false,
+          cache: false,
+          processData: false,
+          beforeSend: function(){
+              $('.submit-btn').attr("disabled","disabled");
+              $('#addProd').css("opacity",".5");
+          },
+          complete: ()=>{
+            $('#addProd').css("opacity","");
+            $(".submit-btn").removeAttr("disabled");
+            document.getElementById('statusMsg').scrollIntoView(true)
+            setTimeout(()=>{
+              $('.statusMsg > span').css('display', 'none');
+            }, 3000);
+          },
+          success: (msg)=>{
+              $('.statusMsg').html('');
+              if(msg && msg.success===true){
+                  $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Product has been added successfully.</span>');
+                  $(this)[0].reset();
+                  $('.placeholder-container input').next().removeAttr("src"); 
+              }else{
+                  $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">'+ (msg.message?msg.message:'Some problem occurred, please try again.')+'</span>');
+              }
+              
+          },
+          error: function(errObj, status){
+            $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
+          }
+      }
+    );
+  
+  }
+);
 
 });
-
-
-//   Array.prototype.forEach.call( inputsContainer, function( container ) {
-//     var fileInput = container.firstElementChild
-//       , imageTag = container.lastElementChild;
- 
-//     fileInput.addEventListener( 'change', function( e ) {
-//       var fileName = undefined;
-//       if ( this.files && this.files.length > 1 ) {
-//         fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
-//       } else {
-//         var reader = new FileReader();
-//         reader.onload = function(){
-//           imageTag.src = reader.result;
-//         };
-//         reader.readAsDataURL(e.target.files[0]);
-//       }
-//     });
-//   });
-
-// });
 
 </script>
 
