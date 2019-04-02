@@ -417,64 +417,37 @@ router.post('/:storeid/addprod',
                                                 return res.json(response);
                                             
                                             }
-                                            Product.where({name: itemName.toLowerCase(), 
-                                                category: productSubCategoryId,
-                                                store: storeid,
-                                                })
-                                                .updateOne(
-                                                    {
-                                                        name: itemName,
-                                                        description: productDescription,
-                                                        category: productSubCategoryId,
-                                                        price: itemPrice,
-                                                        manufacturer: prodManf,
-                                                        color: prodColor,
-                                                        image_path: newImgName,
-                                                        quantity: itemQty,
-                                                        store: storeid
-                                                        
-                                                    }, 
-                                                    function(err, writeopres){
-                                                        if(writeopres.nModified){
-                                                            response.success = true;
-                                                            response.message = 'product updated';
-                                                            return res.json(response);
-                                                        }
-                                                    }
-                                                )
+                                            if(productDescription)prod.description = productDescription;
+                                            if(itemPrice)prod.price = itemPrice;
+                                            if(prodManf)prod.manufacturer = prodManf;
+                                            if(prodColor)prod.color = prodColor;
+                                            prod.image_path = newImgName;
+                                            if(itemQty)prod.quantity = itemQty;
+                                            prod.save((err, result)=>{
+                                                if(result){
+                                                    response.success = true;
+                                                    response.message = 'product updated';
+                                                    return res.json(response);
+                                                }
                                             }
+                                            );
+                                        }
                                         )
                                     }else{
-                                        Product.where({name: itemName.toLowerCase(), 
-                                            category: productSubCategoryId,
-                                            store: storeid,
-                                            })
-                                            .updateOne(
-                                                {
-                                                    name: itemName,
-                                                    description: productDescription,
-                                                    category: productSubCategoryId,
-                                                    price: itemPrice,
-                                                    manufacturer: prodManf,
-                                                    color: prodColor,
-                                                    quantity: itemQty,
-                                                    store: storeid
-                                                 
-                                                }, 
-                                                function(err, writeopres){
-                                                    if(err) return res.json({success: false, message: 'something went wrong'})
-                                                    console.log(writeopres)
-                                                    if(writeopres.nModified){
-                                                        response.success = true;
-                                                        response.message = 'product updated';
-                                                        return res.json(response);
-                                                    }else{
-                                                        response.success = false;
-                                                        response.message = 'update not successful';
-                                                        return res.json(response);
-                                                    }
-                                                }
-                                            )
+                                        if(productDescription)prod.description = productDescription;
+                                        if(itemPrice)prod.price = itemPrice;
+                                        if(prodManf)prod.manufacturer = prodManf;
+                                        if(prodColor)prod.color = prodColor;
+                                        if(itemQty)prod.quantity = itemQty;
+                                        prod.save((err, result)=>{
+                                            if(result){
+                                                response.success = true;
+                                                response.message = 'product updated';
+                                                return res.json(response);
+                                            }
+                                        }
+                                        );
+                                    
                                     }
                                     
                                 }else{
