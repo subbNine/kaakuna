@@ -24,7 +24,7 @@
 				</ul>
 			<%}%>
 			<!---- ====================sign row starts here================ -->
-				<div class="row" id="sign-in-form">
+				<div class="row hidden" id="sign-in-form">
 					<!-- Sign-in -->
 					<div class="col-md-4 col-sm-4"></div>			
 					<div  class="col-md-4 col-sm-4 sign-in" style="">
@@ -62,7 +62,7 @@
 					<div class="col-md-4 col-sm-4"></div>
 				</div>
 					<!-- Sign-in -->
-				<div class="row" id="sign-up-form">
+				<div class="row hidden" id="sign-up-form">
 					<div class="col-md-4 col-sm-4"></div>
 					<!-- create a new account -->
 					<div class="col-md-4 col-sm-4 create-new-account">
@@ -214,26 +214,23 @@
 				$(this).parent().toggleClass('open');
 				return false;
 			});
-
-			// hide sign-up form
-			$('#sign-up-form').hide();
 			
 			
-			minfroute('signup', null, function(){
-				// e.preventDefault();
-				$('#sign-in-form').hide();
-				$('#sign-up-form').show();
-				$('#breadcrumblnk').text('Sign up');
-				viewport.scrollIntoView(true);
-			});
+			minfroute('signup', 
+				()=>{return 'sign-up-form'}, 
+				()=>{
+					$('#breadcrumblnk').text('Sign up');
+					viewport.scrollIntoView(true);
+				}
+			);
 
-			minfroute('signin', null, function(){
-				// e.preventDefault();
-				$('#sign-up-form').hide();
-				$('#sign-in-form').show();
-				$('#breadcrumblnk').text('Sign in')
-				viewport.scrollIntoView(true);
-			});
+			minfroute('signin', 
+				()=>{ return 'sign-in-form'}, 
+				()=>{
+					$('#breadcrumblnk').text('Sign in')
+					viewport.scrollIntoView(true);
+				}
+			);
 			var viewport = document.getElementById('view-port');
 			viewport.scrollIntoView(true);
 		});
