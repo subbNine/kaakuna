@@ -402,7 +402,7 @@ router.post('/:storeid/addprod',
                                     response.message = 'something went wrong, please try again';
                                     return res.json(response);
                                    
-                                };
+                                }
                                 var storeDataDir = ''+storeid
                                 var newImgName = ''+mongoose.Types.ObjectId() // .Schema.Types.ObjectId;
                                 var newImgPath = path.join(dataDirectoryRoot, storeDataDir, newImgName);
@@ -435,9 +435,11 @@ router.post('/:storeid/addprod',
                                                         
                                                     }, 
                                                     function(err, writeopres){
-                                                        response.success = true;
-                                                        response.message = 'product updated';
-                                                        return res.json(response);
+                                                        if(writeopres.nModified){
+                                                            response.success = true;
+                                                            response.message = 'product updated';
+                                                            return res.json(response);
+                                                        }
                                                     }
                                                 )
                                             }
