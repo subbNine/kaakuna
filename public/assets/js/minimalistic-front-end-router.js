@@ -4,14 +4,11 @@ const minfhandlers = {};
 const minfviews = {};
 var minfcontainer = undefined;
 var minfOldRoute = '';
-// register route handlers
-// const minfhandler = function(name, handlerFunc){
-//     return minfhandlers[name] = handlerFunc;
-// };
 
 // define routes
-// when you specify a route with its handler 
-// the handler is a function that returns a view
+// you specify a route with its view handler 
+// the handler may be a function that returns a view
+// or an id to a container you want to use as a view
 const minfroute = function(path, view, ...callbacks){
 	if(callbacks){
 		minfroutes[path] = {callbacks: callbacks};
@@ -34,8 +31,19 @@ function minfgetView(route){
 			return minfgetView('*');
 		}
 		catch(err){
-			minfviews['*'] = '<p>not found<p/>'
-			return minfviews['*']
+			if(!minfcontainer){
+				var minfElem = document.getElementById(Object.values(minfviews)[0]);
+				console.log(minfviews)
+				const minfNullRoute = 'minfNullRoute';
+				minfElem.insertAdjacentHTML("beforebegin",
+											`<p id='${minfNullRoute}' class='hidden'>
+												Oops! This route is not defined</p>`);
+				minfviews['*'] = minfNullRoute;
+				return minfviews['*']
+			}
+
+			minfviews['*'] = "<p>Oops! This route is not defined</p>";
+			return minfviews['*'];
 		}
     }else{
         return minfviews[route];
@@ -43,7 +51,6 @@ function minfgetView(route){
 };
 
 function minfresolveRoute(route){
-    // console.log(minfroutes);
 	if(minfOldRoute && minfOldRoute){ 
 		if(minfcontainer && minfcontainer.innerHTML){
 			minfviews[minfOldRoute] = minfcontainer.innerHTML;	
@@ -63,7 +70,6 @@ function minfresolveRoute(route){
 												?minfgetView(route).slice(1)
 												:minfgetView(route));
 		currentViewId.classList.remove('hidden');
-		console.log(currentViewId.classList);
 	}
 
 	var callbacks = minfroutes[route] && minfroutes[route].callbacks? minfroutes[route].callbacks:''
