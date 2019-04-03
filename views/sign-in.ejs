@@ -215,7 +215,14 @@
 				return false;
 			});
 			
-			
+			minfroute('/', 
+				()=>{ return 'sign-in-form'}, 
+				()=>{
+					$('#breadcrumblnk').text('Sign in')
+					viewport.scrollIntoView(true);
+				}
+			);
+
 			minfroute('signup', 
 				()=>{return 'sign-up-form'}, 
 				()=>{
