@@ -5,10 +5,14 @@ const minfviews = {};
 var minfcontainer = undefined;
 var minfOldRoute = '';
 
-// define routes
-// you specify a route with its view handler 
-// the handler may be a function that returns a view
-// or an id to a container you want to use as a view
+// define routes.
+// you specify a route path (1st parameter) with its view (2nd parameter),
+// the view (2nd parameter) may be a function that returns a view
+// or a function that returns an id to a view container which is inside your html.
+// In the 2nd case (where a function returns an id to a view container) ensure that you
+// define a css class of type hidden. this class should have a property 'display: none'.
+// finally, in your view add this css class to your class attribute
+// you dont need to follow this procedure if you're going to return a view in the 2nd parameter
 const minfroute = function(path, view, ...callbacks){
 	if(callbacks){
 		minfroutes[path] = {callbacks: callbacks};

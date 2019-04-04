@@ -142,6 +142,11 @@
   .statusMsg > span{
     transition: display 0.5s;
   }
+
+  .show-icons-btn{
+    background-color: rgba(0,0,0,0);
+    border: 1px solid #eee;
+  }
 </style>
 <div class="body-content outer-top-xs">
   <div class='container'>
@@ -272,6 +277,19 @@
                   <input type='text' name='catName' 
                   class='form-control info-update unicase-form-control text-input' id='catName' />
 
+                  
+                  <label class="info-title" for="iconClass" style="margin: 20px 50px 10px 0">Select Category Icon
+                    <input type="hidden" name="iconClass" id="iconClass" value=""/>
+                  </label>
+                  <div class="dropdown col-md-12" style="padding: 0">
+                    <button class="btn show-icons-btn col-md-12 dropdown-toggle" type="button" title="select a descriptive icon for the category" data-toggle="dropdown">
+                      <i class="icon fa" aria-hidden="true" style="margin: 10px 0 10px 20px; font-size: 18px">Icon:</i>
+                      <i data-iconClass="" id="catIcon" aria-hidden="true" style="margin: 10px 0 10px 20px; font-size: 18px"></i>
+                    </button>
+                    <ul class="dropdown-menu col-md-12" style="height: 200px; overflow: auto;" id="catIcons-dropdown-menu">
+                      
+                    </ul>
+                  </div>
                   <label for="catimginp" style="margin: 20px 0 10px 0">
                     Category Image
                   </label>
@@ -338,7 +356,7 @@
               <div class='form-group col-md-6' >
                 <label class='info-title' for='itemPrice'>Price of Item<span></span></label>
                 <input type='number' required
-                placeholder="Price of Item (NGN)" 
+                placeholder="Price Per Item (NGN)" 
                 name='itemPrice'  class='form-control info-update unicase-form-control text-input' id='itemPrice' />                    
               </div>
               <div class='form-group col-md-6' >
@@ -494,7 +512,8 @@
 <script src="/assets/js/scripts.js"></script>
 <script src="/assets/js/materialize.min.js"></script>
 <script src="/assets/js/products.js"></script>
-<script src='/assets/js/minimalistic-front-end-router.js'></script>
+<script src="/assets/js/minimalistic-front-end-router.js"></script>
+<script src="/assets/js/fontawesome-icons-classes.js"></script>
 	
 <script>
 $(document).ready(function(){ 
@@ -507,7 +526,6 @@ $(document).ready(function(){
         return this;
     }
   });   
-
 
   //--begin-- router section
   // minfsetContainer(document.getElementById('actionsDisp'));
@@ -780,6 +798,7 @@ $(document).ready(function(){
 
                   $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Category added successfully.</span>');
                   $(this)[0].reset();
+                  $('#catIcon').attr('class', 'icon fa')
                   $('.placeholder-container input').next().removeAttr("src");
                 }else{
                   $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">'+ (msg.message?msg.message:'Some problem occurred, please try again.')+'</span>');
@@ -877,9 +896,24 @@ $(document).ready(function(){
       }
     );
   
-  }
-);
+    }
+  );
 
+  var catIconsDropdown = document.getElementById('catIcons-dropdown-menu');
+  var iconsClasses = faIconsCls;
+  iconsClasses.forEach((item, idx, arr)=>{
+    var li = document.createElement('li');
+    li.innerHTML = `<a href="#" class="cat-icon" data-catIcon="${item.class}"><i class="fa ${item.class}"></i> ${item.name}</a>`;
+    // console.log(li)
+    catIconsDropdown.appendChild(li);
+  });
+
+  $('.cat-icon').live('click', function(event){
+    event.preventDefault();
+    var selectedClass = $(this).attr('data-catIcon');
+    $('#catIcon').attr('class','icon fa '+selectedClass);
+    $('#iconClass').val(selectedClass)
+  });
 });
 
 </script>

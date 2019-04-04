@@ -207,10 +207,17 @@ router.post('/:storeid/cat',
 
         form.parse(req, (err, fields, files) => {
             var catName = fields.catName;
+            var catIconClass = fields.iconClass;
             if(!catName){
                 response.success = false;
                 response.message = 'please do not leave the category name field blank';
                 return res.json(response);
+            }
+
+            if(!catIconClass){
+                response.success = false;
+                response.message = 'please select a descriptive icon for a category'
+                return res.json(response)
             }
 
             if(!files.file.size){
@@ -246,7 +253,10 @@ router.post('/:storeid/cat',
                                
                             };
                             // console.log('Rename complete!');
-                            var productCategory = new ProductCategory({category_name: catName, image_path: newImgName, store: storeid});
+                            var productCategory = new ProductCategory({category_name: catName, 
+                                                                        icon_class: catIconClass, 
+                                                                        image_path: newImgName, 
+                                                                        store: storeid});
                             
                             productCategory.save(function(err, category){
                                 if(err) {
