@@ -5,6 +5,16 @@ const minfviews = {};
 var minfcontainer = undefined;
 var minfOldRoute = '';
 
+function minfredirect(redirectTo){
+    window.location.hash = redirectTo;
+}
+
+// this object will be passed into all callbacks in minfroute.
+// it exposes all operations that you would love to be
+// carried out on routes. for now it has only the the redirect function
+// as a property. more properties can be added
+const minfrouteFunc = {}
+
 // define routes.
 // you specify a route path (1st parameter) with its view (2nd parameter),
 // the view (2nd parameter) may be a function that returns a view
@@ -19,7 +29,8 @@ const minfroute = function(path, view, ...callbacks){
 	}
 	
     if(typeof(view) === 'function'){
-		minfviews[path] = view();	
+		minfrouteFunc.minfredirect = minfredirect;
+		minfviews[path] = view(minfrouteFunc);	
 	}
 	else if(typeof(view) === 'string'){
 		minfviews[path] = view;
@@ -78,7 +89,7 @@ function minfresolveRoute(route){
 
 	var callbacks = minfroutes[route] && minfroutes[route].callbacks? minfroutes[route].callbacks:''
 	if(callbacks && callbacks.length){
-		callbacks.forEach(callback=>callback());
+		callbacks.forEach(callback=>callback(minfrouteFunc));
 	}
 };
 
@@ -87,14 +98,13 @@ const minfrouter = (evt) => {
     minfresolveRoute(url);
 };
 
-const minfredirect = (redirectTo)=>{
-    window.location.hash = redirectTo;
-}
-
+// If the route handler you will pass to minfroute function -defined above- returns a view container,
+// then the argument you pass to this function should be the id to the container you
+// want the view to be displayed in
 function minfsetContainer(containerDiv){
 	minfcontainer = containerDiv;
 }
 
-// For first load or when routes are changed in browser url box.
+// For first load or when routes are changed in browser address field.
 window.addEventListener('load', minfrouter);
 window.addEventListener('hashchange', minfrouter);

@@ -143,9 +143,9 @@
     transition: display 0.5s;
   }
 
-  .show-icons-btn{
+  .reveal-btn{
     background-color: rgba(0,0,0,0);
-    border: 1px solid #eee;
+    border: 1px solid #ddd;
   }
 </style>
 <div class="body-content outer-top-xs">
@@ -240,7 +240,7 @@
                           <img src='<%=store._id+"/"%>images<%='/'+img.path%>' id="logoImg" 
                           />
                         </label>   
-                      <button class="btn btn-flat col-sm-12 submit-btn delete-btn"  style="margin: 4px 0 0 0;"type="submit">delete</button> 
+                      <button class="btn btn-flat col-xs-12 submit-btn delete-btn"  style="margin: 4px 0 0 0;"type="submit">delete</button> 
                     </div>
                   <%})%>
                 <%}%>
@@ -254,25 +254,23 @@
                     
                     <a class="addimg" >add image</a>             
                   </label> 
-                  <button class="btn btn-flat col-sm-12 submit-btn" style="margin: 4px 0 0 0;"type="submit">Upload</button> 
+                  <button class="btn btn-flat col-xs-12 submit-btn" style="margin: 4px 0 0 0;"type="submit">Upload</button> 
                 </div> 
                 <div class="col-md-4"></div>
             </div>    
           </form>
 
-          <div id="addCategory" class='hidden form-group row col-md-12 col-sm-12'>
+          <div id="addCategory" class='hidden form-group row col-md-12 col-xs-12'>
 
-            <div class='col-md-3 col-sm-1' >
+            <div class='col-md-2 ' >
             </div> 
 
-            <div class="col-md-6 col-sm-10">
-              <button  class="btn cat-btn btn-flat col-md-12 col-sm-12" data-target="#addCat" data-toggle="collapse" >add category</button>
+            <div class="col-md-8 col-xs-12">
+              <button  class="btn cat-btn btn-flat col-xs-12 reveal-btn" data-target="#addCat" data-toggle="collapse" >add category</button>
               
               
-              <form method='post' class="collapse col-sm-12" enctype="multipart/form-data" id='addCat'> 
-                <div class="col-md-1 col-sm-1">
-                </div>
-                <div class=' col-md-10 col-sm-10'>
+              <form method='post' class="collapse col-xs-12" enctype="multipart/form-data" id='addCat'> 
+                <div class=' col-xs-12' style="padding-right: 0">
                   <label class='info-title' for='catName' style="margin: 20px 0 0 0">Category Name<span></span></label>
                   <input type='text' name='catName' 
                   class='form-control info-update unicase-form-control text-input' id='catName' />
@@ -281,19 +279,19 @@
                   <label class="info-title" for="iconClass" style="margin: 20px 50px 10px 0">Select Category Icon
                     <input type="hidden" name="iconClass" id="iconClass" value=""/>
                   </label>
-                  <div class="dropdown col-md-12" style="padding: 0">
-                    <button class="btn show-icons-btn col-md-12 dropdown-toggle" type="button" title="select a descriptive icon for the category" data-toggle="dropdown">
+                  <div class="dropdown col-xs-12" style="padding: 0">
+                    <button class="btn reveal-btn col-xs-12 dropdown-toggle" type="button" title="select a descriptive icon for the category" data-toggle="dropdown">
                       <i class="icon fa" aria-hidden="true" style="margin: 10px 0 10px 20px; font-size: 18px">Icon:</i>
                       <i data-iconClass="" id="catIcon" aria-hidden="true" style="margin: 10px 0 10px 20px; font-size: 18px"></i>
                     </button>
-                    <ul class="dropdown-menu col-md-12" style="height: 200px; overflow: auto;" id="catIcons-dropdown-menu">
+                    <ul class="dropdown-menu col-xs-12" style="height: 400px; overflow: auto;" id="catIcons-dropdown-menu">
                       
                     </ul>
                   </div>
-                  <label for="catimginp" style="margin: 20px 0 10px 0">
+                  <label for="catimginp" class="col-xs-12" style="margin: 20px 0 10px 0; padding-left: 0;">
                     Category Image
                   </label>
-                  <label class="col-md-6 placeholder-container" id="placeholder-container"> 
+                  <label class="col-xs-6 placeholder-container" id="placeholder-container"> 
                     <input type="file" name="file" accept="image/*" id="catimginp" data-multiple-caption="{count} files selected" />
                     
                     <img id="catImg" 
@@ -301,19 +299,16 @@
                     
                     <a class="addimg" >add image</a>             
                   </label> 
-                  <button class='col-md-12 btn submit-btn' style="margin: 4px 0 0 0">Add</button>
-                </div>
-                <div class="col-md-1 col-sm-1">
+                  <button class='col-xs-12 btn submit-btn' style="margin: 4px 0 0 0">Add</button>
                 </div>
 
               </form>
 
-              <button   class="btn cat-btn btn-flat col-md-12 col-sm-12" data-target="#addSubCat" data-toggle="collapse">add sub category</button>
+              <button   class="btn cat-btn btn-flat col-xs-12 reveal-btn" data-target="#addSubCat" data-toggle="collapse">add sub category</button>
               
-              <form method='post' class="collapse col-sm-12" enctype="multipart/form-data" id='addSubCat'> 
-                <div class="col-md-1 col-sm-1">
-                </div>
-                <div class="col-md-10 col-sm-10">
+              <form method='post' class="collapse col-xs-12" enctype="multipart/form-data" id='addSubCat'> 
+                
+                <div class="col-xs-12" style="padding-right: 0">
                   <label class='info-title' for='subcatCategory' style="margin-top: 20px">Category Name<span></span></label>
                   <select name='subcatCategory'  id='subcatCategory' class='form-control unicase-form-control prodCat'>
                     <option selected>  ---Select Category---
@@ -331,21 +326,20 @@
                   <input type='text'  placeholder='Enter Sub category Name' name='subCatName' 	
                     class='form-control unicase-form-control address-update text-input' id='subCatName'/>  
                   
-                    <button class='col-md-12 btn submit-btn' style="margin: 10px 0 0 0">Add</button>  
+                    <button class='col-xs-12 btn submit-btn' style="margin: 10px 0 0 0">Add</button>  
                 </div>
-                <div class="col-md-1 col-sm-1">
-                </div>
+                
 
               </form>
 
             </div>
 
-            <div class='col-md-3 col-sm-1' >
+            <div class='col-md-2 ' >
             </div>
 
           </div> 
         
-          <form id="addProd" class="hidden"  enctype="multipart/form-data">					
+          <form id="addProd" class="hidden row"  enctype="multipart/form-data">					
             <div class="col-md-12">
               
               <div class='form-group col-md-6' >
@@ -431,10 +425,10 @@
                 </label>                  
               </div>
             </div>  
-            <div class='col-md-12' style="margin-top: 30px">
-              <div class="col-md-4"></div>
-              <button class='col-md-4 btn' style="background-color: #d0205e">Add Product</button>
-              <div class="col-md-4"></div>
+            <div class='col-xs-12' style="margin-top: 30px">
+              <div class="col-xs-1 col-sm-4"></div>
+              <button class='col-xs-10 btn col-sm-4' style="background-color: #d0205e">Add Product</button>
+              <div class="col-xs-1 col-sm-4"></div>
             </div>     
           </form>
 
@@ -536,13 +530,18 @@ $(document).ready(function(){
       return 'welcome';
     }, 
     ()=>{
-      sectionHeading.textContent = 'Welcome'
+      sectionHeading.textContent = 'Welcome';
+      sectionHeading.scrollIntoView(true);
     }
   );
 
   minfroute('*', 
     ()=>{
       return 'default';
+    },
+    ()=>{
+      sectionHeading.textContent = 'default view';
+      sectionHeading.scrollIntoView(true);
     }
   );
   
@@ -551,36 +550,36 @@ $(document).ready(function(){
       return 'logoImgUpld';
     },
     ()=>{
-      sectionHeading.textContent = 'Upload a Logo for your store'
+      sectionHeading.textContent = 'Upload a Logo for your store';
+      sectionHeading.scrollIntoView(true);
     }
   );
   
   var formAppends = {};
-  formAppends.bannerdata = '';
   minfroute('storebanner', ()=>{
       return 'storebanner';
     },
     ()=>{
-      sectionHeading.textContent = 'Upload a Banner for your store'
+      sectionHeading.textContent = 'Upload a Banner for your store';
+      sectionHeading.scrollIntoView(true);
     }
   );
 
-  formAppends.prodcatdata = ''
   minfroute('productcategories', ()=>{
       return 'addCategory';
     },
     ()=>{
-      sectionHeading.textContent = 'Product Categories'
+      sectionHeading.textContent = 'Product Categories';
+      sectionHeading.scrollIntoView(true)
     }
   ); 
 
-  formAppends.proddata = {}
-  formAppends.proddata.subcat = ''
   minfroute('products', ()=>{
       return 'addProd';
     },
     ()=>{
-      sectionHeading.textContent = "Product Catalog"
+      sectionHeading.textContent = "Product Catalog";
+      sectionHeading.scrollIntoView(true)
     }
   );
   //--end-- router section
