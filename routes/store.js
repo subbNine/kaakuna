@@ -32,22 +32,27 @@ router.use('/:storeid',
                 if(err) return next(err);
                 // complete refernce object to the store object 
                 res.locals.store = store;
+                var cat = res.locals.categories
+                if(cat){
+                    return next()
+                }
             });
 
             ProductCategory.find({store: storeid}, 'category_name _id', function(err, cat){
                 if(err) return next(err);
                 // console.log(cat)
                 res.locals.categories = cat;
-                
+                var store = res.locals.store
+                if(store){
+                    return next()
+                }
             });
-
-            return next();
+        }else{
+            // 404 error page
+            res.status(404).send('page not found');
+            return;
+            // 
         }
-    
-    // 404 error page
-    res.status(404).send('page not found');
-    return;
-    // 
     }
 );
 

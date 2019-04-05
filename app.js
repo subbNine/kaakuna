@@ -114,22 +114,56 @@ app.use('/checkout.html', function(req, res, next){
     res.render('checkout')
 })
 
-var Store = require('./models/store').Store
+const {
+    Store: Store, 
+    item: Product, 
+    itemCategory: ProductCategory, 
+    itemSubCategory: ProductSubCategory} = require('./models/store');
 
 app.use('/:store_url_name', function(req, res, next){
     var storeUrlName = req.params.store_url_name.toLowerCase();;
-    Store.findOne({url: storeUrlName}, function(err, store){
-        if(err) return next(err)
-        if(store && store.url){
-            req.storeUrlName = storeUrlName
-            res.locals.storeData = store
-            return next()
+    Store.findOne({url: storeUrlName}, 
+        function(err, store){
+            if(err) return next(err)
+            
+            if(store && store.url){
+                res.locals.storeData = store;
+                
+                // fetch categories and products asynchronously
+                ProductCategory.find({store: store._id}, 
+                    (err, cats)=>{
+                        if(err) return next(err);
+                        
+                        res.locals.categories = cats;
+                        var products = res.locals.products;
+                        if(products){   // are products ready
+                            console.log(cats, products)
+                            next();
+                        }
+                    }
+                );
+                
+                Product.find({store: store._id}, 
+                    (err, products)=>{
+                        if(err) return next(err);
+                        
+                        res.locals.products = products;
+                        var cats = res.locals.categories ;
+                        if(cats){   // are categories ready
+                            console.log(cats, products)
+                            return next();
+                        }
+                    }
+                );
+                
+            }
+            else{
+                // res.redirect('/')
+                res.send(`If you see this page then your're requesting for a 
+                store page that does not exist. A better fallback page is being worked on`)
+            }
         }
-        // res.redirect('/')
-        res.send(`If you see this page then your're requesting for a 
-        store page that does not exist. A better fallback page is being worked on`)
-    })
-    
+    );    
 }, mall);
 
 
@@ -148,7 +182,6 @@ app.use('*', function(req, res, next) {
 });
 
 app.listen(port);
-// module.exports = app;
 
 // a middleware function that will enable the user
 // to set a path where to save user's data
