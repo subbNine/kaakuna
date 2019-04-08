@@ -24,7 +24,7 @@
 				</ul>
 			<%}%>
 			<!---- ====================sign row starts here================ -->
-				<div class="row hidden" id="sign-in-form">
+				<div class="row"  id="sign-in-form">
 					<!-- Sign-in -->
 					<div class="col-md-4 col-sm-4"></div>			
 					<div  class="col-md-4 col-sm-4 sign-in" style="">
@@ -62,7 +62,7 @@
 					<div class="col-md-4 col-sm-4"></div>
 				</div>
 					<!-- Sign-in -->
-				<div class="row hidden" id="sign-up-form">
+				<div class="row"  id="sign-up-form">
 					<div class="col-md-4 col-sm-4"></div>
 					<!-- create a new account -->
 					<div class="col-md-4 col-sm-4 create-new-account">
@@ -215,7 +215,11 @@
 				return false;
 			});
 			
-			minfroute('/', 
+			var minfroute = Minf();
+
+			
+
+			minfroute.route('/', 
 				()=>{ return 'sign-in-form'}, 
 				()=>{
 					$('#breadcrumblnk').text('Sign in')
@@ -223,7 +227,7 @@
 				}
 			);
 
-			minfroute('signup', 
+			minfroute.route('signup', 
 				()=>{return 'sign-up-form'}, 
 				()=>{
 					$('#breadcrumblnk').text('Sign up');
@@ -231,7 +235,7 @@
 				}
 			);
 
-			minfroute('signin', 
+			minfroute.route('signin', 
 				()=>{ return 'sign-in-form'}, 
 				()=>{
 					$('#breadcrumblnk').text('Sign in')

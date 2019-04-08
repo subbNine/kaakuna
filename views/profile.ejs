@@ -367,10 +367,10 @@
 			var currentView = document.querySelector('#breadcrumb .active');
 			var myAccountDisp = document.getElementById('myAccountEdit');
 			var sectionHeading = document.getElementById('sectionHeading');
-			minfcontainer = myAccountDisp;
-			
+						
 			// front-end routes
-			minfroute('personaldetails', function(){
+			var minfroute = Minf({container: myAccountDisp, nullrouteRedirect: '/'});
+			minfroute.route('personaldetails', function(){
 				return `
 				<form method='post' name="uProfileForm" action='/account/profile/user' id='uProfileForm' class="uProfile ">
 					<div class='col-md-6'>
@@ -427,12 +427,12 @@
 				}
 			);
 
-			minfroute('/', null,  function(minffunc){
-				minffunc.minfredirect('personaldetails')
+			minfroute.route('/', null,  function(minf){
+				minf.redirect('personaldetails')
 				
 			});
 
-			minfroute('deliveryaddress', function(){
+			minfroute.route('deliveryaddress', function(){
 					return `
 					<form method='post' id='uAddressForm' action="/account/profile/address<%= user.address?'/'+user.address:''%>#deliveryaddress" class="uProfile ">
 						<div class='form-group col-md-6' >
@@ -511,7 +511,7 @@
 				}
 			);
 
-			minfroute('createstore', 
+			minfroute.route('createstore', 
 				function(){
 	
 					return `
@@ -607,7 +607,7 @@
 				}
 			);
 
-			minfroute('mystores', 
+			minfroute.route('mystores', 
 				function(){
 					return `
 					<%if(user && user.stores){%>

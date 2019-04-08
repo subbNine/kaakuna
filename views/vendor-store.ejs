@@ -198,11 +198,11 @@
           
           <p class="statusMsg" id="statusMsg"></p>
           
-          <h4 id="welcome" class="hidden">Welcome</h4>
+          <h4 id="welcome" hidden>Welcome</h4>
 
-          <h4 id="default" class="hidden">page not ready</h4>
+          <h4 id="default" hidden>page not ready</h4>
           
-          <form method="post" class="hidden" id="logoImgUpld" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
+          <form method="post" hidden id="logoImgUpld" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
             <div class="col-md-12 centeralize">
                 <div class="col-md-4"></div>
                 <label class="col-md-4 placeholder-container pl-logo" id="placeholder-container">
@@ -228,7 +228,7 @@
             </div>     
           </form>
 
-          <form method="post"  class="hidden"  id="storebanner" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
+          <form method="post"  hidden  id="storebanner" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
             <div class="col-md-12 imgwrapper">
                 <%if(store && store.banner_image){%>
                   <%store.banner_image.forEach(function(img){%>
@@ -260,7 +260,7 @@
             </div>    
           </form>
 
-          <div id="addCategory" class='hidden form-group row col-md-12 col-xs-12'>
+          <div id="addCategory" hidden class='form-group row col-md-12 col-xs-12'>
 
             <div class='col-md-2 ' >
             </div> 
@@ -339,7 +339,7 @@
 
           </div> 
         
-          <form id="addProd" class="hidden row"  enctype="multipart/form-data">					
+          <form id="addProd" hidden class="row"  enctype="multipart/form-data">					
             <div class="col-md-12">
               
               <div class='form-group col-md-6' >
@@ -525,7 +525,8 @@ $(document).ready(function(){
   // minfsetContainer(document.getElementById('actionsDisp'));
   var sectionHeading = document.getElementById('section-heading');
 
-  minfroute('/', 
+  var minfroute = Minf({nullrouteRedirect: '/'})
+  minfroute.route('/', 
     ()=>{
       return 'welcome';
     }, 
@@ -535,7 +536,7 @@ $(document).ready(function(){
     }
   );
 
-  minfroute('*', 
+  minfroute.route('*', 
     ()=>{
       return 'default';
     },
@@ -545,7 +546,7 @@ $(document).ready(function(){
     }
   );
   
-  minfroute('storelogo', 
+  minfroute.route('storelogo', 
     ()=>{
       return 'logoImgUpld';
     },
@@ -556,7 +557,7 @@ $(document).ready(function(){
   );
   
   var formAppends = {};
-  minfroute('storebanner', ()=>{
+  minfroute.route('storebanner', ()=>{
       return 'storebanner';
     },
     ()=>{
@@ -565,7 +566,7 @@ $(document).ready(function(){
     }
   );
 
-  minfroute('productcategories', ()=>{
+  minfroute.route('productcategories', ()=>{
       return 'addCategory';
     },
     ()=>{
@@ -574,7 +575,7 @@ $(document).ready(function(){
     }
   ); 
 
-  minfroute('products', ()=>{
+  minfroute.route('products', ()=>{
       return 'addProd';
     },
     ()=>{
