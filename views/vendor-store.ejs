@@ -235,7 +235,7 @@
                     <div class="col-md-6 banner">
                       <!--new elems should be appended here-->
                       
-                        <label class="col-md-6 placeholder-container" id="placeholder-container">
+                        <label class="col-md-6 placeholder-container">
                         
                           <img src='<%=store._id+"/"%>images<%='/'+img.path%>' id="logoImg" 
                           />
@@ -246,7 +246,7 @@
                 <%}%>
                 <div class="col-md-6 banner add-banner-container">
                   <!--new elems should be appended here-->
-                  <label class="col-md-6 placeholder-container" id="placeholder-container">
+                  <label class="col-md-6 placeholder-container">
                     <input type="file" name="file" accept="image/*" id="bannerimginp" data-multiple-caption="{count} files selected" />
                     
                       <img id="bannerImg" 
@@ -593,7 +593,7 @@ $(document).ready(function(){
     $('.addimg').css('background-color', 'rgba(0,0,0,0)')
   });
 
-  $('.placeholder-container').live('mouseenter', function(event){
+  $('.add-banner-container .placeholder-container').live('mouseenter', function(event){
     $('.addimg').css('background-color', '#aaaaaa')
   }).live('mouseleave', function(){
     $('.addimg').css('background-color', 'rgba(0,0,0,0)')
@@ -720,15 +720,16 @@ $(document).ready(function(){
             },
             success: (msg)=>{
                 $('.statusMsg').html('');
+                console.log(msg)
                 if(msg && msg.success===true){
                     formAppends.buffer = `<div class="col-md-6 banner">
                                           <!--new elems should be appended here-->
                                           
-                                            <label class="col-md-6 placeholder-container" id="placeholder-container">
+                                            <label class="col-md-6 placeholder-container">
                                               <img src='${imgfile}' id="logoImg" 
                                               />
                                             </label>   
-                                          <button class="btn btn-flat col-sm-12 submit-btn delete-btn"  style="margin: 4px 0 0 0;"type="submit">delete</button> 
+                                          <button class="btn btn-flat col-sm-12 delete-btn" style="margin: 4px 0 0 0;"type="submit">delete</button> 
                                         </div> `;
                     $(formAppends.buffer).insertBefore('.add-banner-container')
                       formAppends.buffer = '';

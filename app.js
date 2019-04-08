@@ -137,7 +137,7 @@ app.use('/:store_url_name', function(req, res, next){
                         res.locals.categories = cats;
                         var products = res.locals.products;
                         if(products){   // are products ready
-                            console.log(cats, products)
+                            // console.log(cats, products)
                             next();
                         }
                     }
@@ -150,7 +150,7 @@ app.use('/:store_url_name', function(req, res, next){
                         res.locals.products = products;
                         var cats = res.locals.categories ;
                         if(cats){   // are categories ready
-                            console.log(cats, products)
+                            // console.log(cats, products)
                             return next();
                         }
                     }

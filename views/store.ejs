@@ -89,6 +89,12 @@
                       </div>
                     <%}%>
                     <!-- /.accordion-group -->
+                  <%}else{%>
+                    <%if(user){%>
+                      <div class="accordion-group">
+                        <a href="/account/store/<%=storeData._id%>/#productcategories">click to add category<a/>
+                      </div>
+                    <%}%>
                   <%}%>
                 </div>
                 <!-- /.accordion --> 
@@ -217,22 +223,75 @@
       <!-- /.sidebar -->
       <div class='col-md-9'> 
         <!-- ========================================== SECTION – HERO ========================================= -->
-        
-        <div id="category" class="category-carousel hidden-xs">
-          <div class="item">
-            <div class="image"> <img src="/assets/images/banners/cat-banner-1.jpg" alt="" class="img-responsive"> </div>
-            <div class="container-fluid">
-              <div class="caption vertical-top text-left">
-                <div class="big-text"> Big Sale </div>
-                <div class="excerpt hidden-sm hidden-md"> Save up to 49% off </div>
-                <div class="excerpt-normal hidden-sm hidden-md"> Lorem ipsum dolor sit amet, consectetur adipiscing elit </div>
+        <%if(storeData && storeData.banner_image && storeData.banner_image.length && storeData.banner_image.length==1){%>
+          <div id="category" class="category-carousel hidden-xs">
+            <div class="item">
+              <div class="image" style="height: 370px; overflow: hidden"> 
+                <img src="/<%=storeData.url%>/images/<%=storeData.banner_image[0].path%>" alt="" class="img-responsive"/> 
               </div>
-              <!-- /.caption --> 
+              
+              <div class="container-fluid">
+                <div class="caption vertical-top text-left">
+                  <div class="big-text"> Big Sale </div>
+                  <div class="excerpt hidden-sm hidden-md"> Save up to 49% off </div>
+                  <div class="excerpt-normal hidden-sm hidden-md"> Lorem ipsum dolor sit amet, consectetur adipiscing elit </div>
+                </div>
+                <!-- /.caption --> 
+              </div>
+              <!-- /.container-fluid --> 
             </div>
-            <!-- /.container-fluid --> 
           </div>
-        </div>
-        
+        <%}else if(storeData && storeData.banner_image && storeData.banner_image.length && storeData.banner_image.length>1){%>
+          <div id="owl-main" class="owl-carousel owl-inner-nav owl-ui-sm">
+            <%for(banner of storeData.banner_image){%>
+              <div class="item" style="background-image: url(/<%=storeData.url%>/images/<%=banner.path%>);">
+                <div class="container-fluid">
+                  <div class="caption bg-color vertical-center text-left">
+                    <div class="slider-header fadeInDown-1">Top Brands</div>
+                    <div class="big-text fadeInDown-1"> New Collections </div>
+                    <div class="excerpt fadeInDown-2 hidden-xs"> <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span> </div>
+                    <div class="button-holder fadeInDown-3"> <a href="#" class="btn-lg btn btn-uppercase btn-primary shop-now-button">Shop Now</a> </div>
+                  </div>
+                  <!-- /.caption --> 
+                </div>
+                <!-- /.container-fluid --> 
+              </div>
+            <%}%>
+            <!-- /.item --> 
+          </div>
+        <%}else{%>
+          <div id="owl-main" class="owl-carousel owl-inner-nav owl-ui-sm">
+            <div class="item" style="background-image: url(assets/images/sliders/01.jpg);">
+              <div class="container-fluid">
+                <div class="caption bg-color vertical-center text-left">
+                  <div class="slider-header fadeInDown-1">Top Brands</div>
+                  <div class="big-text fadeInDown-1"> New Collections </div>
+                  <div class="excerpt fadeInDown-2 hidden-xs"> <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span> </div>
+                  <div class="button-holder fadeInDown-3"> <a href="#" class="btn-lg btn btn-uppercase btn-primary shop-now-button">Shop Now</a> </div>
+                </div>
+                <!-- /.caption --> 
+              </div>
+              <!-- /.container-fluid --> 
+            </div>
+          
+            <!-- /.item -->
+          
+            <div class="item" style="background-image: url(assets/images/sliders/02.jpg);">
+              <div class="container-fluid">
+                <div class="caption bg-color vertical-center text-left">
+                  <div class="slider-header fadeInDown-1">Spring 2016</div>
+                  <div class="big-text fadeInDown-1"> Women <span class="highlight">Fashion</span> </div>
+                  <div class="excerpt fadeInDown-2 hidden-xs"> <span>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit</span> </div>
+                  <div class="button-holder fadeInDown-3"> <a href="#" class="btn-lg btn btn-uppercase btn-primary shop-now-button">Shop Now</a> </div>
+                </div>
+                < /.caption> 
+              </div>
+              </.container-fluid> 
+            </div>
+            <!-- /.item --> 
+            
+          </div>
+        <%}%>
      
         <div class="clearfix filters-container m-t-10">
           <div class="row">

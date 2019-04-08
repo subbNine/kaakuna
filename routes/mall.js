@@ -17,6 +17,7 @@ serveStoreImgs.get('/:imageName', function(req, res,next){
     var store = storeData._id;
     var dataDirectoryRoot = req.dataDirectoryRoot;
     res.sendFile(path.join(dataDirectoryRoot, ''+store, imageName))
+    // console.log('mall')
 
 });
 
