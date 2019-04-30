@@ -32,6 +32,10 @@
     border-bottom: 1px solid #e3e3e3;
   }
 
+  th{
+    text-align: center;
+  }
+
   .no-products-icon{
     font-size: 16px; 
     margin-right: 12px;
@@ -78,7 +82,7 @@
     color: #d0205e;
     padding: 5px;
     border: 1px #aaaaaa solid;
-    transition: background-color 0.5s;
+    transition: background-color 0.5s cubic-bezier(0.28, -0.25, 0, 0.98);
   }
 
   .centeralize{
@@ -92,11 +96,21 @@
   .section-heading{
 			font-size: 15px;
 			font-family: 'Open Sans', sans-serif;
-			border-bottom: 1px solid #e3e3e3;
-			padding-bottom: 10px;
 			text-transform: uppercase;
 			font-weight: 550;	
-			margin-bottom: 35px;
+      padding: 0;
+      margin: 10px 0 7px 0;
+  }
+
+  .section-heading + h4{
+    text-align: right;
+  }
+
+  .section-heading + h4 a{
+    height: 2.7rem;
+    text-transform: none;
+    display: inline !important;
+
   }
   
   [type="file"] {
@@ -140,12 +154,25 @@
   }
 
   .statusMsg > span{
-    transition: display 0.5s;
+    transition: display 0.5s cubic-bezier(0.28, -0.25, 0, 0.98);
   }
 
   .reveal-btn{
     background-color: rgba(0,0,0,0);
     border: 1px solid #ddd;
+  }
+
+  .subcat-input{
+    position: absolute;
+    top:-3rem; width: 100%; 
+    /*height: 3rem;*/
+    height: 0; 
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: row; 
+    align-items: flex-start; 
+    background-color: white;
+    transition: 1.5s linear;
   }
 </style>
 <div class="body-content outer-top-xs">
@@ -190,127 +217,234 @@
         <!-- /.sidebar-module-container --> 
       
       <!-- /.sidebar -->
-      <div class='col-md-9'> 
+      <div class='col-md-9' id="for-scroll-into-view"> 
+        <div class="">
         <!-- ========================================== SECTION – HERO ========================================= -->
-        <h4 class="section-heading" id="section-heading"></h4>
-        
-        <div id="actionsDisp" class="col-md-12">  
+          <div class="col-xs-12" style="border-bottom: 1px solid #e3e3e3; margin-bottom: 20px; padding-left: 0; padding-right: 0;">
+            <h4 class="section-heading col-xs-8" id="section-heading"></h4> 
+          </div>
           
-          <p class="statusMsg" id="statusMsg"></p>
-          
-          <h4 id="welcome" hidden>Welcome</h4>
+          <div id="actionsDisp" class="col-xs-12 row">  
+            
+            <p class="statusMsg" id="statusMsg"></p>
+            
+            <h4 id="welcome" hidden>Welcome</h4>
 
-          <h4 id="default" hidden>page not ready</h4>
-          
-          <form method="post" hidden id="logoImgUpld" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
-            <div class="col-md-12 centeralize">
-                <div class="col-md-4"></div>
-                <label class="col-md-4 placeholder-container pl-logo" id="placeholder-container">
-                  <input type="file" name="file" accept="image/*" id="logoimginp" data-multiple-caption="{count} files selected" />
-                  <%if(store && store._id && store.logo_path){%>
-                    <img id="logoImg" 
-                    src="/account/store/<%=store._id+'/'%>images<%='/'+store.logo_path%>"/>
-                    <a class="addimg" >change logo image</a>
-                  <%} else{%>
-                    <img id="logoImg" />
-                    <a class="addimg" >add logo image</a>
-                  <%}%>      
-                </label>   
-                <div class="col-md-4"></div>
-            </div>
-            <div class="col-md-12 centeralize" >
-                <div class="col-md-4"></div>
-                <div class="col-md-4" >
-                  
-                  <input class="btn btn-flat col-md-9" type="submit" value="Upload logo"/>
-                  
-                </div>          
-            </div>     
-          </form>
+            <h4 id="default" hidden>page not ready</h4>
+            
+            <form method="post" hidden id="logoImgUpld" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
+              <div class="col-md-12 centeralize">
+                  <div class="col-md-4"></div>
+                  <label class="col-md-4 placeholder-container pl-logo focus" id="placeholder-container">
+                    <input type="file" name="file" accept="image/*" id="logoimginp" data-multiple-caption="{count} files selected" />
+                    <%if(store && store._id && store.logo_path){%>
+                      <img id="logoImg" 
+                      src="/account/store/<%=store._id+'/'%>images<%='/'+store.logo_path%>"/>
+                      <a class="addimg" >change logo image</a>
+                    <%} else{%>
+                      <img id="logoImg" />
+                      <a class="addimg" >add logo image</a>
+                    <%}%>      
+                  </label>   
+                  <div class="col-md-4"></div>
+              </div>
+              <div class="col-md-12 centeralize" >
+                  <div class="col-md-4"></div>
+                  <div class="col-md-4" >
+                    
+                    <input class="btn btn-flat col-md-9" type="submit" value="Upload logo"/>
+                    
+                  </div>          
+              </div>     
+            </form>
 
-          <form method="post"  hidden  id="storebanner" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
-            <div class="col-md-12 imgwrapper">
-                <%if(store && store.banner_image){%>
-                  <%store.banner_image.forEach(function(img){%>
-                    <div class="col-md-6 banner">
-                      <!--new elems should be appended here-->
-                      
-                        <label class="col-md-6 placeholder-container">
+            <form method="post"  hidden  id="storebanner" enctype="multipart/form-data" action="/account/store<%=storeid?'/'+storeid:''%>/logo">
+              <div class="col-md-12 imgwrapper">
+                  <%if(store && store.banner_image){%>
+                    <%store.banner_image.forEach(function(img){%>
+                      <div class="col-md-6 banner">
+                        <!--new elems should be appended here-->
                         
-                          <img src='<%=store._id+"/"%>images<%='/'+img.path%>' id="logoImg" 
-                          />
-                        </label>   
-                      <button class="btn btn-flat col-xs-12 submit-btn delete-btn"  style="margin: 4px 0 0 0;"type="submit">delete</button> 
-                    </div>
-                  <%})%>
-                <%}%>
-                <div class="col-md-6 banner add-banner-container">
-                  <!--new elems should be appended here-->
-                  <label class="col-md-6 placeholder-container">
-                    <input type="file" name="file" accept="image/*" id="bannerimginp" data-multiple-caption="{count} files selected" />
-                    
-                      <img id="bannerImg" 
-                      />
-                    
-                    <a class="addimg" >add image</a>             
-                  </label> 
-                  <button class="btn btn-flat col-xs-12 submit-btn" style="margin: 4px 0 0 0;"type="submit">Upload</button> 
-                </div> 
-                <div class="col-md-4"></div>
-            </div>    
-          </form>
+                          <div class="col-md-6 placeholder-container">
+                          
+                            <img src='<%=store._id+"/"%>images<%='/'+img.path%>' id="logoImg" 
+                            />
+                          </div>   
+                        <button class="btn btn-flat col-xs-12 submit-btn delete-btn"  style="margin: 4px 0 0 0;"type="submit">delete</button> 
+                      </div>
+                    <%})%>
+                  <%}%>
+                  <div class="col-md-6 banner add-banner-container">
+                    <!--new elems should be appended here-->
+                    <label class="col-md-6 placeholder-container focus">
+                      <input type="file" name="file" accept="image/*" id="bannerimginp" data-multiple-caption="{count} files selected" />
+                      
+                        <img id="bannerImg" 
+                        />
+                      
+                      <a class="addimg" >add image</a>             
+                    </label> 
+                    <button class="btn btn-flat col-xs-12 submit-btn" style="margin: 4px 0 0 0;"type="submit">Upload</button> 
+                  </div> 
+                  <div class="col-md-4"></div>
+              </div>    
+            </form>
 
-          <div id="addCategory" hidden class='form-group row col-md-12 col-xs-12'>
+            <div id="addCategory" hidden class='row col-xs-12'>
+              <div class="col-xs-12 row">
+                <table class="table-bordered col-xs-12 text-center">
+                  <thead>
+                    <th> category icon</th>
+                    <th>Name</th>
+                    <th>No. of Sub-Categories</th> 
+                    <th>Products</th> 
+                    <th>Actions</th>  
+                  </thead>
+                  <tbody>
+                    <%if(categories && categories.length){%>
+                    <%for(cat of categories){%>
+                    <tr>
+                      <td>
+                        <i class="icon fa <%=cat.icon_class%>"></i>
+                      </td>
+                      <td>
+                        <%=cat.category_name%>
+                      </td>
+                      <td data-cat=<%=cat._id%>>
+                        <div class="dropdown menu-item"><span class='subcat-length'><%=cat.subCategories?+cat.subCategories.length:0%></span>
+                            <a class="subcat-add" data-cat="<%=cat.id%>" title="click to add sub category" style="float: right; margin-right: 1rem; color: #999; margin-left: 2rem; width: 1rem;" href="#">
+                              <i class="icon fa fa-plus"></i>
+                            </a>
 
-            <div class='col-md-2 ' >
+                            <a style="float: right; color: #999; width: 1rem;" title="click to view sub category" class="dropdown-toggle" data-toggle="dropdown" href="#">
+                              <i class="icon fa fa-ellipsis-v"></i>
+                            </a>
+                          <%if(cat.subCategories && cat.subCategories.length){%>
+                            <ul class="dropdown-menu col-xs-12">
+                              <li class="yamm-content">
+                                <div class="row">
+                                      
+                                    <div class="col-xs-12">
+                                        <ul class="links list-unstyled subcat-container" >
+                                          <%for(subcategory of cat.subCategories){%>
+                                            <li style="padding-left: 1rem; padding-right: 2rem; ">
+                                              <a data-subcat="<%=subcategory._id%>" href="#">
+                                                <%=subcategory.name%>
+                                              </a>
+                                              <a style="float: right;  color: #999">
+                                                <i class="icon fa fa-close"></i>
+                                              </a>
+                                            </li>
+                                          <%}%>
+                                        </ul>
+                                    </div>
+                                  
+                                  <!-- /.col --> 
+                                </div>
+                                <!-- /.row --> 
+                              </li>
+                              <!-- /.yamm-content -->
+                            </ul>
+                            
+                          <%}%>
+                        </div>
+                      </td>
+                      <td>
+                        <%if(products && products.length){%>
+                        
+                        <%}%>
+                      </td>
+                      <td>
+                      <a href="#" class="btn btn-sm btn-success">+Sub Category</a>
+                      </td>
+                    </tr>
+                    <%}%>
+                    <%}else{%>
+                      <tr><td span='4'>theres nothing here</td></tr>
+                    <%}%>
+                  </tbody>
+                </table>
+              </div>
             </div> 
 
-            <div class="col-md-8 col-xs-12">
-              <button  class="btn cat-btn btn-flat col-xs-12 reveal-btn" data-target="#addCat" data-toggle="collapse" >add category</button>
-              
-              
-              <form method='post' class="collapse col-xs-12" enctype="multipart/form-data" id='addCat'> 
-                <div class=' col-xs-12' style="padding-right: 0">
-                  <label class='info-title' for='catName' style="margin: 20px 0 0 0">Category Name<span></span></label>
-                  <input type='text' name='catName' 
-                  class='form-control info-update unicase-form-control text-input' id='catName' />
+            <form method='post' hidden class="col-xs-12" enctype="multipart/form-data" id="addCat"> 
+              <div class=' col-xs-12' style="padding-right: 0">
+                <label class='info-title' for='catName' style="margin: 20px 0 0 0">Category Name<span></span></label>
+                <input type='text' name='catName' 
+                class='form-control info-update unicase-form-control text-input' id='catName' />
 
-                  
-                  <label class="info-title" for="iconClass" style="margin: 20px 50px 10px 0">Select Category Icon
-                    <input type="hidden" name="iconClass" id="iconClass" value=""/>
-                  </label>
-                  <div class="dropdown col-xs-12" style="padding: 0">
-                    <button class="btn reveal-btn col-xs-12 dropdown-toggle" type="button" title="select a descriptive icon for the category" data-toggle="dropdown">
-                      <i class="icon fa" aria-hidden="true" style="margin: 10px 0 10px 20px; font-size: 18px">Icon:</i>
-                      <i data-iconClass="" id="catIcon" aria-hidden="true" style="margin: 10px 0 10px 20px; font-size: 18px"></i>
-                    </button>
-                    <ul class="dropdown-menu col-xs-12" style="height: 400px; overflow: auto;" id="catIcons-dropdown-menu">
-                      
-                    </ul>
-                  </div>
-                  <label for="catimginp" class="col-xs-12" style="margin: 20px 0 10px 0; padding-left: 0;">
-                    Category Image
-                  </label>
-                  <label class="col-xs-6 placeholder-container" id="placeholder-container"> 
-                    <input type="file" name="file" accept="image/*" id="catimginp" data-multiple-caption="{count} files selected" />
-                    
-                    <img id="catImg" 
-                    />
-                    
-                    <a class="addimg" >add image</a>             
-                  </label> 
-                  <button class='col-xs-12 btn submit-btn' style="margin: 4px 0 0 0">Add</button>
-                </div>
-
-              </form>
-
-              <button   class="btn cat-btn btn-flat col-xs-12 reveal-btn" data-target="#addSubCat" data-toggle="collapse">add sub category</button>
-              
-              <form method='post' class="collapse col-xs-12" enctype="multipart/form-data" id='addSubCat'> 
                 
-                <div class="col-xs-12" style="padding-right: 0">
-                  <label class='info-title' for='subcatCategory' style="margin-top: 20px">Category Name<span></span></label>
-                  <select name='subcatCategory'  id='subcatCategory' class='form-control unicase-form-control prodCat'>
+                <label class="info-title" for="iconClass" style="margin: 20px 50px 10px 0">Select Category Icon
+                <input type="hidden" name="iconClass" id="iconClass" value=""/>
+                </label>
+                <div class="dropdown col-xs-12" style="padding: 0">
+                <button class="btn reveal-btn col-xs-12 dropdown-toggle" type="button" title="select a descriptive icon for the category" data-toggle="dropdown">
+                  <i class="icon fa" aria-hidden="true" style="margin: 10px 0 10px 20px; font-size: 18px">Icon:</i>
+                  <i data-iconClass="" id="catIcon" aria-hidden="true" style="margin: 10px 0 10px 20px; font-size: 18px"></i>
+                </button>
+                <ul class="dropdown-menu col-xs-12" style="height: 400px; overflow: auto;" id="catIcons-dropdown-menu">
+                  
+                </ul>
+                </div>
+                <label for="catimginp" class="col-xs-12" style="margin: 20px 0 10px 0; padding-left: 0;">
+                Category Image
+                </label>
+                <label class="col-xs-6 placeholder-container focus" id="placeholder-container"> 
+                <input type="file" name="file" accept="image/*" id="catimginp" data-multiple-caption="{count} files selected" />
+                
+                <img id="catImg" 
+                />
+                
+                <a class="addimg" >add image</a>             
+                </label> 
+                <button class='col-xs-12 btn submit-btn' style="margin: 4px 0 0 0">Add</button>
+              </div>
+
+            </form>
+            
+            <form id="addProd" hidden class="row"  enctype="multipart/form-data">					
+              <div class="col-md-12">
+                
+                <div class='form-group col-md-6' >
+                  <label class='info-title' for='itemName'>Name of Item<span></span></label>
+                  <input type='text'  placeholder='Name of Item' name='itemName' required
+                  class='form-control unicase-form-control address-update text-input' id='itemName'/>                    
+                </div>  
+                <div class='form-group col-md-6' >
+                  <label class='info-title' for='itemPrice'>Price of Item<span></span></label>
+                  <input type='number' required
+                  placeholder="Price Per Item (NGN)" 
+                  name='itemPrice'  class='form-control info-update unicase-form-control text-input' id='itemPrice' />                    
+                </div>
+                <div class='form-group col-md-6' >
+                  <label class='info-title' for='itemQty'>Item Quantity<span></span></label>
+                  <input type='number' required
+                  placeholder="Quantity of Item" 
+                  name='itemQty'  class='form-control info-update unicase-form-control text-input' id='itemQty' />                    
+                </div>
+            
+                <div class='form-group col-md-6' >
+                  <label class='info-title' for='prodManf'>Manufacturer of Product<span></span></label>
+                  <input type='text' name='prodManf' required
+                  placeholder='Manufacturer of Products' 
+                  class='form-control unicase-form-control text-input' id='prodManf'/>                    
+                </div>  
+              
+                <div class='form-group col-md-6' >
+                  <label class='info-title' for='prodColor'>Color of Product<span></span></label>
+                  <input type='text' placeholder="e.g black" required
+                  name='prodColor' class='form-control info-update unicase-form-control text-input' 
+                  id='prodColor' />                    
+                </div>
+                <div class='form-group col-md-6' >
+                  <label class='info-title' for='productDesc'>Description of Product<span></span></label>
+                  <textarea type='text area'name='productDesc' required
+                  class='form-control info-update unicase-form-control text-input' placeholder="brand, model number, type"
+                  id='productDesc'></textarea>
+                </div>
+                <div class="form-group col-md-6">
+                  <label class='info-title' for='prodCategory' style="">Category Name<span></span></label>
+                  <select name='prodCategory'  id='prodCategory' class='form-control unicase-form-control prodCat'>
                     <option selected>  ---Select Category---
                     </option>
                     <%if(categories){%>
@@ -321,117 +455,49 @@
                       
                       <%}%>
                     <%}%>
+                    
                   </select>
-                  <label class='info-title' for='subCatName' style="margin-top: 20px">Sub category Name<span></span></label>
-                  <input type='text'  placeholder='Enter Sub category Name' name='subCatName' 	
-                    class='form-control unicase-form-control address-update text-input' id='subCatName'/>  
-                  
-                    <button class='col-xs-12 btn submit-btn' style="margin: 10px 0 0 0">Add</button>  
                 </div>
-                
+                <div class="col-md-6">
+                  <label class='info-title' for='prodSubCategory' style="">Sub Category Name<span></span></label>
+                  <select name='prodSubCategory' required  id='prodSubCategory' class='form-control unicase-form-control'>
+                    <option selected>  ---Select sub category---
+                    </option>
+                    <!--<%if(categories){%>
+                      <%for(cat of categories){%> 
+                        
+                        <option value='<%=cat._id%>'> <%=cat.category_name%>
+                        </option>
+                      
+                      <%}%>
+                    <%}%>-->
+                    
+                  </select>
+                </div>
+                <div class='form-group col-md-12'>
+                  <label for="prodImg" style="margin-top: 20px">
+                    Product Image
+                  </label>
+                  <label class="col-md-6 placeholder-container focus" id="placeholder-container"> 
+                    <input type="file"  name="prodImgInp" accept="image/*" id="prodImgInp"/>
+                    
+                    <img id="prodImg" 
+                    />
+                    
+                    <a class="addimg" >add image</a>             
+                  </label>                  
+                </div>
+              </div>  
+              <div class='col-xs-12' style="margin-top: 30px">
+                <div class="col-xs-1 col-sm-4"></div>
+                <button class='col-xs-10 btn col-sm-4' style="background-color: #d0205e">Add Product</button>
+                <div class="col-xs-1 col-sm-4"></div>
+              </div>     
+            </form>
 
-              </form>
-
-            </div>
-
-            <div class='col-md-2 ' >
-            </div>
-
-          </div> 
+          </div>
         
-          <form id="addProd" hidden class="row"  enctype="multipart/form-data">					
-            <div class="col-md-12">
-              
-              <div class='form-group col-md-6' >
-                <label class='info-title' for='itemName'>Name of Item<span></span></label>
-                <input type='text'  placeholder='Name of Item' name='itemName' required
-                class='form-control unicase-form-control address-update text-input' id='itemName'/>                    
-              </div>  
-              <div class='form-group col-md-6' >
-                <label class='info-title' for='itemPrice'>Price of Item<span></span></label>
-                <input type='number' required
-                placeholder="Price Per Item (NGN)" 
-                name='itemPrice'  class='form-control info-update unicase-form-control text-input' id='itemPrice' />                    
-              </div>
-              <div class='form-group col-md-6' >
-                <label class='info-title' for='itemQty'>Item Quantity<span></span></label>
-                <input type='number' required
-                placeholder="Quantity of Item" 
-                name='itemQty'  class='form-control info-update unicase-form-control text-input' id='itemQty' />                    
-              </div>
-          
-              <div class='form-group col-md-6' >
-                <label class='info-title' for='prodManf'>Manufacturer of Product<span></span></label>
-                <input type='text' name='prodManf' required
-                placeholder='Manufacturer of Products' 
-                class='form-control unicase-form-control text-input' id='prodManf'/>                    
-              </div>  
-            
-              <div class='form-group col-md-6' >
-                <label class='info-title' for='prodColor'>Color of Product<span></span></label>
-                <input type='text' placeholder="e.g black" required
-                name='prodColor' class='form-control info-update unicase-form-control text-input' 
-                id='prodColor' />                    
-              </div>
-              <div class='form-group col-md-6' >
-                <label class='info-title' for='productDesc'>Description of Product<span></span></label>
-                <textarea type='text area'name='productDesc' required
-                class='form-control info-update unicase-form-control text-input' placeholder="brand, model number, type"
-                 id='productDesc'></textarea>
-              </div>
-              <div class="form-group col-md-6">
-                <label class='info-title' for='prodCategory' style="">Category Name<span></span></label>
-                <select name='prodCategory'  id='prodCategory' class='form-control unicase-form-control prodCat'>
-                  <option selected>  ---Select Category---
-                  </option>
-                  <%if(categories){%>
-                    <%for(cat of categories){%> 
-                      
-                      <option value='<%=cat._id%>'> <%=cat.category_name%>
-                      </option>
-                    
-                    <%}%>
-                  <%}%>
-                  
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label class='info-title' for='prodSubCategory' style="">Sub Category Name<span></span></label>
-                <select name='prodSubCategory' required  id='prodSubCategory' class='form-control unicase-form-control'>
-                  <option selected>  ---Select Category---
-                  </option>
-                  <!--<%if(categories){%>
-                    <%for(cat of categories){%> 
-                      
-                      <option value='<%=cat._id%>'> <%=cat.category_name%>
-                      </option>
-                    
-                    <%}%>
-                  <%}%>-->
-                  
-                </select>
-              </div>
-              <div class='form-group col-md-6'>
-                <label for="prodImg" style="margin-top: 20px">
-                  Product Image
-                </label>
-                <label class="col-md-6 placeholder-container" id="placeholder-container"> 
-                  <input type="file"  name="prodImgInp" accept="image/*" id="prodImgInp"/>
-                  
-                  <img id="prodImg" 
-                  />
-                  
-                  <a class="addimg" >add image</a>             
-                </label>                  
-              </div>
-            </div>  
-            <div class='col-xs-12' style="margin-top: 30px">
-              <div class="col-xs-1 col-sm-4"></div>
-              <button class='col-xs-10 btn col-sm-4' style="background-color: #d0205e">Add Product</button>
-              <div class="col-xs-1 col-sm-4"></div>
-            </div>     
-          </form>
-
+        
         </div>
       <!-- /.col -->
       </div> 
@@ -524,6 +590,7 @@ $(document).ready(function(){
   //--begin-- router section
   // minfsetContainer(document.getElementById('actionsDisp'));
   var sectionHeading = document.getElementById('section-heading');
+  var scrollIntoView = document.getElementById('for-scroll-into-view');
 
   var minfroute = Minf({nullrouteRedirect: '/'})
   minfroute.route('/', 
@@ -531,8 +598,9 @@ $(document).ready(function(){
       return 'welcome';
     }, 
     ()=>{
+      $(`#section-heading + h4`).remove()
       sectionHeading.textContent = 'Welcome';
-      sectionHeading.scrollIntoView(true);
+      scrollIntoView.scrollIntoView(true);
     }
   );
 
@@ -541,8 +609,9 @@ $(document).ready(function(){
       return 'default';
     },
     ()=>{
+      $(`#section-heading + h4`).remove();
       sectionHeading.textContent = 'default view';
-      sectionHeading.scrollIntoView(true);
+      scrollIntoView.scrollIntoView(true);
     }
   );
   
@@ -551,8 +620,9 @@ $(document).ready(function(){
       return 'logoImgUpld';
     },
     ()=>{
+      $(`#section-heading + h4`).remove();
       sectionHeading.textContent = 'Upload a Logo for your store';
-      sectionHeading.scrollIntoView(true);
+      scrollIntoView.scrollIntoView(true);
     }
   );
   
@@ -561,8 +631,9 @@ $(document).ready(function(){
       return 'storebanner';
     },
     ()=>{
+      $(`#section-heading + h4`).remove();
       sectionHeading.textContent = 'Upload a Banner for your store';
-      sectionHeading.scrollIntoView(true);
+      scrollIntoView.scrollIntoView(true);
     }
   );
 
@@ -571,16 +642,32 @@ $(document).ready(function(){
     },
     ()=>{
       sectionHeading.textContent = 'Product Categories';
-      sectionHeading.scrollIntoView(true)
+      scrollIntoView.scrollIntoView(true);
+      $(`#section-heading + h4`).remove();
+      // show add category button
+      $(`<h4 class="section-heading col-xs-4"><a class="btn btn-sm btn-success" href="#addcat"><i class="icon fa fa-plus"></i> Category</a></h4>`).insertAfter('#section-heading')
     }
   ); 
+
+  minfroute.route('addcat', ()=>{
+      return 'addCat';
+    },
+    ()=>{
+      sectionHeading.textContent = 'Product Categories';
+      scrollIntoView.scrollIntoView(true);
+      $(`#section-heading + h4`).remove();
+      $(`<h4 class="section-heading col-xs-4"><a class="btn btn-sm btn-success" href="#addcat"><i class="icon fa fa-plus"></i> Category</a></h4>`).insertAfter('#section-heading')
+
+    }
+  );
 
   minfroute.route('products', ()=>{
       return 'addProd';
     },
     ()=>{
+      $(`#section-heading + h4`).remove();
       sectionHeading.textContent = "Product Catalog";
-      sectionHeading.scrollIntoView(true)
+      scrollIntoView.scrollIntoView(true)
     }
   );
   //--end-- router section
@@ -593,7 +680,7 @@ $(document).ready(function(){
     $('.addimg').css('background-color', 'rgba(0,0,0,0)')
   });
 
-  $('.add-banner-container .placeholder-container').live('mouseenter', function(event){
+  $('.focus').live('mouseenter', function(event){
     $('.addimg').css('background-color', '#aaaaaa')
   }).live('mouseleave', function(){
     $('.addimg').css('background-color', 'rgba(0,0,0,0)')
@@ -601,7 +688,6 @@ $(document).ready(function(){
 
   $('#prodCategory').live('change', function(event){
     var category = $(this).val();
-    formAppends.proddata.subcat = '';
     // console.log(category)
     $.ajax({
           type: 'GET',
@@ -615,7 +701,7 @@ $(document).ready(function(){
                   // add result to the list of subcategory
                   if(msg.data && msg.data.length){
                     $('#prodSubCategory')
-                        .html(`<option selected>  ---Select Category---
+                        .html(`<option selected>  ---Select sub category---
                               </option>`)
                     msg.data.forEach(
                       (data)=>{
@@ -626,16 +712,16 @@ $(document).ready(function(){
                         
                         // cache this data so that it persists even when we change views
                         // redux should be used here, but, well, this works too
-                        formAppends.proddata.subcat += 
-                          `<option value="${data.id}">
-                            ${data.name}
-                          </option>`;
+                        // formAppends.proddata.subcat += 
+                        //  `<option value="${data.id}">
+                        //    ${data.name}
+                        //  </option>`;
                       }
                     );
                   }
                   else{
                     $('#prodSubCategory')
-                        .html(`<option selected>  ---Select Category---
+                        .html(`<option selected>  ---Select sub category---
                               </option>`)
                         .append(`<option value="">
                                   <i>no sub category added yet</i>
@@ -648,6 +734,25 @@ $(document).ready(function(){
       });
   });
 
+  $('body').click(function(event){
+    var subcatAdd = event.target.closest('.subcat-add');
+    var subcatInput = event.target.closest('.subcat-input');
+    
+    if(!subcatInput){
+        $('.subcat-input').remove();
+      }
+    if(subcatAdd){
+      $(`<form class="subcat-input" id="subcat-input-form">
+        <input type="text" name="subCatName" required data-cat="${subcatAdd.dataset.cat}" style="width: 80%; padding-left: 0.7rem; padding-right: 0.7rem" type="text"/>
+        <input type="hidden" name="subcatCategory" />
+        <button style="width: 20%">
+          <i class="icon fa fa-save" style="font-size: "></i>
+        </button>
+      </form>`).insertBefore(subcatAdd).css('top', '0rem').css('height', '3rem');
+      return false;
+    }
+  });    
+
   // retrieve bas64 format of images
   // and display them in an image tag
   // tags should follow this arrangement
@@ -657,7 +762,7 @@ $(document).ready(function(){
   //   <img />
   // </elem>
   var imgfile = undefined;
-  $('[type="file"]').live( 'change', function( e ) {
+  $('[type="file"]').live('change', function( e ) {
     var fileName = undefined;
     var imageTag = this.nextElementSibling;
     var file = e.target.files[0];
@@ -679,6 +784,73 @@ $(document).ready(function(){
         
       }    
     }
+  });
+
+  // loader gif
+  var loadingImg = new Image();
+  loadingImg.src = '/assets/images/loading_sm.gif';
+
+  $('#subcat-input-form').live('submit', function(event){
+    event.preventDefault()
+    var submitBtn = $('#subcat-input-form button');
+    var submitBtnContent = submitBtn.html();
+    var category = $('#subcat-input-form > input[name="subCatName"]'
+                    ).attr('data-cat');
+    $("#subcat-input-form input[name='subcatCategory']"
+      ).val(category);
+    
+    $.ajax({
+        type: 'POST',
+        url: "/account/store<%=storeid?'/'+storeid:''%>/subcat",
+        data: new FormData(this),
+        contentType: false,
+        cache: false,
+        processData: false,
+        beforeSend: ()=>{
+          submitBtn.attr("disabled","disabled");
+          // $(this).css("opacity",".5");
+          submitBtn.html(loadingImg);
+        },
+        complete: ()=>{
+          submitBtn.html(submitBtnContent);
+          // $('#addSubCat').css("opacity","");
+          submitBtn.removeAttr("disabled");
+          // document.getElementById('statusMsg').scrollIntoView(true);
+          setTimeout(()=>{
+            $('.statusMsg > span').css('display', 'none');
+          }, 3000);
+        },
+        success: (msg)=>{
+            $('.statusMsg').html('');
+            if(msg && msg.success===true){
+                var data = msg.data;
+                $(`td[data-cat="${category}"] .subcat-container`).append(`
+                  <li style="padding-left: 1rem; padding-right: 2rem; ">
+                    <a data-subcat="${data._id}" href="#">
+                      ${data.name}
+                    </a>
+                    <a style="float: right;  color: #999">
+                      <i class="icon fa fa-close"></i>
+                    </a>
+                  </li>
+                `);
+
+                var length = $(`td[data-cat='${category}'] .subcat-length`).html();
+                length= +length + 1;
+                $(`td[data-cat='${category}'] .subcat-length`).html(""+length);
+
+                $('.statusMsg').html('<span style="font-size:18px;color:#34A853">sub category added successfully.</span>');
+                $(this).remove()
+            }else{
+                $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">'+ 
+                  (msg.message?msg.message:'Some problem occurred, please try again.')+'</span>');
+            }
+            $(this)[0].reset();
+        },
+        error: function(errObj, status){
+          $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
+        }
+    });
   });
 
   $('#logoImgUpld').live('submit', function(event){

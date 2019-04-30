@@ -51,7 +51,7 @@ const storeItemCategory = new Schema({
 const storeItem = new Schema({
     name: {type: String, lowercase: true},
     description: String,
-    category: {type: Schema.Types.ObjectId, ref: 'StoreItemSubCategory'},
+    category: {subcategory:{type: Schema.Types.ObjectId, ref: 'storeItemSubCategory'}, category:{type: Schema.Types.ObjectId, ref: 'storeItemCategory'}},
     price: Number,
     manufacturer: String,
     color: {type: String, lowercase: true},

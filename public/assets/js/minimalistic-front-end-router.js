@@ -56,7 +56,9 @@ function Minf(options){
 
 		// it is assumed that if this.container is not set, then views are passed in via view id
 		if(this.routeViews[path] && !this.container){
-			var elem = document.getElementById(this.routeViews[path])
+			var elem = document.getElementById(this.routeViews[path]);
+			elem.style.transition = "opacity 0.1s cubic-bezier(0.28, -0.25, 0, 0.98)";
+			elem.style.opacity = 0
 			elem.hidden = elem.hidden || !elem.hidden
 		}	
 	};
@@ -115,7 +117,8 @@ function Minf(options){
 														fromView.startsWith('#')
 														?fromView.slice(1)
 														:fromView
-														);
+									);
+					prevViewId.style.opacity = 0;
 					prevViewId.hidden = true;
 				}
 				
@@ -137,6 +140,7 @@ function Minf(options){
 																?curView.slice(1)
 																:curView);
 					currentViewId.hidden = false;
+					currentViewId.style.opacity = 1
 				}
 			}
 			this.previousRoute = route;
