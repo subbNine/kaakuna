@@ -217,7 +217,9 @@
 			
 			var minfroute = Minf();
 
-			
+			minfroute.route('*',null, (minf)=>{
+				minf.redirect('signin');
+			})
 
 			minfroute.route('/', 
 				()=>{ return 'sign-in-form'}, 

@@ -12,7 +12,7 @@ router.get('/', function(req, res){
     var redirectTo = req.session.oldUrl;
     
     // users cant see login/signup page if they have signed in
-    if(res.locals.user && res.locals.login ){
+    if(res.locals.user || res.locals.login ){
         if(redirectTo){
             res.redirect(redirectTo);
         }else{
@@ -30,12 +30,12 @@ router.get('/', function(req, res){
 
 router.post('/signin', passport.authenticate('signin', {failureRedirect: '/account#signin',
     failureFlash: true}), 
-    function(req, res, next) {
+    function(req, res) {
         if (req.session.oldUrl) {
             var redirectTo = req.session.oldUrl;
             res.redirect(redirectTo);
             // req.session.oldUrl = null;
-        } else {
+        } else{
             res.redirect('/account/profile');
         }
     }

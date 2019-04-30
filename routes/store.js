@@ -38,7 +38,7 @@ router.use('/:storeid',
                 }
             });
 
-            ProductCategory.find({store: storeid}, 'category_name _id', function(err, cat){
+            ProductCategory.find({store: storeid}, function(err, cat){
                 if(err) return next(err);
                 // console.log(cat)
                 res.locals.categories = cat;
@@ -66,30 +66,38 @@ router.get('/:storeid/images/:imageName', function(req, res){
 router.get('/:storeid', function(req, res, next){
     const storeid = req.params.storeid;
     res.locals.products = undefined;
+    var products = undefined;
+    var prod_categories = undefined;
     // console.log(res.locals)
     
-    Product.where('store').equals(storeid).exec(function(err, products){
+    Product.where('store').equals(storeid).exec(function(err, found_products){
         if(err){
             return next(err)
+        }else{
+            if(found_products.length){
+                products = found_products; 
+                res.render('vendor-store', {page: 'store', products, storeid});           
+            }else{
+                res.render('vendor-store', {page: 'store', storeid});
+            }
         }
+    });
 
-        ProductCategory.find({store: storeid}, 'category_name _id', function(err, cat){
-            if(err) return next(err);
-            // console.log(cat)
-            categories = cat;
-            // console.log(cat)
-            // something in products?
-            if(products.length){
-                // console.log('products: ', {page: 'store', products}, typeof products)
-                res.render('vendor-store', {page: 'store', categories: categories, products, storeid})
-            }
-            else{
-                res.render('vendor-store', {page: 'store', categories: categories, storeid})
-            }
-            
-        });
+    // ProductCategory.find({store: storeid}, 'category_name _id', function(err, found_cat){
+    //     if(err) return next(err);
+    //     // console.log(cat)
+    //     prod_categories = found_cat;
+    //     // console.log(cat)
+    //     // something in products?
+    //     if(products && products.length){    // products async search is ready
+    //         // console.log('products: ', {page: 'store', products}, typeof products)
+    //         res.render('vendor-store', {page: 'store', categories: prod_categories, products, storeid})
+    //     }
+    //     else{
+    //         res.render('vendor-store', {page: 'store', categories: prod_categories, storeid})
+    //     }
         
-    })
+    // });
 })
 
 // create or change store logo
@@ -319,6 +327,7 @@ router.post('/:storeid/subcat',
                             cat.save(function(){
                                 response.success = true;
                                 response.message = 'success';
+                                response.data = subcat;
                                 return res.json(response)
                             });
                         });
