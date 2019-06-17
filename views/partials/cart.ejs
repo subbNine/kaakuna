@@ -1,0 +1,256 @@
+<script>
+
+    // loader gif
+    const loadingImg = new Image();
+    loadingImg.src = '/assets/images/loading_sm.gif';
+    // shopping cart logic
+        
+    // increment button
+    const incrementBtn = ".increment";
+    
+    // decrement button
+    const decrementBtn = ".decrement";
+
+    $(document).on('click', incrementBtn, function(event){
+        event.preventDefault();
+        let number = this.previousElementSibling;
+        number.innerText = +number.innerText + 1
+    });
+    
+    $(document).on('click', decrementBtn, function(event){
+        event.preventDefault();
+        let number = this.nextElementSibling;
+        number.innerText = number.innerText >1?+number.innerText - 1: 1
+    }) 
+
+    $('.add-to-cart-form').on('submit', function(event){
+        event.preventDefault();
+        // get quantity of products to add to cart
+        var qty = getChildElem("div[class=\"number\"]", this.closest('.dropdown-menu'), true, true);
+
+        // set hidden input field of name quantity to quantity selected by user
+        var qtyInputField = getChildElem('input[name="qty"]', this);
+        qtyInputField.value = qty;
+
+        const cartBtn = getChildElem('.add-to-cart-btn', this);
+
+        const product = cartBtn.dataset.product;
+        console.log(product)
+        var price = !!+cartBtn.dataset.discount? cartBtn.dataset.price.split('/')[0]: cartBtn.dataset.price.split('/')[1];
+
+        const productRootElem = this.closest('.product');
+        const prodImg = getChildElem("img[src]", productRootElem);
+        const prodTitle = getChildElem("div.product-info > .name > a", productRootElem).innerText;
+        
+        const cartImg = new Image
+        // newImg.onload = function(){}
+        cartImg.src = prodImg.src;
+
+        const btnText = $(cartBtn).html();
+        // add product to cart
+        $.ajax({
+            type: 'POST',
+            url: "/<%=storeData && storeData.url?`${storeData.url}/cart/`:''%>"+product,
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            beforeSend: ()=>{
+                console.log('cart');
+                $(cartBtn).html(loadingImg);
+            },
+            complete: ()=>{
+                $(cartBtn).html(btnText);
+            },
+            success: (msg)=>{
+                qty = +qty;
+                var updPrice = +price * qty
+                var oldPrice = +$('#shopping-cart .total-price > .value').text()
+                var newPrice = updPrice + oldPrice
+                $('#shopping-cart .total-price > .value').text(newPrice)
+                $('#shopping-cart .subtotal').text(newPrice)
+
+                const cartItemId = 'cartitem-'+product
+                var itemInCart = document.getElementById(cartItemId);
+                // increase the number of items in cart if it already exist
+                if(itemInCart){
+                    // get quantity of item already in cart
+                    var qtyInCart = +$('#'+cartItemId+' .qty').text();
+                    // add the quantity of newly added cart items to that which is already in cart
+                    qtyInCart += qty;
+                    // update the dom with the quantity update
+                    $('#'+cartItemId+' .qty').text(qtyInCart);
+                }else{  // add new item to cart and increment the number representing the number of items in cart
+                    // template for adding cart item
+                    var newCartItem =`
+                    <div class="row" id="cartitem-${product}">
+                        <div class="col-xs-4">
+                            <div class="image"> 
+                            <a href="detail.html">
+                                <img src="${cartImg.src}" alt="">
+                            </a> 
+                            </div>
+                        </div>
+                        <div class="col-xs-5">
+                            <h3 class="name"><a href="index8a95.html?page-detail">${prodTitle}</a></h3>
+                            <div class="qty" style="font-weight: bold">${qty}</div>
+                            <div class="price">N ${price}.00</div>
+                        </div>
+                        <div class="col-xs-1 action"> 
+                            <a href="" class="reduce-item-by-one" 
+                            data-price="${price}" 
+                            data-product="${product}" 
+                            title="reduce quantity by one">
+                            <i class="fa fa-minus"></i>
+                          </a> 
+                        </div>
+                        <div class="col-xs-1 action"> 
+                            <a href="" 
+                            class="increase-item-by-one" 
+                            data-price="${price}"  
+                            data-product="${product}" 
+                            title="increase quantity by one">
+                            <i class="fa fa-plus"></i>
+                          </a> 
+                        </div>
+                        <div class="col-xs-1 action"> 
+                            <a href="" class="remove-item-from-cart" 
+                            data-product="${product}" 
+                            title="remove item from cart">
+                                <i class="fa fa-trash"></i>
+                            </a> 
+                        </div>
+                    </div>
+                    <hr>`;
+
+                    // add item to cart
+                    $('#shopping-cart form  .product-summary').append(newCartItem);
+                    // increase number of items on cart after adding new item
+                    var cartListLength = +$('#shopping-cart .basket-item-count .count').text();
+                    $('#shopping-cart .basket-item-count .count').text(cartListLength+1);
+                }
+            },
+            error: function(errObj, status){
+
+            }
+        });
+    });
+
+    $(document).on('click', '#shopping-cart .reduce-item-by-one', function(event){
+        event.preventDefault()
+        const product = this.dataset.product;
+        var itemQtyElem = getChildElem(`#cartitem-${product} .qty`, this.closest(`#cartitem-${product}`));
+        var itemQty = +$(itemQtyElem).text()
+        console.log(itemQty)
+        if(itemQty > 1){
+            const icon = $(this).html();
+            // console.log({price: this.dataset.price});
+            $.ajax({
+                type: 'GET',
+                url: `/cart/reduce/${product}`, 
+                success: (data)=>{
+                    var totalPrice = +$('#shopping-cart .subtotal').text();
+                    //console.log({subtotal: totalPrice});
+                    $('#shopping-cart .price .subtotal').text(totalPrice - +this.dataset.price);
+                    $('#shopping-cart .total-price .value').text(totalPrice - +this.dataset.price);
+                    $(itemQtyElem).text(itemQty - 1);
+                    //console.log({subtotal_after: totalPrice})
+                    },
+                beforeSend: ()=>{
+                    $(this).css('opacity', '0.5');
+                    
+                },
+                complete: ()=>{
+                    $(this).css("opacity", '1');
+                }
+            }
+            )
+        }
+    });
+
+    $(document).on('click', '#shopping-cart .increase-item-by-one', function(event){
+        event.preventDefault()
+        const product = this.dataset.product;
+        var itemQtyElem = getChildElem(`#cartitem-${product} .qty`, this.closest(`#cartitem-${product}`));
+        var itemQty = +$(itemQtyElem).text()
+        const icon = $(this).html();
+        $.ajax({
+            type: "get",
+            url: `/cart/${product}`, 
+            beforeSend: ()=>{
+                $(this).css("opacity", '0.5')
+                
+            },
+            success: (data)=>{
+                var totalPrice = +$('#shopping-cart .subtotal').text();
+                $('#shopping-cart .subtotal').text( +this.dataset.price + totalPrice);
+                $('#shopping-cart .total-price .value').text(+this.dataset.price + totalPrice);
+                $(itemQtyElem).text(itemQty + 1);
+                // console.log('data')
+            },
+            complete: ()=>{
+                $(this).css("opacity", '1')
+            }
+        }
+        )        
+    });
+
+    $(document).on('click', '#shopping-cart .remove-item-from-cart', function(event){
+        event.preventDefault()
+        const product = this.dataset.product;
+        const icon = $(this).html();
+        $.ajax({
+            type: "get",
+            url: `/cart/remove/${product}`, 
+            beforeSend: ()=>{
+                $(this).css("opacity", '0.5');
+                
+            },
+            success: (data)=>{
+                // console.log(data)
+                data = data.item;
+                var totalPrice = +$('#shopping-cart .subtotal').text();
+                $('#shopping-cart .subtotal').text(totalPrice - +data.price);
+                $('#shopping-cart .total-price .value').text(totalPrice - +data.price);
+                // get the quantity of items in cart
+                var cartListLength = +$('#shopping-cart .basket-item-count .count').text();
+                // set the new quantity of items in cart
+                $('#shopping-cart .basket-item-count .count').text(cartListLength - 1);
+                // remove horizontal divide first from below cart item in dom
+                $(`#cartitem-${product}`).next('hr').remove()
+                // remover cart item from dom
+                $(`#cartitem-${product}`).remove();
+            },
+            complete: ()=>{
+                $(this).css("opacity", '1');
+            }
+        }
+        )
+    });
+
+    // iterate through all the siblings in the parameter defined as 'collection'
+    // and return the element that matches 'selector'
+    function getChildElem(selector, collection, returnContent, asRaw){
+        if(collection.matches(selector)){
+            // if 'returnContent' is passed to the function it returns the 
+            // innertext/innerhtml of the matched element else it returns the element.
+            if(returnContent === true){
+                // if 'asRaw' is passed the innerText is returned else the innerhtml 
+                // of the matched element is returned
+                if(asRaw === true){
+                    return collection.innerText;
+                }
+                return collection.innerHTML;
+            }
+            return collection;
+        }else{
+            if(collection.children){
+                for(let elem of collection.children){
+                    const found = getChildElem(selector, elem, returnContent, asRaw);
+                    if(found) return found;
+                }
+            }
+        }
+        
+    }
+</script>

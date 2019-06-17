@@ -1,13 +1,13 @@
 <%# header %>
-<% include partials/store_head_section.ejs %>
+<% include partials/head_section.ejs %>
 
 <div class="breadcrumb">
   <div class="container">
     <div class="breadcrumb-inner">
       <ul class="list-inline list-unstyled">
         <li><a href="/">Home</a></li>
-        <%if(currentStore){%>
-          <li class='active'><%=currentStore%></li>
+        <%if(storeData){%>
+          <li class='active'><%=storeData.name%></li>
         <%}%>
       </ul>
     </div>
@@ -39,144 +39,10 @@
 <div class="body-content outer-top-xs">
   <div class='container'>
     <div class='row'>
-      <div class='col-md-3 sidebar'> 
-        <!-- ================================== TOP NAVIGATION ================================== -->
-        <div class="side-menu animate-dropdown outer-bottom-xs">
-          <div class="head"><i class="icon fa fa-align-justify fa-fw"></i> Categories</div>
-          <nav class="yamm megamenu-horizontal">
-            <ul class="nav">
-              <%if(!products){%>
-                <a class="no-products" >
-                  <i class="no-products-icon " aria-hidden="true"></i>No item added to store yet
-                </a>
-              <%}%>
-            </ul>
-            <!-- /.nav --> 
-          </nav>
-          <!-- /.megamenu-horizontal --> 
-        </div>
-        <!-- /.side-menu --> 
-        <!-- ================================== TOP NAVIGATION : END ================================== -->
-        <div class="sidebar-module-container">
-          <div class="sidebar-filter"> 
-            <!-- ============================================== SIDEBAR CATEGORY ============================================== -->
-            <div class="sidebar-widget wow fadeInUp">
-              <h3 class="section-title">shop by</h3>
-              <div class="widget-header">
-                <h4 class="widget-title">Category</h4>
-              </div>
-              <div class="sidebar-widget-body">
-                <%if(!products){%>
-                  <a class="no-products" >
-                    <i class="no-products-icon " aria-hidden="true"></i>No item added to store yet
-                  </a>
-                <%}%>
-              </div>
-              <!-- /.sidebar-widget-body --> 
-            </div>
-            <!-- /.sidebar-widget --> 
-            <!-- ============================================== SIDEBAR CATEGORY : END ============================================== --> 
-
-            <!-- ============================================== MANUFACTURES============================================== -->
-            <div class="sidebar-widget wow fadeInUp">
-              <div class="widget-header">
-                <h4 class="widget-title">Manufactures</h4>
-              </div>
-              <div class="sidebar-widget-body">
-                <ul class="list">
-                  <%if(!products){%>
-                    <a class="no-products" >
-                      <i class="no-products-icon " aria-hidden="true"></i>No item added to store yet
-                    </a>
-                  <%}%>
-                </ul>
-                <!--<a href="#" class="lnk btn btn-primary">Show Now</a>--> 
-              </div>
-              <!-- /.sidebar-widget-body --> 
-            </div>
-            <!-- /.sidebar-widget --> 
-            <!-- ============================================== MANUFACTURES: END ============================================== --> 
-            <!-- ============================================== COLOR============================================== -->
-            <div class="sidebar-widget wow fadeInUp">
-              <div class="widget-header">
-                <h4 class="widget-title">Colors</h4>
-              </div>
-              <div class="sidebar-widget-body">
-                <ul class="list">
-                  <%if(!products){%>
-                    <a class="no-products" >
-                      <i class="no-products-icon " aria-hidden="true"></i>No item added to store yet
-                    </a>
-                  <%}%>
-                </ul>
-              </div>
-              <!-- /.sidebar-widget-body --> 
-            </div>
-            <!-- /.sidebar-widget --> 
-            <!-- ============================================== COLOR: END ============================================== --> 
-            <!-- ============================================== COMPARE============================================== -->
-            <div class="sidebar-widget wow fadeInUp outer-top-vs">
-              <h3 class="section-title">Compare products</h3>
-              <div class="sidebar-widget-body">
-                <div class="compare-report">
-                  <p>You have no <span>item(s)</span> to compare</p>
-                </div>
-                <!-- /.compare-report --> 
-              </div>
-              <!-- /.sidebar-widget-body --> 
-            </div>
-            <!-- /.sidebar-widget --> 
-            <!-- ============================================== COMPARE: END ============================================== --> 
-            <!-- ============================================== PRODUCT TAGS ============================================== -->
-            <div class="sidebar-widget product-tag wow fadeInUp outer-top-vs">
-              <h3 class="section-title">Product tags</h3>
-              <div class="sidebar-widget-body outer-top-xs">
-                <div class="tag-list"> <a class="item" title="Phone" href="category.html">Phone</a> <a class="item active" title="Vest" href="category.html">Vest</a> <a class="item" title="Smartphone" href="category.html">Smartphone</a> <a class="item" title="Furniture" href="category.html">Furniture</a> <a class="item" title="T-shirt" href="category.html">T-shirt</a> <a class="item" title="Sweatpants" href="category.html">Sweatpants</a> <a class="item" title="Sneaker" href="category.html">Sneaker</a> <a class="item" title="Toys" href="category.html">Toys</a> <a class="item" title="Rose" href="category.html">Rose</a> </div>
-                <!-- /.tag-list --> 
-              </div>
-              <!-- /.sidebar-widget-body --> 
-            </div>
-            <!-- /.sidebar-widget --> 
-          <!----------- Testimonials------------->
-            <%#<div class="sidebar-widget  wow fadeInUp outer-top-vs ">
-              <div id="advertisement" class="advertisement">
-                <div class="item">
-                  <div class="avatar"><img src="/assets/images/testimonials/member1.png" alt="Image"></div>
-                  <div class="testimonials"><em>"</em> Vtae sodales aliq uam morbi non sem lacus port mollis. Nunc condime tum metus eud molest sed consectetuer.<em>"</em></div>
-                  <div class="clients_author">John Doe <span>Abc Company</span> </div>
-                  <!-- /.container-fluid --> 
-                </div>
-                <!-- /.item -->
-                
-                <div class="item">
-                  <div class="avatar"><img src="/assets/images/testimonials/member3.png" alt="Image"></div>
-                  <div class="testimonials"><em>"</em>Vtae sodales aliq uam morbi non sem lacus port mollis. Nunc condime tum metus eud molest sed consectetuer.<em>"</em></div>
-                  <div class="clients_author">Stephen Doe <span>Xperia Designs</span> </div>
-                </div>
-                <!-- /.item -->
-                
-                <div class="item">
-                  <div class="avatar"><img src="/assets/images/testimonials/member2.png" alt="Image"></div>
-                  <div class="testimonials"><em>"</em> Vtae sodales aliq uam morbi non sem lacus port mollis. Nunc condime tum metus eud molest sed consectetuer.<em>"</em></div>
-                  <div class="clients_author">Saraha Smith <span>Datsun &amp; Co</span> </div>
-                  <!-- /.container-fluid --> 
-                </div>
-                <!-- /.item --> 
-                
-              </div>
-              <!-- /.owl-carousel --> 
-            </div>%>
-            
-            <!-- ============================================== Testimonials: END ============================================== -->
-            
-            <%#<div class="home-banner"> <img src="/assets/images/banners/LHS-banner.jpg" alt="Image"> </div>%>
-          </div>
-          <!-- /.sidebar-filter --> 
-        </div>
-        <!-- /.sidebar-module-container --> 
+      <div class='col-md-1'> 
       </div>
       <!-- /.sidebar -->
-      <div class='col-md-9'> 
+      <div class='col-md-10'> 
         <!-- ========================================== SECTION – HERO ========================================= -->
         
         <div id="category" class="category-carousel hidden-xs">

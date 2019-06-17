@@ -15,6 +15,8 @@ var port = process.env.PORT || 30000;
 var home = require('./routes/home');
 var account = require('./routes/account');
 var mall = require('./routes/mall')
+const Cart = require('./models/cart');
+const cartRoute = require('./routes/cart');
 
 var app = express();
 
@@ -52,7 +54,7 @@ if (app.get('env') === 'production') {
 }
 
 // middlewares
-app.use(pathToDataDirectory(path.resolve(__dirname, 'data', 'kaakuna')))
+app.use(pathToDataDirectory(path.join(__dirname, 'data', 'kaakuna')))
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(express.json())
@@ -74,6 +76,14 @@ app.use(function(req, res, next) {
     // res.locals.hashpath = undefined;
     res.locals.storeData = undefined;
     // console.log(res.locals)
+    if(req.session.cart){
+        var cart = new Cart(req.session.cart);
+        res.locals.cartItems = cart.generateArray()
+        res.locals.cartTotalPrice = cart.totalPrice;
+    }else{
+        res.locals.cartItems = null;
+        res.locals.cartTotalPrice = null;
+    }
     next();
 });
 
@@ -95,28 +105,31 @@ app.use(function(req, res, next){
     var isReallyStaticRoute = staticRoute? staticRoute.index===0: false;     
 
     // dont get urls of assets routes that miraculously bypassed the static middleware
-    if(url && !(loginRoute || (staticRoute && isReallyStaticRoute))){
+    if(url && !(loginRoute || (staticRoute && isReallyStaticRoute) || url.indexOf('/images/')>0)){
         req.session.oldUrl = url;
     }
     next();
 });
 
+app.use('/cart', cartRoute)
 app.use('/', home);
-
 app.use('/account', account);
-
 // app.use('/category', store);
 app.use('/detail.html', function(req, res, next){
     res.render('detail')
 })
-
+app.use('/wishlist', function(req, res, next){
+    res.render('my-wishlist')
+})
+app.use('/shopping-cart', function(req, res, next){
+    res.render('shopping-cart')
+})
 app.use('/checkout.html', function(req, res, next){
     res.render('checkout')
 })
 
 const {
-    Store: Store, 
-    item: Product, 
+    Store: Store,  
     itemCategory: ProductCategory, 
     itemSubCategory: ProductSubCategory} = require('./models/store');
 
@@ -127,40 +140,23 @@ app.use('/:store_url_name', function(req, res, next){
             if(err) return next(err)
             
             if(store && store.url){
+                console.log(store.url)
                 res.locals.storeData = store;
                 
-                // fetch categories and products asynchronously
+                // fetch categories
                 ProductCategory.find({store: store._id}, 
                     (err, cats)=>{
                         if(err) return next(err);
                         
                         res.locals.categories = cats;
                         var products = res.locals.products;
-                        if(products){   // are products ready
-                            // console.log(cats, products)
-                            next();
-                        }
+                        next();
                     }
-                );
-                
-                Product.find({store: store._id}, 
-                    (err, products)=>{
-                        if(err) return next(err);
-                        
-                        res.locals.products = products;
-                        var cats = res.locals.categories ;
-                        if(cats){   // are categories ready
-                            // console.log(cats, products)
-                            return next();
-                        }
-                    }
-                );
-                
+                );                
             }
             else{
                 // res.redirect('/')
-                res.send(`If you see this page then your're requesting for a 
-                store page that does not exist. A better fallback page is being worked on`)
+                res.send(`404 PAGE`)
             }
         }
     );    
@@ -188,6 +184,7 @@ app.listen(port);
 function pathToDataDirectory(dataRoot){
     return function(req, res, next){
         req.dataDirectoryRoot = dataRoot;
+        res.locals.dataDirectoryRoot = dataRoot;
         next();
     }
 }

@@ -5,14 +5,16 @@ const path = require('path');
 let express = require('express');
 let router = express.Router();
 var mongoose = require('mongoose')
-const formidable = require('formidable');
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
 // const Store = require('../models/store').Store;
 
 const {
     Store: Store, 
     item: Product, 
-    itemCategory: ProductCategory, 
-    itemSubCategory: ProductSubCategory} = require('../models/store');
+    } = require('../models/store');
+
+const {Category} = require("../models/category");
 
 // console.log(Product)
 
@@ -38,7 +40,7 @@ router.use('/:storeid',
                 }
             });
 
-            ProductCategory.find({store: storeid}, function(err, cat){
+            Category.find({nodeType: "rootNode"}, function(err, cat){
                 if(err) return next(err);
                 // console.log(cat)
                 res.locals.categories = cat;
@@ -55,6 +57,25 @@ router.use('/:storeid',
         }
     }
 );
+
+router.post("/:storeid/category", upload.single("file"), function(req, res, next){
+    const category = req.body.category;
+    const icon_class = req.body.icon;
+    const uploadedFilePath = req;
+    const cat = new Category({path: `/${category}/`, 
+        icon_class: icon_class, 
+        node_name: category, 
+        node_type: "ROOTNODE", 
+        prev_node: ''
+    });
+    cat.save(function(err, cat){
+        if(err){
+            return next(err)
+        }
+
+        return res.json({data: cat});
+    });
+});
 
 router.get('/:storeid/images/:imageName', function(req, res){
     var imageName = req.params.imageName;

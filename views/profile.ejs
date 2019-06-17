@@ -218,7 +218,7 @@
 
 				<div class='col-md-9' id="contentDisplay"> 
 					
-					<div class="prof-display row" >
+					<div class="prof-display row" style="margin: 0">
 						<div class="section-heading col-md-12" id="sectionHeading">
 						</div>
 						
@@ -421,13 +421,34 @@
 								
 							</form>
 							<div hidden id="uStores">
-								<%if(user && user.stores){%>
-									<ul class="col-md-6">
-										<%user.stores.forEach(function(store){%>
-											<li><a href='/account/store/<%=store.storeid%>'><%=store.storename%></a></li>
-										<%})%>
-									</ul>
-								<%}%>
+							<%if(user && user.stores){%>
+								<div class="table-responsive  ">
+									<table class="table table-bordered">
+										<thead>
+											<tr>
+												<th class="item"> Name of store</th>
+												<th class="item"> Date created</th>
+												<th class="item"> Url of store</th>
+												<%# <th class="item"> edit</th> %>
+											</tr>
+										</thead>
+										<tbody>
+									<%user.stores.forEach(function(store){%>
+										<tr>
+											<td>
+												<a target="_blank" title="click to visit store" href='/account/store/<%=store.storeid%>'><%=store.storename%></a>
+											</td>
+											<td>
+												
+											</td>
+											<td></td>
+										
+										</tr>
+									<%})%>
+										</tbody>
+									</table>
+                </div>
+							<%}%>
 							</div>
 						</div>
 					</div>
@@ -779,8 +800,7 @@
 	<!-- For demo purposes – can be removed on production : End -->
 
 	
-
+<% include partials/cart.ejs %>
 </body>
 
-<!-- Mirrored from www.themesground.com/flipmart-demo/V6/sign-in.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 11 Feb 2019 14:27:05 GMT -->
 </html>

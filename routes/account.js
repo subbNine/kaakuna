@@ -120,7 +120,7 @@ router.post('/profile/user', isLoggedIn, [
                     return resolve('isMatch')
                 }
                 else{
-                    return reject('you have entered an invalid password in current password field');
+                    return reject('the password you have entered in current password is incorrect');
                 }
             })
         })}
@@ -390,7 +390,8 @@ router.post('/profile/store', isLoggedIn, [check('bizUrl').isLength({min: 1})
                                           city: bizCity, 
                                           LGA: bizLga, 
                                           streetAddress: bizStreet, 
-                                          store: newStore._id});
+                                          store: newStore._id,
+                                          created_on: new Date()});
         newStore.business_address.push(newStoreAddr._id);
         newStore.save(function(err){    // save new store document
             if(!err){
@@ -428,9 +429,10 @@ router.post('/profile/store', isLoggedIn, [check('bizUrl').isLength({min: 1})
 // });
 
 router.get('/logout', isLoggedIn, function(req, res, next) {
-    req.session.destroy();
+    // req.session.destroy();
+    console.log(req.logOut)
     req.logOut();
-    res.redirect('/');
+    res.redirect(req.session.oldUrl||'/');
 });
 
 

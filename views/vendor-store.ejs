@@ -174,6 +174,52 @@
     background-color: white;
     transition: 1.5s linear;
   }
+  td{
+    padding: 20px!important;
+    border: 1px solid #eee !important;
+  }
+  th{
+    text-align: left;
+  }
+
+  /* treeview */
+  ul.treeview {
+    list-style-type: none;
+  }
+
+  .treeview {
+    margin: 0;
+    padding: 0;
+  }
+
+  .treeview-caret {
+    cursor: pointer;
+    -webkit-user-select: none; /* Safari 3.1+ */
+    -moz-user-select: none; /* Firefox 2+ */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none;
+  }
+
+  .treeview-caret::before {
+    content: "\203A";
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+  }
+
+  .treeview-caret-down::before {
+    -ms-transform: rotate(90deg); /* IE 9 */
+    -webkit-transform: rotate(90deg); /* Safari */'
+    transform: rotate(90deg);  
+  }
+
+  .nested {
+    display: none;
+  }
+
+  .active {
+    display: block;
+  }
 </style>
 <div class="body-content outer-top-xs">
   <div class='container'>
@@ -181,26 +227,26 @@
       <div class='col-md-3 sidebar'> 
         <!-- ================================== TOP NAVIGATION ================================== -->
         <div class="side-menu animate-dropdown outer-bottom-xs">
-          <div class="head"><i class="icon glyphicon glyphicon-cog fa-fw"></i> Actions</div>
+          <div class="head"><i class="icon glyphicon glyphicon-cog fa-fw"></i> Manage Store</div>
           <nav class="yamm megamenu-horizontal">
             <ul class="nav">
               <a class="no-products" href="#">
                 <i class="no-products-icon"  aria-hidden="true"></i>Welcome
               </a>
               <a class="no-products" href="#storelogo">
-                <i class="no-products-icon"  aria-hidden="true"></i>Store's Logo
+                <i class="no-products-icon"  aria-hidden="true"></i>Manage Logo
               </a>
               <a class="no-products" href="#storebanner">
-                <i class="no-products-icon "  aria-hidden="true"></i>Store's Banner
+                <i class="no-products-icon "  aria-hidden="true"></i>Manage Banner
               </a>
-              <a class="no-products" href="#storetheme">
+              <%# <a class="no-products" href="#storetheme">
                 <i class="no-products-icon " aria-hidden="true"></i>Store's Theme
-              </a>
+              </a> %>
               <a class="no-products" href="#productcategories">
-                <i class="no-products-icon " aria-hidden="true"></i>Product Categories
+                <i class="no-products-icon " aria-hidden="true"></i>Manage Categories
               </a>
               <a class="no-products" href="#products">
-                <i class="no-products-icon "  aria-hidden="true"></i>Add Products
+                <i class="no-products-icon "  aria-hidden="true"></i>Manage Products
               </a>
               <a class="no-products" href="/<%=store && store.url?store.url:''%>" target="_blank">
                 <i class="no-products-icon "  aria-hidden="true"></i>View Changes in Store
@@ -288,121 +334,55 @@
                   </div> 
                   <div class="col-md-4"></div>
               </div>    
-            </form>
+            </form>            
 
-            <div id="addCategory" hidden class='row col-xs-12'>
-              <div class="col-xs-12 row">
-                <table class="table-bordered col-xs-12 text-center">
-                  <thead>
-                    <th> category icon</th>
-                    <th>Name</th>
-                    <th>No. of Sub-Categories</th> 
-                    <th>Products</th> 
-                    <th>Actions</th>  
-                  </thead>
-                  <tbody>
-                    <%if(categories && categories.length){%>
-                    <%for(cat of categories){%>
-                    <tr>
-                      <td>
-                        <i class="icon fa <%=cat.icon_class%>"></i>
-                      </td>
-                      <td>
-                        <%=cat.category_name%>
-                      </td>
-                      <td data-cat=<%=cat._id%>>
-                        <div class="dropdown menu-item"><span class='subcat-length'><%=cat.subCategories?+cat.subCategories.length:0%></span>
-                            <a class="subcat-add" data-cat="<%=cat.id%>" title="click to add sub category" style="float: right; margin-right: 1rem; color: #999; margin-left: 2rem; width: 1rem;" href="#">
-                              <i class="icon fa fa-plus"></i>
-                            </a>
-
-                            <a style="float: right; color: #999; width: 1rem;" title="click to view sub category" class="dropdown-toggle" data-toggle="dropdown" href="#">
-                              <i class="icon fa fa-ellipsis-v"></i>
-                            </a>
-                          <%if(cat.subCategories && cat.subCategories.length){%>
-                            <ul class="dropdown-menu col-xs-12">
-                              <li class="yamm-content">
-                                <div class="row">
-                                      
-                                    <div class="col-xs-12">
-                                        <ul class="links list-unstyled subcat-container" >
-                                          <%for(subcategory of cat.subCategories){%>
-                                            <li style="padding-left: 1rem; padding-right: 2rem; ">
-                                              <a data-subcat="<%=subcategory._id%>" href="#">
-                                                <%=subcategory.name%>
-                                              </a>
-                                              <a style="float: right;  color: #999">
-                                                <i class="icon fa fa-close"></i>
-                                              </a>
-                                            </li>
-                                          <%}%>
-                                        </ul>
-                                    </div>
-                                  
-                                  <!-- /.col --> 
-                                </div>
-                                <!-- /.row --> 
-                              </li>
-                              <!-- /.yamm-content -->
-                            </ul>
-                            
-                          <%}%>
-                        </div>
-                      </td>
-                      <td>
-                        <%if(products && products.length){%>
-                        
-                        <%}%>
-                      </td>
-                      <td>
-                      <a href="#" class="btn btn-sm btn-success">+Sub Category</a>
-                      </td>
-                    </tr>
-                    <%}%>
-                    <%}else{%>
-                      <tr><td span='4'>theres nothing here</td></tr>
-                    <%}%>
-                  </tbody>
-                </table>
-              </div>
-            </div> 
-
-            <form method='post' hidden class="col-xs-12" enctype="multipart/form-data" id="addCat"> 
-              <div class=' col-xs-12' style="padding-right: 0">
-                <label class='info-title' for='catName' style="margin: 20px 0 0 0">Category Name<span></span></label>
-                <input type='text' name='catName' 
-                class='form-control info-update unicase-form-control text-input' id='catName' />
-
-                
-                <label class="info-title" for="iconClass" style="margin: 20px 50px 10px 0">Select Category Icon
-                <input type="hidden" name="iconClass" id="iconClass" value=""/>
-                </label>
-                <div class="dropdown col-xs-12" style="padding: 0">
-                <button class="btn reveal-btn col-xs-12 dropdown-toggle" type="button" title="select a descriptive icon for the category" data-toggle="dropdown">
-                  <i class="icon fa" aria-hidden="true" style="margin: 10px 0 10px 20px; font-size: 18px">Icon:</i>
-                  <i data-iconClass="" id="catIcon" aria-hidden="true" style="margin: 10px 0 10px 20px; font-size: 18px"></i>
-                </button>
-                <ul class="dropdown-menu col-xs-12" style="height: 400px; overflow: auto;" id="catIcons-dropdown-menu">
-                  
-                </ul>
-                </div>
-                <label for="catimginp" class="col-xs-12" style="margin: 20px 0 10px 0; padding-left: 0;">
-                Category Image
-                </label>
-                <label class="col-xs-6 placeholder-container focus" id="placeholder-container"> 
-                <input type="file" name="file" accept="image/*" id="catimginp" data-multiple-caption="{count} files selected" />
-                
-                <img id="catImg" 
-                />
-                
-                <a class="addimg" >add image</a>             
-                </label> 
-                <button class='col-xs-12 btn submit-btn' style="margin: 4px 0 0 0">Add</button>
-              </div>
-
-            </form>
             
-            <form id="addProd" hidden class="row"  enctype="multipart/form-data">					
+            <div id="addCategory" hidden class="col-xs-12">
+            
+            <%# get root node%>
+            <%# use root node as an entry node to porpulate all intermediate nodes%>
+            
+            <%if(categories && categories.length){%>
+              <ul class="treeview">
+                <%for(category of categories){%>
+                  <li><span class="treeview-caret"><%=category.node_name%></span></li>
+                <%}%>
+              </ul>
+            <%}else{%> 
+              <form id="addRootCategory" style="width: 100%" method="post" enctype="multipart/form-data"
+              action="/account/store<%=storeid?'/'+storeid:''%>/category">
+                <div style="width: 80%; margin: auto; display: flex; 
+                flex-direction: column; align-items: center; justify-content: center;">
+
+                  <div style=" font-size: 17px; margin: 10px;"> add a root category below</div>
+                  
+                  <input type="hidden" name="iconClass" id="iconClass" value=""/>
+
+                  <div class="dropdown" style="padding: 0">
+                    <button class="btn reveal-btn dropdown-toggle" type="button" style="margin: 10px"
+                    title="select a descriptive icon for the category" data-toggle="dropdown">
+                      <i class="icon fa" aria-hidden="true" style="margin: 10px 0 10px 20px; font-size: 18px">Icon:</i>
+                      <i data-iconClass="" class="catIcon fa icon " aria-hidden="true" 
+                      style="margin: 10px 0 10px 20px; font-size: 18px"></i>
+                    </button>
+                    <ul class="dropdown-menu col-xs-12" style="height: 400px; overflow: auto;" id="catIcons-dropdown-menu"> 
+                    </ul>
+                  </div>
+
+                  <label style="width: 100px; height: 30px; border: 1px solid whitesmoke; margin: 10px; cursor: pointer">
+                    <input class="uploadWithLabelIndicator" type="file" name="file"
+                    accept="image/*" id="catimginp" data-multiple-caption="{count} files selected" />
+                    <span></span>
+                  </label>
+                  
+                  <input style="margin: 10px;" type="text" name="category"/>
+                  <button style="margin: 10px;" type="submit" class="btn">add category</button>
+                </div>
+              </form>
+            <%}%>
+            </div>
+            
+            <form id="addProd" hidden class="row"  enctype="multipart/form-data">
               <div class="col-md-12">
                 
                 <div class='form-group col-md-6' >
@@ -496,8 +476,7 @@
             </form>
 
           </div>
-        
-        
+
         </div>
       <!-- /.col -->
       </div> 
@@ -553,9 +532,6 @@
 <!-- /.body-content --> 
 <%# /* footer */%>
 <% include partials/footer.ejs %>
-<!-- For demo purposes – can be removed on production --> 
-
-<!-- For demo purposes – can be removed on production : End --> 
 
 <!-- JavaScripts placed at the end of the document so the pages load faster --> 
 
@@ -574,6 +550,7 @@
 <script src="/assets/js/products.js"></script>
 <script src="/assets/js/minimalistic-front-end-router.js"></script>
 <script src="/assets/js/fontawesome-icons-classes.js"></script>
+<script src="/assets/js/toastr.min.js"></script>
 	
 <script>
 $(document).ready(function(){ 
@@ -586,6 +563,25 @@ $(document).ready(function(){
         return this;
     }
   });   
+
+  // toast notification setup
+  toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-bottom-left",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+}
 
   //--begin-- router section
   // minfsetContainer(document.getElementById('actionsDisp'));
@@ -645,21 +641,13 @@ $(document).ready(function(){
       scrollIntoView.scrollIntoView(true);
       $(`#section-heading + h4`).remove();
       // show add category button
-      $(`<h4 class="section-heading col-xs-4"><a class="btn btn-sm btn-success" href="#addcat"><i class="icon fa fa-plus"></i> Category</a></h4>`).insertAfter('#section-heading')
+      $(`<h4 class="section-heading col-xs-4">
+            <a class="btn btn-sm btn-success" href="#addcat">
+              <i class="icon fa fa-plus"></i> Category
+            </a>
+          </h4>`).insertAfter('#section-heading')
     }
   ); 
-
-  minfroute.route('addcat', ()=>{
-      return 'addCat';
-    },
-    ()=>{
-      sectionHeading.textContent = 'Product Categories';
-      scrollIntoView.scrollIntoView(true);
-      $(`#section-heading + h4`).remove();
-      $(`<h4 class="section-heading col-xs-4"><a class="btn btn-sm btn-success" href="#addcat"><i class="icon fa fa-plus"></i> Category</a></h4>`).insertAfter('#section-heading')
-
-    }
-  );
 
   minfroute.route('products', ()=>{
       return 'addProd';
@@ -686,6 +674,7 @@ $(document).ready(function(){
     $('.addimg').css('background-color', 'rgba(0,0,0,0)')
   });
 
+  // manage category
   $('#prodCategory').live('change', function(event){
     var category = $(this).val();
     // console.log(category)
@@ -740,13 +729,18 @@ $(document).ready(function(){
     
     if(!subcatInput){
         $('.subcat-input').remove();
+        $('.dropdown .subcat-add').css('display', '').next('a').css('display', '');
       }
     if(subcatAdd){
-      $(`<form class="subcat-input" id="subcat-input-form">
-        <input type="text" name="subCatName" required data-cat="${subcatAdd.dataset.cat}" style="width: 80%; padding-left: 0.7rem; padding-right: 0.7rem" type="text"/>
+      $(subcatAdd).css('display', 'none').next('a').css('display', 'none');
+      $(`<form class="subcat-input" id="subcat-input-form" style="width: 18rem; height: 4rem !important; position: relative;background: rgba(0,0,0,0)">
+        <input type="text" name="subCatName" required data-cat="${subcatAdd.dataset.cat}" 
+        style="width: 80%; height: 100%; padding-left: 0.7rem; padding-right: 0.7rem;
+        border: 0px solid #eee;
+        " type="text"/>
         <input type="hidden" name="subcatCategory" />
-        <button style="width: 20%">
-          <i class="icon fa fa-save" style="font-size: "></i>
+        <button style="width: 20%; height: 100%; border: 0; background: rgba(0,0,0,0)">
+          <i class="icon fa fa-check" style="font-size: "></i>
         </button>
       </form>`).insertBefore(subcatAdd).css('top', '0rem').css('height', '3rem');
       return false;
@@ -762,7 +756,7 @@ $(document).ready(function(){
   //   <img />
   // </elem>
   var imgfile = undefined;
-  $('[type="file"]').live('change', function( e ) {
+  $('input.uploadWithLabelIndicator[type="file"]').live('change', function( e ) {
     var fileName = undefined;
     var imageTag = this.nextElementSibling;
     var file = e.target.files[0];
@@ -785,6 +779,36 @@ $(document).ready(function(){
       }    
     }
   });
+
+  var catFileSelected = undefined;
+  $('[type="file"]').live('change', function( e ) {
+    // var fileName = undefined;
+    var span = this.nextElementSibling;
+    var file = e.target.files[0];
+    var imgtype = file.type;
+    console.log(file)
+    var supportedimgs= ["image/jpeg","image/png","image/jpg"];
+    if(!(supportedimgs.includes(imgtype))){
+      alert('please select a valid image file (JPEG/JPG/PNG)')
+      $(this).val('')
+      return false
+    }
+    else{
+      if( !(this.files && this.files.length > 1 ) ){
+        catFileSelected = !!this.files.length;
+        span.innerText = file.name;
+        // var reader = new FileReader();
+        // reader.onload = function(){
+        //   imageTag.src = reader.result;
+        //   imgfile = reader.result;
+        // };
+        // reader.readAsDataURL(e.target.files[0]);
+        
+      }    
+    }
+  });
+
+  
 
   // loader gif
   var loadingImg = new Image();
@@ -841,6 +865,7 @@ $(document).ready(function(){
 
                 $('.statusMsg').html('<span style="font-size:18px;color:#34A853">sub category added successfully.</span>');
                 $(this).remove()
+                $('.dropdown .subcat-add').css('display', '').next('a').css('display', '');
             }else{
                 $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">'+ 
                   (msg.message?msg.message:'Some problem occurred, please try again.')+'</span>');
@@ -922,74 +947,12 @@ $(document).ready(function(){
     }
   );
 
-  //  create category for store item
-  $('#addCat').live('submit', function(event){
-    event.preventDefault();
-    if(!$('#catimginp').val()){
-      // code-block:::show error message
-      alert('please click on the add image button to add a category image')
-      return false
-    }
-    if(!$('#catName').val()){
-      alert('please do not leave the category name field blank')
-      return false
-    }
-
-    $.ajax({
-          type: 'POST',
-          url: "/account/store<%=storeid?'/'+storeid:''%>/cat",
-          data: new FormData(this),
-          contentType: false,
-          cache: false,
-          processData: false,
-          beforeSend: function(){
-              $('.submit-btn').attr("disabled","disabled");
-              $('#addCat').css("opacity",".5");
-          },
-          complete:()=>{
-            $('#addCat').css("opacity","");
-            $(".submit-btn").removeAttr("disabled");
-            document.getElementById('statusMsg').scrollIntoView(true)
-            setTimeout(()=>{
-              $('.statusMsg > span').css('display', 'none');
-            }, 3000);
-          },
-          success: (msg)=>{
-              $('.statusMsg').html('');
-              if(msg && msg.success===true){
-                  
-                  // add result to the list of categories under the subcategory section
-                  $('.prodCat')
-                  .append(`<option value="${msg.data && msg.data.value? msg.data.value:''}">
-                              ${msg.data && msg.data.innerHtml?msg.data.innerHtml:''}
-                          </option>`);
-
-                  // formAppends.prodcatdata += `
-                  //     <option value="${msg.data && msg.data.value? msg.data.value:''}">
-                  //         ${msg.data && msg.data.innerHtml?msg.data.innerHtml:''}
-                  //     </option>`;
-
-                  $('.statusMsg').html('<span style="font-size:18px;color:#34A853">Category added successfully.</span>');
-                  $(this)[0].reset();
-                  $('#catIcon').attr('class', 'icon fa')
-                  $('.placeholder-container input').next().removeAttr("src");
-                }else{
-                  $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">'+ (msg.message?msg.message:'Some problem occurred, please try again.')+'</span>');
-              }
-              
-          },
-          error: function(errObj, status){
-            $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">Some problem occurred, please try again.</span>');
-          }
-      });
-  });
-
   // create sub category for store item
   $('#addSubCat').live('submit', function(event){
     event.preventDefault();
     if(!$('#subCatName').val()){
       // code-block:::show error message
-      alert('please click on the add image button to add a category image')
+      alert('please dont leave the sub category name field blank');
       return false
     }
     if(!$('#subcatCategory').val() || $('#subcatCategory').val() == '---Select Category---'  ){
@@ -1081,16 +1044,34 @@ $(document).ready(function(){
     catIconsDropdown.appendChild(li);
   });
 
+  let selectedIcon = undefined
   $('.cat-icon').live('click', function(event){
     event.preventDefault();
     var selectedClass = $(this).attr('data-catIcon');
-    $('#catIcon').attr('class','icon fa '+selectedClass);
+    var dropdownBtn = this.closest('.dropdown').querySelector(".catIcon");
+    $(dropdownBtn).attr("class", "catIcon fa icon "+selectedClass);
     $('#iconClass').val(selectedClass)
+    selectedIcon = selectedClass;
   });
+
+  //  create category for store item
+  $('#addRootCategory').live('submit', function(event){
+    if(!selectedIcon){
+      // code-block:::show error message
+      toastr["warning"]("please select an icon");
+      return false
+    }
+    if(!catFileSelected){
+      toastr["warning"]("please select an image file");
+      return false
+    }
+  });
+  
 });
 
 </script>
-
+<% include partials/cart.ejs %>
 </body>
+
 
 </html>

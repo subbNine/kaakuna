@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/assets/css/bootstrap-select.min.css">
 
   <!-- favicon -->
-  <link rel="icon" type="image/ico" href="/assets/icon.png" />
+  <link rel="icon" type="image/ico" href="/assets/favicon.ico" />
           
   <!-- Icons/Glyphs -->
   <link rel="stylesheet" href="/assets/css/font-awesome.css">
@@ -63,7 +63,7 @@
             <% if(!user){%>
               <!--<li><a href="#"><i class="icon fa fa-user"></i>My Account</a></li>-->
               
-              <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
+              <li><a href="/wishlist"><i class="icon fa fa-heart"></i>Wishlist</a></li>
               <li><a href="#"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
               <li><a href="#"><i class="icon fa fa-check"></i>Checkout</a></li>
                 
@@ -149,40 +149,90 @@
           <!-- ============================================================= SEARCH AREA : END ============================================================= --> </div>
         <!-- /.top-search-holder -->
         
-        <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row"> 
+        <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row" id="shopping-cart"> 
           <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
           
           <div class="dropdown dropdown-cart"> <a href="#" class="dropdown-toggle lnk-cart" data-toggle="dropdown">
             <div class="items-cart-inner">
               <div class="basket"> <i class="glyphicon glyphicon-shopping-cart"></i> </div>
-              <div class="basket-item-count"><span class="count">2</span></div>
-              <div class="total-price-basket"> <span class="lbl">cart -</span> <span class="total-price"> <span class="sign">$</span><span class="value">600.00</span> </span> </div>
+              <div class="basket-item-count"><span class="count"><%=cartItems?cartItems.length:0%></span></div>
+              <div class="total-price-basket"> 
+                <span class="lbl">cart -</span> 
+                <span class="total-price"> 
+                  <span class="sign">N</span>
+                  <span class="value"><%=cartTotalPrice?cartTotalPrice:0 %></span>
+                </span> 
+              </div>
             </div>
             </a>
-            <ul class="dropdown-menu">
-              <li>
-                <div class="cart-item product-summary">
-                  <div class="row">
-                    <div class="col-xs-4">
-                      <div class="image"> <a href="detail.html"><img src="/assets/images/cart.jpg" alt=""></a> </div>
+            <ul class="dropdown-menu" style="width: 330px; padding-right:0">
+                <form style="padding-right:0">
+                  <li style="padding-right:0">
+                    <div class="cart-item product-summary" style="max-height: 40rem; overflow: auto; padding-right: 22px">
+                  <%if(cartItems){%>
+                    <%for(item of cartItems){%>
+                      <div class="row" id="cartitem-<%=item.item._id%>">
+                        <div class="col-xs-4">
+                          <div class="image"> 
+                            <a href="detail.html">
+                              <img src="/<%=item.storeUrl?`${item.storeUrl}/images/${item.item.image_path}`:''%>" alt="">
+                            </a> 
+                          </div>
+                        </div>
+                        <div class="col-xs-5">
+                          <h3 class="name"><a href="index8a95.html?page-detail"><%=item.item.name%></a></h3>
+                          <div class="qty" style="font-weight: bold"><%=item.qty%></div>
+                          <div class="price">N <%=item.item.price%>.00</div>
+                        </div>
+                        <div class="col-xs-1 action"> 
+                          <a href="" class="reduce-item-by-one" 
+                          data-price="<%=item.item.price%>" 
+                          data-product="<%=item.item._id%>" 
+                          title="reduce quantity by one">
+                            <i class="fa fa-minus"></i>
+                          </a> 
+                        </div>
+                        <div class="col-xs-1 action"> 
+                          <a href="" 
+                          class="increase-item-by-one" 
+                          data-price="<%=item.item.price%>"  
+                          data-product="<%=item.item._id%>" 
+                          title="increase quantity by one">
+                            <i class="fa fa-plus"></i>
+                          </a> 
+                        </div>
+                        <div class="col-xs-1 action"> 
+                          <a href="" class="remove-item-from-cart" 
+                          data-product="<%=item.item._id%>" 
+                          title="remove item from cart">
+                            <i class="fa fa-trash"></i>
+                          </a> 
+                        </div>
+                      </div>
+                      <hr>
+                    <%}%>
+                  <%}%>  
                     </div>
-                    <div class="col-xs-7">
-                      <h3 class="name"><a href="index8a95.html?page-detail">Simple Product</a></h3>
-                      <div class="price">$600.00</div>
-                    </div>
-                    <div class="col-xs-1 action"> <a href="#"><i class="fa fa-trash"></i></a> </div>
-                  </div>
-                </div>
-                <!-- /.cart-item -->
-                <div class="clearfix"></div>
-                <hr>
-                <div class="clearfix cart-total">
-                  <div class="pull-right"> <span class="text">Sub Total :</span><span class='price'>$600.00</span> </div>
-                  <div class="clearfix"></div>
-                  <a href="checkout.html" class="btn btn-upper btn-primary btn-block m-t-20">Checkout</a> </div>
-                <!-- /.cart-total--> 
-                
-              </li>
+                    
+                    <!-- /.cart-item -->
+                    <div class="clearfix"></div>
+                    
+                    <div class="clearfix cart-total" style="padding-right: 22px">
+                      <div class="pull-right"> 
+                        <span class="text">
+                          Sub Total :
+                        </span>
+                        <span class='price'>N
+                          <span class="subtotal">
+                            <%=cartTotalPrice?cartTotalPrice:0 %>
+                          </span></span> 
+                        </div>
+                      <div class="clearfix"></div>
+                      <a href="checkout.html" class="btn btn-upper btn-primary btn-block m-t-20">Checkout</a> </div>
+                    <!-- /.cart-total--> 
+                    
+                  </li>
+                </form>
             </ul>
             <!-- /.dropdown-menu--> 
           </div>

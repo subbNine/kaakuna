@@ -1,0 +1,104 @@
+<!-- <div id="addCategory" hidden class="col-xs-12">
+              
+                <div class="row shopping-cart-table shopping-cart">
+                      <div class="table-responsive  ">
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th class="item"> category icon</th>
+                              <th class="item">Name</th>
+                              <th class="item">Sub Categories</th> 
+                              <th class="item">Products</th> 
+                              <th class="item">Actions</th>  
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <%if(categories && categories.length){%>
+                            <%for(cat of categories){%>
+                            <tr>
+                              <td>
+                                <i class="icon fa <%=cat.icon_class%>"></i>
+                              </td>
+                              <td>
+                                <%=cat.category_name%>
+                              </td>
+                              <td data-cat=<%=cat._id%>>
+                                <div class="dropdown menu-item" style="height: 30px">
+                                    <div style="display: inline-block; height: 100%; padding-top: 7px" class='subcat-length'><%=cat.subCategories?+cat.subCategories.length:0%></div>
+                                    <div style="padding: 0.5rem 1rem; float: right; background: #eee; border-radius: 1rem; display: inline-block">
+                                      <a class="subcat-add" data-cat="<%=cat.id%>" 
+                                      title="click to add sub category" 
+                                      style=" padding: 0 1rem; margin-right: 1rem; color: #999; width: 1rem;" href="#">
+                                        <i class="icon fa fa-plus"></i>
+                                      </a>
+
+                                      <a style="color: #999; width: 1rem; padding: 0 1rem" 
+                                      title="click to view sub category" 
+                                      class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                        <i class="icon fa fa-ellipsis-v"></i>
+                                      </a> 
+                                    <%if(cat.subCategories && cat.subCategories.length){%>
+                                      <ul class="dropdown-menu col-xs-12">
+                                        <li class="yamm-content">
+                                          <div class="row">
+                                                
+                                              <div class="col-xs-12">
+                                                  <ul class="links list-unstyled subcat-container" >
+                                                    <%for(subcategory of cat.subCategories){%>
+                                                      <li style="padding-left: 1rem; padding-right: 2rem; ">
+                                                        <a data-subcat="<%=subcategory._id%>" href="#">
+                                                          <%=subcategory.name%>
+                                                        </a>
+                                                        <a style="float: right;  color: #999">
+                                                          <i class="icon fa fa-close"></i>
+                                                        </a>
+                                                      </li>
+                                                    <%}%>
+                                                  </ul>
+                                              </div>
+                                            
+                                            <!-- /.col --> 
+                                          </div>
+                                          <!-- /.row --> 
+                                        </li>
+                                        <!-- /.yamm-content -->
+                                      </ul>
+                                    <%}else{%>
+                                      <ul class="dropdown-menu col-xs-12">
+                                        <li class="yamm-content">
+                                          <div class="row">
+                                                
+                                              <div class="col-xs-12">
+                                                  <ul class="links list-unstyled subcat-container" >
+                                                  </ul>
+                                              </div>
+                                            
+                                            <!-- /.col --> 
+                                          </div>
+                                          <!-- /.row --> 
+                                        </li>
+                                        <!-- /.yamm-content -->
+                                      </ul>
+                                    <%}%>
+                                    </div>
+                                </div>
+                              </td>
+                              <td>
+                                <%if(products && products.length){%>
+                                
+                                <%}%>
+                              </td>
+                              <td>
+                              <a href="#" class="btn btn-sm btn-success">+Sub Category</a>
+                              </td>
+                            </tr>
+                            <%}%>
+                            <%}else{%>
+                              <tr style="text-align: center"><td colspan='5'>you have not added a category yet</td></tr>
+                            <%}%>
+                          </tbody>
+                        </table>
+                      </div>
+                </div>
+              
+            </div>  -->

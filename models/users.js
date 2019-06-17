@@ -27,7 +27,7 @@ var userSchema = new Schema({
     // stores: [{store:{type: Schema.Types.ObjectId, ref: 'Store'}, role:{type: String, enum:['vendor', 'store manager']}}],
     stores: {type:[
                     {storeid:{type: Schema.Types.ObjectId, ref: 'Store'}, 
-                    storename: String, 
+                    storename: String, storeurl: String, datecreated: String,
                     role:{type: String, enum:['vendor', 'store manager']}}], default: undefined}
 
 });

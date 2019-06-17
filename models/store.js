@@ -21,7 +21,8 @@ const store = new Schema({
     banner_image: {type:[{path: String}], default: undefined},
     logo_path: String,
     description: String,
-    tags:[{type: String}]
+    tags:[{type: String}],
+    created_on: Date
 });
 
 // store.virtuals('bannerI').get
@@ -51,13 +52,20 @@ const storeItemCategory = new Schema({
 const storeItem = new Schema({
     name: {type: String, lowercase: true},
     description: String,
-    category: {subcategory:{type: Schema.Types.ObjectId, ref: 'storeItemSubCategory'}, category:{type: Schema.Types.ObjectId, ref: 'storeItemCategory'}},
-    price: Number,
+    category: {subcategory:{type: Schema.Types.ObjectId, ref: 'storeItemSubCategory'}, 
+                category:{type: Schema.Types.ObjectId, ref: 'storeItemCategory'}},
     manufacturer: String,
     color: {type: String, lowercase: true},
     image_path: String,
-    quantity: Number,
-    store: {type: Schema.Types.ObjectId, ref: 'store'}
+    store: {type: Schema.Types.ObjectId, ref: 'store'},
+    quantity: { type: Number, min: 0, default: 0 },
+    price: { type: Number, min: 0, required: [true, 'Product should have a price!'] },
+    // addons: { type: [addon], default: [] },
+    sold: { type: Number, min: 0, default: 0 },
+    purchases: { type: Number, min: 0, default: 0 },
+    created_on: Date
+    // discount: { type: Number, min: 0, max: 99, default: null }, // discount = promoArray[n] == productId && (start <= Date.now <= end)? num: null
+    // reviews: { type: [review], default: [] }, // rating of product
 });
 
 const itemCategory = mongoose.model('storeItemCategory', storeItemCategory)
