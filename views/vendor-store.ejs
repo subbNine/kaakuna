@@ -220,6 +220,74 @@
   .active {
     display: block;
   }
+
+  #addRootCategory button.btn{
+    height: 45px;
+    border: 1px solid #e4e4e4;
+    margin: 10px 0 10px 20px;
+  }
+
+  #addRootCategory button.btn:active{
+    -moz-outline-style: none;
+    outline: #eee solid 1px;
+  }
+
+   #addRootCategory button.btn:hover, 
+   #addRootCategory button[type="submit"]:hover,
+   #addRootCategory label:hover
+   {
+     transform: translateY(-2px);
+     box-shadow: 0.55909px 0.52727px 4.3182px rgba(0, 0, 0, 0.3);
+   }
+
+  #addRootCategory label{
+    height: 45px;
+    min-width: 70px;
+    padding: 0 20px;
+    width: fit-content;
+    border: 1px solid #e4e4e4;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    cursor: pointer;
+  }
+
+  #addRootCategory label img{
+    height: 23.99px;
+    width: 23.99px;
+  }
+
+  #addRootCategory input[name="category"]{
+    width: 100%;
+    height: 45px;
+    border: 0;
+    background: rgba(0,0,0,0);
+    margin: 0 !important;
+    padding: 0 10px;
+  }  
+
+  #addRootCategory input[name="category"]:focus{
+    outline: #e4e4e4 solid 1px;
+  }
+
+  ::placeholder{
+    color: #bbbbbb;
+  }
+
+  #addRootCategory .input-wrapper{
+    padding: 0;
+    font-weigth: 100;
+    border: 1px solid #e4e4e4;
+    border-radius: 5px;
+    width: 250px;
+  }
+
+  #addRootCategory button[type="submit"]{
+    background: whitesmoke;
+    margin-right: 10px;
+    color: #888;
+  } 
+
 </style>
 <div class="body-content outer-top-xs">
   <div class='container'>
@@ -351,32 +419,39 @@
             <%}else{%> 
               <form id="addRootCategory" style="width: 100%" method="post" enctype="multipart/form-data"
               action="/account/store<%=storeid?'/'+storeid:''%>/category">
-                <div style="width: 80%; margin: auto; display: flex; 
-                flex-direction: column; align-items: center; justify-content: center;">
+                
+                <div style=" font-size: 12px; color: #333; margin: 10px;">ADD CATEGORY</div>
 
-                  <div style=" font-size: 17px; margin: 10px;"> add a root category below</div>
+                <div style="width: 100%; margin: auto; display: flex; 
+                flex-direction: row; align-items: center; justify-content: space-between; border: 1px solid #c4c4c4">
+
                   
                   <input type="hidden" name="iconClass" id="iconClass" value=""/>
 
                   <div class="dropdown" style="padding: 0">
-                    <button class="btn reveal-btn dropdown-toggle" type="button" style="margin: 10px"
+                    <button title="select descriptive icon for the category" 
+                    class="btn reveal-btn dropdown-toggle" type="button" style="margin: 10px"
                     title="select a descriptive icon for the category" data-toggle="dropdown">
-                      <i class="icon fa" aria-hidden="true" style="margin: 10px 0 10px 20px; font-size: 18px">Icon:</i>
-                      <i data-iconClass="" class="catIcon fa icon " aria-hidden="true" 
-                      style="margin: 10px 0 10px 20px; font-size: 18px"></i>
+                      <img src="/assets/images/select_icon2.png" />
+                      <i class="icon fa" aria-hidden="true" style=""></i>
+                      <i data-iconClass="" style="font-size: 22px;" class="catIcon fa icon " aria-hidden="true"></i>
                     </button>
-                    <ul class="dropdown-menu col-xs-12" style="height: 400px; overflow: auto;" id="catIcons-dropdown-menu"> 
+                    <ul class="dropdown-menu col-xs-12" style="height: 400px; overflow: auto;" 
+                    id="catIcons-dropdown-menu"> 
                     </ul>
                   </div>
 
-                  <label style="width: 100px; height: 30px; border: 1px solid whitesmoke; margin: 10px; cursor: pointer">
+                  <label style="" title="select an image for the category">
+                    <img src="/assets/images/select_picture1.svg" />
                     <input class="uploadWithLabelIndicator" type="file" name="file"
                     accept="image/*" id="catimginp" data-multiple-caption="{count} files selected" />
                     <span></span>
                   </label>
                   
-                  <input style="margin: 10px;" type="text" name="category"/>
-                  <button style="margin: 10px;" type="submit" class="btn">add category</button>
+                  <span class="input-wrapper">
+                    <input style="margin: 10px;" type="text" name="category" placeholder="Category Name"/>
+                  </span>
+                  <button type="submit" class="btn">Add Category</button>
                 </div>
               </form>
             <%}%>
@@ -982,9 +1057,11 @@ $(document).ready(function(){
           success: (msg)=>{
               $('.statusMsg').html('');
               if(msg && msg.success===true){
-                  $('.statusMsg').html('<span style="font-size:18px;color:#34A853">sub category added successfully.</span>');
+                  $('.statusMsg').html('<span style="font-size:18px;color:#34A853">'+
+                  'sub category added successfully.</span>');
               }else{
-                  $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">'+ (msg.message?msg.message:'Some problem occurred, please try again.')+'</span>');
+                  $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">'+ 
+                  (msg.message?msg.message:'Some problem occurred, please try again.')+'</span>');
               }
              $(this)[0].reset();
           },
@@ -1022,7 +1099,8 @@ $(document).ready(function(){
                   $(this)[0].reset();
                   $('.placeholder-container input').next().removeAttr("src"); 
               }else{
-                  $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">'+ (msg.message?msg.message:'Some problem occurred, please try again.')+'</span>');
+                  $('.statusMsg').html('<span style="font-size:18px;color:#EA4335">'+ 
+                  (msg.message?msg.message:'Some problem occurred, please try again.')+'</span>');
               }
               
           },
@@ -1047,10 +1125,13 @@ $(document).ready(function(){
   let selectedIcon = undefined
   $('.cat-icon').live('click', function(event){
     event.preventDefault();
-    var selectedClass = $(this).attr('data-catIcon');
+
+    this.closest('.dropdown').querySelector("img").setAttribute('hidden', "true");
+
+    var selectedClass = this.getAttribute('data-catIcon');
     var dropdownBtn = this.closest('.dropdown').querySelector(".catIcon");
-    $(dropdownBtn).attr("class", "catIcon fa icon "+selectedClass);
-    $('#iconClass').val(selectedClass)
+    dropdownBtn.setAttribute("class", "catIcon fa icon "+selectedClass);
+    $('#iconClass').val(selectedClass);
     selectedIcon = selectedClass;
   });
 
@@ -1059,11 +1140,17 @@ $(document).ready(function(){
     if(!selectedIcon){
       // code-block:::show error message
       toastr["warning"]("please select an icon");
-      return false
+      return false;
     }
     if(!catFileSelected){
       toastr["warning"]("please select an image file");
-      return false
+      return false;
+    }
+
+    var editedCategory = this.querySelector("input[name='category']").value;
+    if(!editedCategory){
+      toastr["warning"]("please enter a category name");
+      return false;
     }
   });
   
